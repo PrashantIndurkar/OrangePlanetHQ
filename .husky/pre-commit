@@ -1,2 +1,3 @@
+pnpm exec biome check --write .
 pnpm exec biome ci .
 pnpm run build

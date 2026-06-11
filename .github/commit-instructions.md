@@ -3,7 +3,7 @@ Generate Conventional Commit messages.
 Rules:
 
 - Use feat, fix, chore, docs, refactor, test, ci, build.
-- Maximum 100 characters.
+- Maximum 150 characters.
 - Be specific about what changed.
 - Mention the main tools, files, or features affected.
 - Prefer 50-80 characters when possible.
