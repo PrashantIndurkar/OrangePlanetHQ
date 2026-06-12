@@ -7,21 +7,19 @@ import {
 	CanceledIcon,
 	DoneIcon,
 	InProgressIcon,
-	InReviewIcon,
-	PriorityIcon,
 	TodoIcon,
 } from "../icons";
+import { TaskCard } from "../tasks/task-card";
 
 interface Task {
 	id: string;
 	title: string;
-	status:
-		| "backlog"
-		| "todo"
-		| "in-progress"
-		| "in-review"
-		| "done"
-		| "canceled";
+	status: "backlog" | "todo" | "in-progress" | "done" | "canceled";
+	priority: string;
+	dueDate?: string;
+	createdDate?: string;
+	assigneeName?: string;
+	assigneeAvatarUrl?: string;
 }
 
 export function WorkspaceListView() {
@@ -30,18 +28,54 @@ export function WorkspaceListView() {
 			id: `PLO-${28 - i}`,
 			title: `Backlog issue placeholder ${i + 1}`,
 			status: "backlog" as const,
+			priority: "no-priority",
+			createdDate: "Created Jun 12",
 		})),
-		{ id: "PLO-40", title: "test", status: "todo" as const },
-		{ id: "PLO-41", title: "test", status: "in-progress" as const },
-		{ id: "PLO-42", title: "test", status: "in-review" as const },
-		{ id: "PLO-38", title: "test", status: "done" as const },
+		{
+			id: "PLO-40",
+			title: "test",
+			status: "todo" as const,
+			priority: "no-priority",
+			createdDate: "Created Jun 12",
+			assigneeName: "Prashant Indurkar",
+			assigneeAvatarUrl:
+				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
+		},
+		{
+			id: "PLO-41",
+			title: "Issue title Urgent",
+			status: "in-progress" as const,
+			priority: "urgent",
+			createdDate: "Created Jun 12",
+		},
+		{
+			id: "PLO-35",
+			title: "Issue title High",
+			status: "in-progress" as const,
+			priority: "high",
+			createdDate: "Created Jun 12",
+		},
+		{
+			id: "PLO-33",
+			title: "Issue title medium",
+			status: "in-progress" as const,
+			priority: "medium",
+			createdDate: "Created Jun 12",
+		},
+		{
+			id: "PLO-36",
+			title: "Issue title Low",
+			status: "in-progress" as const,
+			priority: "low",
+			dueDate: "Tomorrow",
+			createdDate: "Created Jun 12",
+		},
 	]);
 
 	const [collapsed, setCollapsed] = useState<Record<string, boolean>>({
 		backlog: true,
 		todo: false,
 		"in-progress": false,
-		"in-review": false,
 		done: false,
 		canceled: false,
 	});
@@ -50,35 +84,26 @@ export function WorkspaceListView() {
 		setCollapsed((prev) => ({ ...prev, [status]: !prev[status] }));
 	};
 
-	const handleToggleTask = (taskId: string) => {
-		setTasks((prev) => prev.filter((t) => t.id !== taskId));
-	};
-
 	const handleAddTask = (
-		status:
-			| "backlog"
-			| "todo"
-			| "in-progress"
-			| "in-review"
-			| "done"
-			| "canceled",
+		status: "backlog" | "todo" | "in-progress" | "done" | "canceled",
 	) => {
 		const newId = `PLO-${tasks.length + 50}`;
 		const newTask: Task = {
 			id: newId,
 			title: `New task ${newId}`,
 			status,
+			priority: "no-priority",
+			createdDate: "Created Jun 12",
 		};
 		setTasks((prev) => [...prev, newTask]);
 	};
 
 	const statusGroups = [
-		{ id: "in-review" as const, title: "In Review" },
 		{ id: "in-progress" as const, title: "In Progress" },
 		{ id: "todo" as const, title: "Todo" },
 		{ id: "backlog" as const, title: "Backlog" },
 		{ id: "done" as const, title: "Done" },
-		{ id: "canceled" as const, title: "Canceled" },
+		{ id: "canceled" as const, title: "Cancel/Delete" },
 	];
 
 	const getStatusTheme = (status: string) => {
@@ -103,13 +128,6 @@ export function WorkspaceListView() {
 					text: "text-amber-600 dark:text-amber-400",
 					iconColor: "text-amber-500",
 					icon: InProgressIcon,
-				};
-			case "in-review":
-				return {
-					bg: "bg-emerald-500/[0.04]",
-					text: "text-emerald-600 dark:text-emerald-400",
-					iconColor: "text-emerald-500",
-					icon: InReviewIcon,
 				};
 			case "done":
 				return {
@@ -136,7 +154,7 @@ export function WorkspaceListView() {
 	};
 
 	return (
-		<div className="w-full h-full overflow-y-auto pt-4 px-4 pb-4 select-none bg-background">
+		<div className="w-full h-full overflow-y-auto pt-4 px-4 pb-4 select-none bg-[#fcfcfc] dark:bg-[#1e2024]">
 			<div className="flex flex-col gap-[2px] w-full">
 				{statusGroups.map((group) => {
 					const groupTasks = tasks.filter((t) => t.status === group.id);
@@ -212,58 +230,17 @@ export function WorkspaceListView() {
 							{!isCollapsed &&
 								groupTasks.length > 0 &&
 								groupTasks.map((task) => (
-									<div
-										key={task.id}
-										className="group flex h-11 items-center text-xs text-foreground px-3 bg-transparent hover:bg-muted/40 transition-colors rounded-none"
-									>
-										<div className="flex-1 flex items-center gap-3 min-w-0">
-											{/* Checkbox (opacity-0 by default, opacity-100 on hover of the row) */}
-											<div className="w-5 h-5 flex items-center justify-center shrink-0">
-												<button
-													type="button"
-													onClick={(e) => {
-														e.stopPropagation();
-														handleToggleTask(task.id);
-													}}
-													className="h-3.5 w-3.5 border border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 bg-card rounded-none transition-all duration-150 opacity-0 group-hover:opacity-100 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
-												>
-													<svg
-														className="w-2.5 h-2.5 opacity-0 hover:opacity-100 transition-opacity"
-														viewBox="0 0 24 24"
-														fill="none"
-														stroke="currentColor"
-														strokeWidth="3"
-														role="img"
-														aria-label="Action"
-													>
-														<title>Action</title>
-														<path
-															d="M20 6L9 17l-5-5"
-															strokeLinecap="round"
-															strokeLinejoin="round"
-														/>
-													</svg>
-												</button>
-											</div>
-
-											{/* Priority placeholder dashes icon --- */}
-											<PriorityIcon className="size-4 text-zinc-400 shrink-0" />
-
-											{/* Task Identifier (e.g. PLO-40) */}
-											<span className="text-[11px] font-mono text-zinc-500 shrink-0 select-text font-medium">
-												{task.id}
-											</span>
-
-											{/* Status Icon */}
-											<theme.icon
-												className={cn("size-3.5 shrink-0", theme.iconColor)}
-											/>
-
-											{/* Task Title */}
-											<span className="truncate font-normal text-foreground select-text">
-												{task.title}
-											</span>
-										</div>
+									<div key={task.id} className="mb-2 px-3">
+										<TaskCard
+											id={task.id}
+											title={task.title}
+											status={task.status}
+											priority={task.priority}
+											dueDate={task.dueDate}
+											createdDate={task.createdDate}
+											assigneeName={task.assigneeName}
+											assigneeAvatarUrl={task.assigneeAvatarUrl}
+										/>
 									</div>
 								))}
 
