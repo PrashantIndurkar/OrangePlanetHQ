@@ -17,8 +17,12 @@ export function useLogin() {
 			// In a real app, you would set state / cookies here
 			router.push("/tasks");
 			return true;
-		} catch (err: any) {
-			setError(err.message || "Something went wrong during login");
+		} catch (err: unknown) {
+			setError(
+				err instanceof Error
+					? err.message
+					: "Something went wrong during login",
+			);
 			return false;
 		} finally {
 			setIsLoading(false);
@@ -46,8 +50,12 @@ export function useSignup() {
 			// In a real app, you would set state / cookies here
 			router.push("/login");
 			return true;
-		} catch (err: any) {
-			setError(err.message || "Something went wrong during registration");
+		} catch (err: unknown) {
+			setError(
+				err instanceof Error
+					? err.message
+					: "Something went wrong during registration",
+			);
 			return false;
 		} finally {
 			setIsLoading(false);

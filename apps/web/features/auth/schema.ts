@@ -34,20 +34,26 @@ export const signupSchema = z
 	});
 
 export function createResolver<T extends z.ZodTypeAny>(schema: T) {
-	return async (values: any) => {
+	return async (values: unknown) => {
 		const result = await schema.safeParseAsync(values);
 		if (result.success) {
 			return { values: result.data, errors: {} };
 		}
 
-		const errors = result.error.issues.reduce((acc: any, current: any) => {
-			const path = current.path.join(".");
-			acc[path] = {
-				type: current.code,
-				message: current.message,
-			};
-			return acc;
-		}, {});
+		const errors = result.error.issues.reduce(
+			(
+				acc: Record<string, { type: string; message: string }>,
+				current: z.ZodIssue,
+			) => {
+				const path = current.path.join(".");
+				acc[path] = {
+					type: current.code,
+					message: current.message,
+				};
+				return acc;
+			},
+			{},
+		);
 
 		return { values: {}, errors };
 	};

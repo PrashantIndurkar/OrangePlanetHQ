@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import React from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -78,7 +77,7 @@ export function LoginForm() {
 			{/* Center-aligned links underneath the button with good space */}
 			<div className="flex flex-col items-center gap-2 mt-4 text-xs select-none">
 				<span className="text-muted-foreground">
-					Don't have an account?{" "}
+					Don&apos;t have an account?{" "}
 					<Link
 						href="/signup"
 						className="text-primary font-semibold hover:underline transition-colors"
