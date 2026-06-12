@@ -21,19 +21,31 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install semver
-        run: npm install semver
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Get current version
         id: current
         run: |
           echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
-      - name: Calculate next patch version
+      - name: Determine bump type
+        id: bump
+        run: |
+          BUMP=$(npx conventional-recommended-bump -p angular)
+          echo "type=$BUMP" >> $GITHUB_OUTPUT
+
+      - name: Calculate next version
         id: next
         run: |
           CURRENT="${{ steps.current.outputs.version }}"
-          NEXT=$(node -e "const semver=require('semver'); console.log(semver.inc('$CURRENT','patch'))")
+          BUMP="${{ steps.bump.outputs.type }}"
+
+          NEXT=$(node -e "
+            const semver = require('semver');
+            console.log(semver.inc('$CURRENT', '$BUMP'));
+          ")
+
           echo "version=$NEXT" >> $GITHUB_OUTPUT
 
       - name: Update versions
