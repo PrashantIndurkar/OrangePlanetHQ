@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const geistSans = localFont({
-	src: "./fonts/GeistVF.woff",
+const plusJakartaSans = Plus_Jakarta_Sans({
+	subsets: ["latin"],
 	variable: "--font-geist-sans",
 });
-const geistMono = localFont({
-	src: "./fonts/GeistMonoVF.woff",
+const geistMono = Geist_Mono({
+	subsets: ["latin"],
 	variable: "--font-geist-mono",
 });
 
@@ -23,7 +23,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={`${geistSans.variable} ${geistMono.variable}`}>
+			<body
+				suppressHydrationWarning
+				className={`${plusJakartaSans.variable} ${geistMono.variable}`}
+			>
 				{children}
 			</body>
 		</html>

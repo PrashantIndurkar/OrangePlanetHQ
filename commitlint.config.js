@@ -8,5 +8,6 @@ export default {
 			"never",
 			["sentence-case", "start-case", "pascal-case", "upper-case"],
 		],
+		"subject-full-stop": [0],
 	},
 };
