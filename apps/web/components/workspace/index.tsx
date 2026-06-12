@@ -8,7 +8,7 @@ import { WorkspaceListView } from "./workspace-list-view";
 
 export function WorkspaceLayout() {
 	const [activeTab, setActiveTab] = useState<string>("tasks");
-	const [view, setView] = useState<"board" | "list">("board");
+	const [view, setView] = useState<"board" | "list">("list");
 
 	return (
 		<div className="flex flex-col h-full w-full overflow-hidden bg-background">
