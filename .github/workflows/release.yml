@@ -2,11 +2,6 @@ name: Create Release
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to release (leave empty for automatic versioning)"
-        required: false
-        type: string
 
 jobs:
   release:
@@ -14,93 +9,60 @@ jobs:
 
     permissions:
       contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          bun-version: latest
+          node-version: 22
 
-      - name: Install dependencies
-        run: |
-          bun add -g conventional-changelog-cli
-          bun add -g conventional-recommended-bump
-          bun add -g conventional-changelog-angular
-          bun add -g semver
-          bun add -g jq
-
-      - name: Get version bump
-        id: bump
-        if: ${{ !inputs.version }}
-        run: |
-          BUMP=$(bunx conventional-recommended-bump -p angular)
-          echo "bump=$BUMP" >> $GITHUB_OUTPUT
+      - name: Install semver
+        run: npm install semver
 
       - name: Get current version
-        id: current_version
+        id: current
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
-      - name: Calculate new version
-        id: new_version
+      - name: Calculate next patch version
+        id: next
         run: |
-          if [ -n "${{ inputs.version }}" ]; then
-            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
-          else
-            cat > version.mjs << EOF
-            import semver from "semver";
-            const current = "${{ steps.current_version.outputs.version }}";
-            const bump = "${{ steps.bump.outputs.bump }}";
-            console.log(semver.inc(current, bump));
-            EOF
+          CURRENT="${{ steps.current.outputs.version }}"
+          NEXT=$(node -e "const semver=require('semver'); console.log(semver.inc('$CURRENT','patch'))")
+          echo "version=$NEXT" >> $GITHUB_OUTPUT
 
-            NEW_VERSION=$(bun version.mjs)
-            rm version.mjs
-
-            echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Update version in package.json files
+      - name: Update versions
         run: |
-          bun x npm version ${{ steps.new_version.outputs.version }} --no-git-tag-version
+          npm version ${{ steps.next.outputs.version }} --no-git-tag-version
 
           cd apps/web
-          bun x npm version ${{ steps.new_version.outputs.version }} --no-git-tag-version
+          npm version ${{ steps.next.outputs.version }} --no-git-tag-version
           cd ../..
 
-      - name: Generate changelog
-        run: |
-          bunx conventional-changelog -p angular -i CHANGELOG.md -s --release-count 1
-
-      - name: Create Release Commit
+      - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add CHANGELOG.md package.json apps/web/package.json
+          git add package.json apps/web/package.json
+          git commit -m "chore(release): v${{ steps.next.outputs.version }}"
 
-          git commit -m "chore(release): v${{ steps.new_version.outputs.version }}" || true
-
-          git tag -f "v${{ steps.new_version.outputs.version }}"
-
-      - name: Push changes
+      - name: Create tag
         run: |
-          git push origin HEAD:${{ github.ref_name }}
-          git push origin --tags --force
+          git tag v${{ steps.next.outputs.version }}
+
+      - name: Push
+        run: |
+          git push
+          git push --tags
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.new_version.outputs.version }}
-          name: Release v${{ steps.new_version.outputs.version }}
+          tag_name: v${{ steps.next.outputs.version }}
           generate_release_notes: true
-          draft: false
-          prerelease: false
