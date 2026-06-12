@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import React from "react";
 import { AuthCard } from "@/components/auth/auth-card";
 import { Logo } from "@/components/auth/logo";
 import { SignupForm } from "@/components/auth/signup-form";
