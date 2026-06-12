@@ -15,14 +15,13 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      actions: write
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -35,6 +34,7 @@ jobs:
           bun add -g conventional-recommended-bump
           bun add -g conventional-changelog-angular
           bun add -g semver
+          bun add -g jq
 
       - name: Get version bump
         id: bump
@@ -46,7 +46,7 @@ jobs:
       - name: Get current version
         id: current_version
         run: |
-          VERSION=$(bun x jq -r .version package.json)
+          VERSION=$(jq -r .version package.json)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Calculate new version
@@ -55,13 +55,14 @@ jobs:
           if [ -n "${{ inputs.version }}" ]; then
             echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
           else
-            echo 'import semver from "semver";
+            cat > version.mjs << EOF
+            import semver from "semver";
             const current = "${{ steps.current_version.outputs.version }}";
             const bump = "${{ steps.bump.outputs.bump }}";
-            console.log(semver.inc(current, bump));' > version.mjs
+            console.log(semver.inc(current, bump));
+            EOF
 
             NEW_VERSION=$(bun version.mjs)
-
             rm version.mjs
 
             echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
@@ -81,25 +82,23 @@ jobs:
 
       - name: Create Release Commit
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add CHANGELOG.md package.json apps/web/package.json
 
-          git commit -m "chore(release): v${{ steps.new_version.outputs.version }}" || echo "No changes to commit"
+          git commit -m "chore(release): v${{ steps.new_version.outputs.version }}" || true
 
-          git tag "v${{ steps.new_version.outputs.version }}"
+          git tag -f "v${{ steps.new_version.outputs.version }}"
 
       - name: Push changes
         run: |
-          git remote set-url origin https://x-access-token:${{ secrets.RELEASE_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin HEAD:${{ github.ref_name }}
-          git push origin --tags
+          git push origin --tags --force
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          token: ${{ secrets.RELEASE_TOKEN }}
           tag_name: v${{ steps.new_version.outputs.version }}
           name: Release v${{ steps.new_version.outputs.version }}
           generate_release_notes: true
