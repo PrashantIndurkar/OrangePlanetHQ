@@ -16,6 +16,9 @@
     "test:integration": "turbo test:integration",
     "prepare": "husky"
   },
+  "dependencies": {
+    "semver": "^7.8.4"
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",
     "@commitlint/cli": "^21.0.2",
@@ -24,7 +27,6 @@
     "esbuild": "^0.28.0",
     "husky": "^9.1.7",
     "linkifyjs": "^4.3.3",
-    "semver": "^7.8.4",
     "tar-fs": "^3.1.2",
     "turbo": "^2.9.18",
     "typescript": "5.9.2"

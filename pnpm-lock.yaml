@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      semver:
+        specifier: ^7.8.4
+        version: 7.8.4
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.4.16
@@ -29,9 +33,6 @@ importers:
       linkifyjs:
         specifier: ^4.3.3
         version: 4.3.3
-      semver:
-        specifier: ^7.8.4
-        version: 7.8.4
       tar-fs:
         specifier: ^3.1.2
         version: 3.1.2
