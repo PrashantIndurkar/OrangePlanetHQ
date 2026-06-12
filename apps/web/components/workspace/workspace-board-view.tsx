@@ -123,7 +123,7 @@ export function WorkspaceBoardView() {
 				return (
 					<div
 						key={column.id}
-						className="group flex flex-col w-[344px] shrink-0 h-full bg-[#f9f9f9] dark:bg-[#1d1d1f] rounded-none overflow-hidden"
+						className="group flex flex-col w-[344px] shrink-0 h-full bg-[#f9f9f9] dark:bg-[#1d1d1f] rounded-none overflow-hidden border border-zinc-200 dark:border-zinc-800"
 					>
 						{/* Column Header */}
 						<div className="flex items-center justify-between p-3 border-b border-border bg-muted/10 shrink-0">
@@ -131,14 +131,16 @@ export function WorkspaceBoardView() {
 								<span className="flex items-center justify-center size-4 shrink-0">
 									{column.icon}
 								</span>
-								<span className="text-sm font-semibold text-foreground leading-none">
-									{column.title}
-								</span>
-								<span className="text-xs text-muted-foreground/60 ml-0.5 leading-none">
-									{columnTasks.length}
-								</span>
+								<div className="flex items-center gap-1.5">
+									<span className="text-sm font-semibold text-foreground">
+										{column.title}
+									</span>
+									<span className="text-xs font-normal text-zinc-400 dark:text-zinc-500 flex items-center justify-center h-4">
+										{columnTasks.length}
+									</span>
+								</div>
 							</div>
-							<div className="flex items-center gap-1 text-muted-foreground/60">
+							<div className="flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
 								<button
 									type="button"
 									className="h-6 w-6 flex items-center justify-center rounded-none hover:bg-accent/10 hover:text-foreground transition-colors cursor-pointer outline-none"
@@ -147,25 +149,36 @@ export function WorkspaceBoardView() {
 									<svg
 										className="w-3.5 h-3.5"
 										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2.5"
+										fill="currentColor"
 										role="img"
 										aria-label="Actions"
 									>
 										<title>Actions</title>
-										<circle cx="12" cy="12" r="1.2" />
-										<circle cx="5" cy="12" r="1.2" />
-										<circle cx="19" cy="12" r="1.2" />
+										<circle cx="12" cy="12" r="1.5" />
+										<circle cx="6" cy="12" r="1.5" />
+										<circle cx="18" cy="12" r="1.5" />
 									</svg>
 								</button>
 								<button
 									type="button"
 									onClick={() => handleAddTask(column.id)}
-									className="h-6 w-6 flex items-center justify-center rounded-none hover:bg-accent/10 hover:text-foreground transition-colors cursor-pointer outline-none text-base font-normal"
+									className="h-6 w-6 flex items-center justify-center rounded-none border border-dotted border-zinc-300 dark:border-zinc-800 bg-transparent hover:bg-accent/10 hover:text-foreground transition-colors cursor-pointer outline-none"
 									title="Add Task"
 								>
-									+
+									<svg
+										className="w-3.5 h-3.5"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										strokeWidth="2.5"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										role="img"
+										aria-label="Add Task"
+									>
+										<title>Add Task</title>
+										<path d="M12 5v14M5 12h14" />
+									</svg>
 								</button>
 							</div>
 						</div>

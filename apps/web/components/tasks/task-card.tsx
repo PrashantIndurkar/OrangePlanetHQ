@@ -94,7 +94,7 @@ export function TaskCard({
 			currentStatus={status as TaskStatus}
 			currentPriority={priority as TaskPriority}
 		>
-			<div className="group flex flex-col w-[320px] rounded-none bg-[#ffffff] dark:bg-[#25272b] p-[9px] pb-[11px] text-card-foreground shadow-none border-none select-none">
+			<div className="group flex flex-col w-[320px] rounded-none bg-[#ffffff] dark:bg-[#25272b] p-[9px] pb-[11px] text-card-foreground shadow-none border border-zinc-200 dark:border-zinc-800 select-none">
 				{/* Top Section: Issue ID and Assignee */}
 				<div className="flex items-center justify-between">
 					<span className="text-[12px] font-[450] text-zinc-700 dark:text-zinc-300 leading-none">
