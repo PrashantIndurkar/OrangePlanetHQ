@@ -1,3 +1,74 @@
+export const ALLOWED_STATUSES = [
+	"backlog",
+	"todo",
+	"in-progress",
+	"done",
+	"canceled",
+] as const;
+
+export const ALLOWED_PRIORITIES = [
+	"no-priority",
+	"urgent",
+	"high",
+	"medium",
+	"low",
+] as const;
+
+export const ALLOWED_DUE_DATES = [
+	"today",
+	"tomorrow",
+	"overdue",
+	"no-due-date",
+] as const;
+
+export const ALLOWED_SORT_BY = ["created", "dueDate", "priority"] as const;
+export const ALLOWED_SORT_ORDER = ["asc", "desc"] as const;
+
+export interface ReadOnlySearchParams {
+	get(key: string): string | null;
+}
+
+export function getNormalizedFilters(searchParams: ReadOnlySearchParams) {
+	const activeStatuses = (searchParams.get("status")?.split(",") || [])
+		.filter(Boolean)
+		.filter((v): v is (typeof ALLOWED_STATUSES)[number] =>
+			(ALLOWED_STATUSES as readonly string[]).includes(v),
+		);
+
+	const activePriorities = (searchParams.get("priority")?.split(",") || [])
+		.filter(Boolean)
+		.filter((v): v is (typeof ALLOWED_PRIORITIES)[number] =>
+			(ALLOWED_PRIORITIES as readonly string[]).includes(v),
+		);
+
+	const activeDueDates = (searchParams.get("due_date")?.split(",") || [])
+		.filter(Boolean)
+		.filter((v): v is (typeof ALLOWED_DUE_DATES)[number] =>
+			(ALLOWED_DUE_DATES as readonly string[]).includes(v),
+		);
+
+	const rawSortBy = searchParams.get("sort_by");
+	const sortBy =
+		rawSortBy && (ALLOWED_SORT_BY as readonly string[]).includes(rawSortBy)
+			? (rawSortBy as (typeof ALLOWED_SORT_BY)[number])
+			: "created";
+
+	const rawSortOrder = searchParams.get("sort_order");
+	const sortOrder =
+		rawSortOrder &&
+		(ALLOWED_SORT_ORDER as readonly string[]).includes(rawSortOrder)
+			? (rawSortOrder as "asc" | "desc")
+			: "desc";
+
+	return {
+		activeStatuses,
+		activePriorities,
+		activeDueDates,
+		sortBy,
+		sortOrder,
+	};
+}
+
 export interface Task {
 	id: string;
 	title: string;

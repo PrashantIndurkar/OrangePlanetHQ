@@ -84,7 +84,7 @@ export function WorkspaceHeader({
 					<button
 						type="button"
 						onClick={toggle}
-						className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-none text-muted-foreground transition-colors outline-none hover:bg-muted/50 hover:text-foreground"
+						className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-none text-muted-foreground transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:bg-muted/50 hover:text-foreground"
 						title="Expand Sidebar"
 					>
 						<svg
@@ -141,7 +141,7 @@ export function WorkspaceHeader({
 								type="button"
 								onClick={() => onTabChange(tab.id)}
 								className={cn(
-									"flex h-full cursor-pointer items-center gap-1.5 rounded-none border-none px-2.5 text-xs transition-colors outline-none",
+									"flex h-full cursor-pointer items-center gap-1.5 rounded-none border-none px-2.5 text-xs transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring/50",
 									isActive
 										? "bg-muted font-semibold text-foreground"
 										: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",

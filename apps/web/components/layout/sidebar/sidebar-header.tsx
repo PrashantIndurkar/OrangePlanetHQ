@@ -33,7 +33,7 @@ export function SidebarHeader() {
 				<button
 					type="button"
 					onClick={() => setIsOpen(!isOpen)}
-					className="flex cursor-pointer items-center gap-2 text-foreground transition-opacity outline-none hover:opacity-90"
+					className="flex cursor-pointer items-center gap-2 rounded-none text-foreground transition-opacity outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:opacity-90"
 				>
 					{/* Blue Brand Mark */}
 					<div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-600 shadow-sm shadow-blue-500/10 dark:bg-blue-500">
@@ -76,7 +76,7 @@ export function SidebarHeader() {
 							<button
 								type="button"
 								onClick={() => setIsOpen(false)}
-								className="flex w-full cursor-pointer items-center justify-between bg-muted/30 px-3 py-2 text-xs font-medium text-foreground outline-none hover:bg-muted"
+								className="flex w-full cursor-pointer items-center justify-between rounded-none bg-muted/30 px-3 py-2 text-xs font-medium text-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:bg-muted"
 							>
 								<span>stride</span>
 								<HugeiconsIcon
@@ -95,7 +95,7 @@ export function SidebarHeader() {
 									// In future settings will hook here
 									console.log("Settings clicked");
 								}}
-								className="flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-xs text-foreground outline-none hover:bg-muted"
+								className="flex w-full cursor-pointer items-center gap-2 rounded-none px-3 py-2 text-left text-xs text-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:bg-muted"
 							>
 								<HugeiconsIcon
 									icon={Settings01Icon}

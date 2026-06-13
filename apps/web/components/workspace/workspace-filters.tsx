@@ -38,6 +38,8 @@ import {
 	UrgentPriorityIcon,
 } from "../icons";
 
+import { getNormalizedFilters } from "./types";
+
 interface WorkspaceFiltersProps {
 	view: "board" | "list";
 	onViewChange: (view: "board" | "list") => void;
@@ -51,16 +53,13 @@ export function WorkspaceFilters({
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 
-	const activeStatuses =
-		searchParams.get("status")?.split(",").filter(Boolean) || [];
-	const activePriorities =
-		searchParams.get("priority")?.split(",").filter(Boolean) || [];
-	const activeDueDates =
-		searchParams.get("due_date")?.split(",").filter(Boolean) || [];
-
-	const sortBy = searchParams.get("sort_by") || "created";
-	const sortOrder =
-		(searchParams.get("sort_order") as "asc" | "desc") || "desc";
+	const {
+		activeStatuses,
+		activePriorities,
+		activeDueDates,
+		sortBy,
+		sortOrder,
+	} = getNormalizedFilters(searchParams);
 
 	const currentQuery = searchParams.get("q") || "";
 	const [prevQuery, setPrevQuery] = useState(currentQuery);
@@ -211,7 +210,9 @@ export function WorkspaceFilters({
 												<CommandItem
 													key={opt.value}
 													value={opt.label}
-													data-checked={activeStatuses.includes(opt.value)}
+													data-checked={(
+														activeStatuses as readonly string[]
+													).includes(opt.value)}
 													onSelect={() => toggleFilter("status", opt.value)}
 													className="cursor-pointer rounded-none"
 												>
@@ -244,7 +245,9 @@ export function WorkspaceFilters({
 												<CommandItem
 													key={opt.value}
 													value={opt.label}
-													data-checked={activePriorities.includes(opt.value)}
+													data-checked={(
+														activePriorities as readonly string[]
+													).includes(opt.value)}
 													onSelect={() => toggleFilter("priority", opt.value)}
 													className="cursor-pointer rounded-none"
 												>
@@ -275,7 +278,9 @@ export function WorkspaceFilters({
 												<CommandItem
 													key={opt.value}
 													value={opt.label}
-													data-checked={activeDueDates.includes(opt.value)}
+													data-checked={(
+														activeDueDates as readonly string[]
+													).includes(opt.value)}
 													onSelect={() => toggleFilter("due_date", opt.value)}
 													className="cursor-pointer rounded-none"
 												>
