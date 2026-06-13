@@ -1,5 +1,5 @@
-import express from "express";
 import cors from "cors";
+import express from "express";
 import morgan from "morgan";
 import { errorHandler } from "./middlewares/error.middleware.js";
 
@@ -16,7 +16,7 @@ app.use(morgan("dev"));
 
 // Health check endpoint
 app.get("/health", (req, res) => {
-  res.status(200).json({ status: "healthy", timestamp: new Date() });
+	res.status(200).json({ status: "healthy", timestamp: new Date() });
 });
 
 // Error handling middleware (must be registered last)
