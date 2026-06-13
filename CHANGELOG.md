@@ -1,11 +1,33 @@
 # [0.5.0](https://github.com/PrashantIndurkar/stride/compare/v0.4.0...v0.5.0) (2026-06-13)
 
+## ✨ New Features (2026-06-13)
 
-### Features
+### Issue Creation Workflow
 
-* add IssueDueDateSelect component for managing issue due dates via popover menu ([c4c384f](https://github.com/PrashantIndurkar/stride/commit/c4c384fbcc92f077491e03120d85c2e741428a98))
-* implement issue creation workflow with dialog components and state management ([e978a86](https://github.com/PrashantIndurkar/stride/commit/e978a8693fb09327fe1cdcf2a823080d1584d712))
-* implement workspace task management system including board views, issue status/priority controls, and mock data storage ([190eb7d](https://github.com/PrashantIndurkar/stride/commit/190eb7d9e7d13ec87633ec3bcb1b6b8c606f2c90))
+* Added a complete issue creation flow with dedicated dialog components.
+* Introduced centralized state management for creating and managing new issues.
+* Improved the overall issue creation experience with a streamlined workflow.
+* Created model and detailed view for issues/tasks
+
+### Due Date Management
+
+* Added the `IssueDueDateSelect` component.
+* Enabled setting, updating, and removing issue due dates through an intuitive popover interface.
+
+### Task & Workspace Management
+
+* Added a workspace task management system powered by mock data storage.
+* Introduced Kanban-style board views for visual task tracking.
+* Added issue status controls for workflow management.
+* Added priority controls for better task prioritization.
+
+## 🚀 Improvements
+
+* Improved task organization and management across workspace views.
+* Enhanced issue editing and interaction patterns.
+* Refined board-view workflows for a more seamless user experience.
+* Established the foundation for future backend integration and persistent data storage.
+
 # 0.4.0 (2026-06-13)
 
 ## ✨ New Features
