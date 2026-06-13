@@ -55,7 +55,12 @@ export function IssueDueDateSelect({
 					icon={Calendar04Icon}
 					className={cn("size-3.5 shrink-0", getDueDateColor(value))}
 				/>
-				<span className={cn("text-[12px] leading-none font-medium", value ? getDueDateColor(value) : "text-foreground")}>
+				<span
+					className={cn(
+						"text-[12px] leading-none font-medium",
+						value ? getDueDateColor(value) : "text-foreground",
+					)}
+				>
 					{value || "Due date"}
 				</span>
 			</PopoverTrigger>
