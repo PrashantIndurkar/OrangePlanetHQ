@@ -67,7 +67,7 @@ export function SidebarNav() {
 								"flex w-full items-center gap-2 rounded-none px-2.5 py-1.5 text-xs font-medium transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring/50",
 								isActive
 									? "bg-muted text-foreground font-medium"
-									: "text-foreground/70 hover:bg-muted/40 hover:text-foreground"
+									: "text-foreground/70 hover:bg-muted/40 hover:text-foreground",
 							)}
 						>
 							<HugeiconsIcon icon={item.icon} size={14} className="shrink-0" />
@@ -79,4 +79,3 @@ export function SidebarNav() {
 		</div>
 	);
 }
-

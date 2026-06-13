@@ -39,9 +39,7 @@ export default function InboxPage() {
 					<h2 className="text-sm font-semibold text-foreground">
 						No notifications
 					</h2>
-					<p className="mt-1 text-xs text-muted-foreground">
-						Need a break?
-					</p>
+					<p className="mt-1 text-xs text-muted-foreground">Need a break?</p>
 				</div>
 			</main>
 		</div>
