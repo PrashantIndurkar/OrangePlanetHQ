@@ -20,7 +20,7 @@ export function WorkspaceHeader({
 			label: "Backlog",
 			icon: (
 				<svg
-					className="w-3.5 h-3.5"
+					className="h-3.5 w-3.5"
 					viewBox="0 0 24 24"
 					fill="none"
 					stroke="currentColor"
@@ -38,7 +38,7 @@ export function WorkspaceHeader({
 			label: "Tasks",
 			icon: (
 				<svg
-					className="w-3.5 h-3.5"
+					className="h-3.5 w-3.5"
 					viewBox="0 0 24 24"
 					fill="none"
 					stroke="currentColor"
@@ -57,7 +57,7 @@ export function WorkspaceHeader({
 			label: "Gantt",
 			icon: (
 				<svg
-					className="w-3.5 h-3.5"
+					className="h-3.5 w-3.5"
 					viewBox="0 0 24 24"
 					fill="none"
 					stroke="currentColor"
@@ -76,7 +76,7 @@ export function WorkspaceHeader({
 	];
 
 	return (
-		<header className="flex h-14 w-full items-center justify-between border-b border-border bg-background px-4 shrink-0 select-none">
+		<header className="flex h-14 w-full shrink-0 items-center justify-between border-b border-border bg-background px-4 select-none">
 			{/* Left side: Breadcrumb path & Navigation tabs */}
 			<div className="flex items-center gap-4">
 				{/* Sidebar Toggle Trigger when collapsed */}
@@ -84,11 +84,11 @@ export function WorkspaceHeader({
 					<button
 						type="button"
 						onClick={toggle}
-						className="h-8 w-8 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors outline-none cursor-pointer rounded-none"
+						className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-none text-muted-foreground transition-colors outline-none hover:bg-muted/50 hover:text-foreground"
 						title="Expand Sidebar"
 					>
 						<svg
-							className="w-4 h-4"
+							className="h-4 w-4"
 							viewBox="0 0 24 24"
 							fill="none"
 							stroke="currentColor"
@@ -110,7 +110,7 @@ export function WorkspaceHeader({
 					<div className="flex items-center gap-1.5 font-semibold text-foreground">
 						{/* Premium Workspace Dashboard Grid Icon */}
 						<svg
-							className="w-3.5 h-3.5 text-blue-600 dark:text-blue-500"
+							className="h-3.5 w-3.5 text-blue-600 dark:text-blue-500"
 							viewBox="0 0 24 24"
 							fill="none"
 							stroke="currentColor"
@@ -129,10 +129,10 @@ export function WorkspaceHeader({
 				</div>
 
 				{/* Decorative separator line */}
-				<div className="h-4 w-px bg-border hidden sm:block" />
+				<div className="hidden h-4 w-px bg-border sm:block" />
 
 				{/* Navigation tabs grouped inside one toggle area with a border but completely boxy (rounded-none) */}
-				<nav className="hidden sm:flex items-center border border-border bg-muted/10 p-0.5 rounded-none gap-0.5">
+				<nav className="hidden h-7 items-center gap-0.5 rounded-none border border-border bg-muted/10 p-0.5 sm:flex">
 					{tabs.map((tab) => {
 						const isActive = activeTab === tab.id;
 						return (
@@ -141,10 +141,10 @@ export function WorkspaceHeader({
 								type="button"
 								onClick={() => onTabChange(tab.id)}
 								className={cn(
-									"flex items-center gap-1.5 px-2.5 py-1 text-xs transition-colors rounded-none outline-none cursor-pointer border-none",
+									"flex h-full cursor-pointer items-center gap-1.5 rounded-none border-none px-2.5 text-xs transition-colors outline-none",
 									isActive
-										? "bg-muted text-foreground font-semibold"
-										: "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+										? "bg-muted font-semibold text-foreground"
+										: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
 								)}
 							>
 								{tab.icon}

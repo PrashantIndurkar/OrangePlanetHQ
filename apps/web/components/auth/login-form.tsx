@@ -32,10 +32,10 @@ export function LoginForm() {
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
-			className="flex flex-col gap-4 w-full"
+			className="flex w-full flex-col gap-4"
 		>
 			{apiError && (
-				<div className="p-3 text-xs bg-destructive/10 text-destructive border border-destructive/20 select-none animate-in fade-in-50 duration-200">
+				<div className="animate-in border border-destructive/20 bg-destructive/10 p-3 text-xs text-destructive duration-200 fade-in-50 select-none">
 					{apiError}
 				</div>
 			)}
@@ -69,18 +69,18 @@ export function LoginForm() {
 			<Button
 				type="submit"
 				disabled={isLoading}
-				className="w-full h-10 bg-primary hover:bg-primary/95 text-primary-foreground text-xs font-bold uppercase rounded-none cursor-pointer mt-2"
+				className="mt-2 h-10 w-full cursor-pointer rounded-none bg-primary text-xs font-bold text-primary-foreground uppercase hover:bg-primary/95"
 			>
 				{isLoading ? "Logging in..." : "Log in"}
 			</Button>
 
 			{/* Center-aligned links underneath the button with good space */}
-			<div className="flex flex-col items-center gap-2 mt-4 text-xs select-none">
+			<div className="mt-4 flex flex-col items-center gap-2 text-xs select-none">
 				<span className="text-muted-foreground">
 					Don&apos;t have an account?{" "}
 					<Link
 						href="/signup"
-						className="text-primary font-semibold hover:underline transition-colors"
+						className="font-semibold text-primary transition-colors hover:underline"
 					>
 						Register
 					</Link>

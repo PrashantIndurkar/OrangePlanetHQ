@@ -12,10 +12,10 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
 		const id = props.id || generatedId;
 
 		return (
-			<div className="w-full flex flex-col items-start">
+			<div className="flex w-full flex-col items-start">
 				<label
 					htmlFor={id}
-					className="text-sm font-medium text-foreground mb-1.5 select-none"
+					className="mb-1.5 text-sm font-medium text-foreground select-none"
 				>
 					{label}
 				</label>
@@ -24,7 +24,7 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
 					type={type}
 					ref={ref}
 					className={cn(
-						"w-full h-10 px-3 text-xs bg-muted/30 border border-input rounded-none outline-none transition-colors",
+						"h-10 w-full rounded-none border border-input bg-muted/30 px-3 text-xs transition-colors outline-none",
 						"focus:border-ring focus:ring-1 focus:ring-ring/40",
 						error &&
 							"border-destructive focus:border-destructive focus:ring-destructive/30",
@@ -33,7 +33,7 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
 					{...props}
 				/>
 				{error && (
-					<span className="text-[11px] text-destructive mt-1 font-medium select-none animate-in fade-in-50 duration-200">
+					<span className="mt-1 animate-in text-[11px] font-medium text-destructive duration-200 fade-in-50 select-none">
 						{error}
 					</span>
 				)}

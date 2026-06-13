@@ -24,7 +24,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
 		return (
 			<div
 				className={cn(
-					"h-7 bg-muted/20 border border-border w-full flex items-center justify-between rounded-none",
+					"flex h-7 w-full items-center justify-between rounded-none border border-border bg-muted/20",
 					className,
 				)}
 			/>
@@ -42,13 +42,13 @@ export function ThemeSwitcher({ className }: { className?: string }) {
 	return (
 		<div
 			className={cn(
-				"relative flex border border-border bg-muted/10 p-0.5 select-none w-full rounded-none h-7",
+				"relative flex h-7 w-full rounded-none border border-border bg-muted/10 p-0.5 select-none",
 				className,
 			)}
 		>
 			{/* Sliding active background indicator */}
 			<div
-				className="absolute top-0.5 bottom-0.5 left-0.5 bg-muted border border-border/20 transition-transform duration-200 ease-out"
+				className="absolute top-0.5 bottom-0.5 left-0.5 border border-border/20 bg-muted transition-transform duration-200 ease-out"
 				style={{
 					width: "calc(33.333% - 1.33px)",
 					transform: `translateX(${
@@ -70,7 +70,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
 						type="button"
 						onClick={() => setTheme(opt.id)}
 						className={cn(
-							"relative z-10 flex flex-1 items-center justify-center h-full text-[10px] font-medium transition-colors outline-none cursor-pointer",
+							"relative z-10 flex h-full flex-1 cursor-pointer items-center justify-center text-[10px] font-medium transition-colors outline-none",
 							isActive
 								? "text-foreground"
 								: "text-muted-foreground hover:text-foreground",

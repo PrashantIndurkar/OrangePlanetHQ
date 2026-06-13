@@ -19,19 +19,19 @@ export function NoPriorityIcon({ className }: { className?: string }) {
 				cx="8"
 				cy="12"
 				r="1.2"
-				className="fill-zinc-400 dark:fill-zinc-500 stroke-none"
+				className="fill-zinc-400 stroke-none dark:fill-zinc-500"
 			/>
 			<circle
 				cx="12"
 				cy="12"
 				r="1.2"
-				className="fill-zinc-400 dark:fill-zinc-500 stroke-none"
+				className="fill-zinc-400 stroke-none dark:fill-zinc-500"
 			/>
 			<circle
 				cx="16"
 				cy="12"
 				r="1.2"
-				className="fill-zinc-400 dark:fill-zinc-500 stroke-none"
+				className="fill-zinc-400 stroke-none dark:fill-zinc-500"
 			/>
 		</svg>
 	);
@@ -73,21 +73,21 @@ export function HighPriorityIcon({ className }: { className?: string }) {
 				y="13.5"
 				width="2"
 				height="3.5"
-				className="fill-zinc-500 dark:fill-zinc-400 stroke-none"
+				className="fill-zinc-500 stroke-none dark:fill-zinc-400"
 			/>
 			<rect
 				x="11"
 				y="10.5"
 				width="2"
 				height="6.5"
-				className="fill-zinc-500 dark:fill-zinc-400 stroke-none"
+				className="fill-zinc-500 stroke-none dark:fill-zinc-400"
 			/>
 			<rect
 				x="14.5"
 				y="7.5"
 				width="2"
 				height="9.5"
-				className="fill-zinc-500 dark:fill-zinc-400 stroke-none"
+				className="fill-zinc-500 stroke-none dark:fill-zinc-400"
 			/>
 		</svg>
 	);
@@ -108,21 +108,21 @@ export function MediumPriorityIcon({ className }: { className?: string }) {
 				y="13.5"
 				width="2"
 				height="3.5"
-				className="fill-zinc-500 dark:fill-zinc-400 stroke-none"
+				className="fill-zinc-500 stroke-none dark:fill-zinc-400"
 			/>
 			<rect
 				x="11"
 				y="10.5"
 				width="2"
 				height="6.5"
-				className="fill-zinc-500 dark:fill-zinc-400 stroke-none"
+				className="fill-zinc-500 stroke-none dark:fill-zinc-400"
 			/>
 			<rect
 				x="14.5"
 				y="7.5"
 				width="2"
 				height="9.5"
-				className="fill-zinc-200 dark:fill-zinc-700 stroke-none"
+				className="fill-zinc-200 stroke-none dark:fill-zinc-700"
 			/>
 		</svg>
 	);
@@ -143,21 +143,21 @@ export function LowPriorityIcon({ className }: { className?: string }) {
 				y="13.5"
 				width="2"
 				height="3.5"
-				className="fill-zinc-500 dark:fill-zinc-400 stroke-none"
+				className="fill-zinc-500 stroke-none dark:fill-zinc-400"
 			/>
 			<rect
 				x="11"
 				y="10.5"
 				width="2"
 				height="6.5"
-				className="fill-zinc-200 dark:fill-zinc-700 stroke-none"
+				className="fill-zinc-200 stroke-none dark:fill-zinc-700"
 			/>
 			<rect
 				x="14.5"
 				y="7.5"
 				width="2"
 				height="9.5"
-				className="fill-zinc-200 dark:fill-zinc-700 stroke-none"
+				className="fill-zinc-200 stroke-none dark:fill-zinc-700"
 			/>
 		</svg>
 	);

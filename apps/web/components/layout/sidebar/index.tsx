@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { SearchInput } from "@/components/ui/search-input";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/providers/sidebar-provider";
 import { SidebarFooter } from "./sidebar-footer";
@@ -62,7 +61,7 @@ export function Sidebar() {
 		<aside
 			style={{ width: isOpen ? `${width}px` : "0px" }}
 			className={cn(
-				"relative h-screen border-border bg-sidebar text-sidebar-foreground flex flex-col overflow-hidden shrink-0 select-none",
+				"relative flex h-screen shrink-0 flex-col overflow-hidden border-border bg-sidebar text-sidebar-foreground select-none",
 				isOpen && "border-r",
 				!isDragging && "transition-[width] duration-200 ease-in-out",
 			)}
@@ -70,22 +69,11 @@ export function Sidebar() {
 			{/* Inner wrapper with fixed width matching sidebar active width to prevent distortion */}
 			<div
 				style={{ width: `${width}px` }}
-				className="h-full flex flex-col justify-between shrink-0 relative"
+				className="relative flex h-full shrink-0 flex-col justify-between"
 			>
-				<div className="flex flex-col flex-1">
+				<div className="flex flex-1 flex-col">
 					{/* Sidebar Header */}
 					<SidebarHeader />
-
-					{/* Global Search Section aligned to workspace filters height */}
-					<div className="px-4 h-11 flex items-center border-b border-border bg-muted/5 shrink-0">
-						<div className="flex-1">
-							<SearchInput
-								placeholder="Search..."
-								showShortcut={true}
-								shortcutKey="/"
-							/>
-						</div>
-					</div>
 
 					{/* Navigation List */}
 					<SidebarNav />
@@ -105,8 +93,8 @@ export function Sidebar() {
 					tabIndex={0}
 					onMouseDown={handleMouseDown}
 					className={cn(
-						"absolute right-0 top-0 bottom-0 w-1 hover:w-1.5 cursor-col-resize z-50 transition-all hover:bg-primary/20",
-						isDragging && "bg-primary/30 w-1.5",
+						"absolute top-0 right-0 bottom-0 z-50 w-1 cursor-col-resize transition-all hover:w-1.5 hover:bg-primary/20",
+						isDragging && "w-1.5 bg-primary/30",
 					)}
 					title="Drag to resize, click to collapse"
 				/>

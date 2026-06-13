@@ -9,6 +9,7 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
+	CommandShortcut,
 } from "@/components/ui/command";
 import {
 	ContextMenu,
@@ -84,6 +85,7 @@ export function TaskContextMenu({
 	// Mock state for UI demonstration
 	const [status, setStatus] = React.useState<TaskStatus>(currentStatus);
 	const [priority, setPriority] = React.useState<TaskPriority>(currentPriority);
+	const [isOpen, setIsOpen] = React.useState(false);
 
 	// Shortcuts
 	useHotkeys("1", () => setStatus("backlog"));
@@ -92,16 +94,25 @@ export function TaskContextMenu({
 	useHotkeys("4", () => setStatus("done"));
 	useHotkeys("5", () => setStatus("canceled"));
 
+	const triggerChild = React.isValidElement(children)
+		? React.cloneElement(
+				children as React.ReactElement<{ "data-context-menu-open"?: boolean }>,
+				{
+					"data-context-menu-open": isOpen,
+				},
+			)
+		: children;
+
 	return (
-		<ContextMenu>
-			<ContextMenuTrigger render={children as React.ReactElement} />
+		<ContextMenu onOpenChange={setIsOpen}>
+			<ContextMenuTrigger render={triggerChild as React.ReactElement} />
 			<ContextMenuContent className="w-56">
 				{/* Status Submenu */}
 				<ContextMenuSub>
 					<ContextMenuSubTrigger className="flex items-center gap-2">
 						<TodoIcon className="h-4 w-4 text-muted-foreground" />
-						<span>Status</span>
-						<span className="ml-auto text-xs text-muted-foreground">S</span>
+						<span className="flex-grow">Status</span>
+						<span className="text-xs text-muted-foreground/60">S</span>
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className="w-48 p-0">
 						<Command>
@@ -119,18 +130,20 @@ export function TaskContextMenu({
 											<s.icon
 												className={`h-4 w-4 ${status === s.value ? "text-primary" : "text-muted-foreground"}`}
 											/>
-											<span>{s.label}</span>
-											{status === s.value && (
-												<HugeiconsIcon
-													icon={Tick02Icon}
-													className="ml-auto h-4 w-4"
-												/>
-											)}
-											<span
-												className={`text-xs text-muted-foreground ${status === s.value ? "ml-2" : "ml-auto"}`}
-											>
-												{s.shortcut}
-											</span>
+											<span className="flex-grow text-left">{s.label}</span>
+											<div className="ml-auto flex shrink-0 items-center gap-2">
+												{status === s.value ? (
+													<HugeiconsIcon
+														icon={Tick02Icon}
+														className="h-4 w-4 text-primary"
+													/>
+												) : (
+													<div className="h-4 w-4" />
+												)}
+												<CommandShortcut className="ml-0 min-w-[12px] text-right tracking-normal">
+													{s.shortcut}
+												</CommandShortcut>
+											</div>
 										</CommandItem>
 									))}
 								</CommandGroup>
@@ -143,8 +156,8 @@ export function TaskContextMenu({
 				<ContextMenuSub>
 					<ContextMenuSubTrigger className="flex items-center gap-2">
 						<PriorityIcon className="h-4 w-4 text-muted-foreground" />
-						<span>Priority</span>
-						<span className="ml-auto text-xs text-muted-foreground">P</span>
+						<span className="flex-grow">Priority</span>
+						<span className="text-xs text-muted-foreground/60">P</span>
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className="w-48 p-0">
 						<Command>
@@ -162,18 +175,20 @@ export function TaskContextMenu({
 											<p.icon
 												className={`h-4 w-4 ${priority === p.value ? "text-primary" : "text-muted-foreground"}`}
 											/>
-											<span>{p.label}</span>
-											{priority === p.value && (
-												<HugeiconsIcon
-													icon={Tick02Icon}
-													className="ml-auto h-4 w-4"
-												/>
-											)}
-											<span
-												className={`text-xs text-muted-foreground ${priority === p.value ? "ml-2" : "ml-auto"}`}
-											>
-												{p.shortcut}
-											</span>
+											<span className="flex-grow text-left">{p.label}</span>
+											<div className="ml-auto flex shrink-0 items-center gap-2">
+												{priority === p.value ? (
+													<HugeiconsIcon
+														icon={Tick02Icon}
+														className="h-4 w-4 text-primary"
+													/>
+												) : (
+													<div className="h-4 w-4" />
+												)}
+												<CommandShortcut className="ml-0 min-w-[12px] text-right tracking-normal">
+													{p.shortcut}
+												</CommandShortcut>
+											</div>
 										</CommandItem>
 									))}
 								</CommandGroup>

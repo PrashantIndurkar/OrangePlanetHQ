@@ -30,21 +30,21 @@ export function SidebarNav() {
 	];
 
 	return (
-		<div className="flex-1 py-4 px-3 flex flex-col gap-4 select-none">
+		<div className="flex flex-1 flex-col gap-4 px-3 py-4 select-none">
 			{/* Projects Collapsible Group */}
 			<div className="flex flex-col gap-1">
 				<button
 					type="button"
 					onClick={() => setProjectsExpanded(!projectsExpanded)}
-					className="flex items-center justify-between w-full px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground uppercase tracking-wider outline-none cursor-pointer"
+					className="flex w-full cursor-pointer items-center justify-between px-2 py-1 text-[10px] font-semibold tracking-wider text-muted-foreground uppercase outline-none hover:text-foreground"
 				>
 					<span>Projects</span>
 					<HugeiconsIcon
 						icon={ArrowDown01Icon}
 						size={12}
 						className={cn(
-							"transition-transform duration-200 text-muted-foreground",
-							projectsExpanded && "transform rotate-180",
+							"text-muted-foreground transition-transform duration-200",
+							projectsExpanded && "rotate-180 transform",
 						)}
 					/>
 				</button>
@@ -54,8 +54,8 @@ export function SidebarNav() {
 					className={cn(
 						"flex flex-col gap-0.5 overflow-hidden transition-all duration-300 ease-in-out",
 						projectsExpanded
-							? "max-h-96 opacity-100 mt-1"
-							: "max-h-0 opacity-0 pointer-events-none",
+							? "mt-1 max-h-96 opacity-100"
+							: "pointer-events-none max-h-0 opacity-0",
 					)}
 				>
 					{projects.map((project) => {
@@ -71,9 +71,9 @@ export function SidebarNav() {
 								key={project.id}
 								href={project.href}
 								className={cn(
-									"flex items-center gap-2 px-2.5 py-1.5 text-xs transition-colors rounded-none w-full font-medium outline-none",
+									"flex w-full items-center gap-2 rounded-none px-2.5 py-1.5 text-xs font-medium transition-colors outline-none",
 									isActive
-										? "bg-muted text-foreground border-l-2 border-primary pl-2"
+										? "border-l-2 border-primary bg-muted pl-2 text-foreground"
 										: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
 								)}
 							>
@@ -90,7 +90,7 @@ export function SidebarNav() {
 					{/* Add Project Item UI (static) */}
 					<button
 						type="button"
-						className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground hover:bg-muted/40 hover:text-foreground transition-colors rounded-none w-full font-medium outline-none cursor-pointer text-left"
+						className="flex w-full cursor-pointer items-center gap-2 rounded-none px-2.5 py-1.5 text-left text-xs font-medium text-muted-foreground transition-colors outline-none hover:bg-muted/40 hover:text-foreground"
 					>
 						<HugeiconsIcon icon={Add01Icon} size={14} className="shrink-0" />
 						<span>Add project</span>

@@ -1,6 +1,42 @@
 "use client";
 
+import { Calendar04Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from "@/components/ui/command";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuRadioGroup,
+	DropdownMenuRadioItem,
+	DropdownMenuSeparator,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { SearchInput } from "@/components/ui/search-input";
 import { cn } from "@/lib/utils";
+import {
+	BacklogIcon,
+	CanceledIcon,
+	DoneIcon,
+	HighPriorityIcon,
+	InProgressIcon,
+	LowPriorityIcon,
+	MediumPriorityIcon,
+	NoPriorityIcon,
+	TodoIcon,
+	UrgentPriorityIcon,
+} from "../icons";
 
 interface WorkspaceFiltersProps {
 	view: "board" | "list";
@@ -11,66 +47,330 @@ export function WorkspaceFilters({
 	view,
 	onViewChange,
 }: WorkspaceFiltersProps) {
-	return (
-		<div className="flex h-11 w-full items-center justify-between border-b border-border bg-background px-4 shrink-0 select-none">
-			{/* Left side: Filter and Sort buttons */}
-			<div className="flex items-center gap-2">
-				<button
-					type="button"
-					className="flex items-center gap-1.5 px-2.5 py-1 text-xs border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-200 outline-none cursor-pointer rounded-none font-medium"
-				>
-					{/* Custom Filter Icon */}
-					<svg
-						className="w-3.5 h-3.5"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					>
-						<title>Filter</title>
-						<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-					</svg>
-					<span>Filter</span>
-				</button>
+	const router = useRouter();
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
 
-				<button
-					type="button"
-					className="flex items-center gap-1.5 px-2.5 py-1 text-xs border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-200 outline-none cursor-pointer rounded-none font-medium"
-				>
-					{/* Custom Sort Icon */}
-					<svg
-						className="w-3.5 h-3.5"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					>
-						<title>Sort</title>
-						<path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 4v16" />
-					</svg>
-					<span>Sort</span>
-				</button>
+	const activeStatuses =
+		searchParams.get("status")?.split(",").filter(Boolean) || [];
+	const activePriorities =
+		searchParams.get("priority")?.split(",").filter(Boolean) || [];
+	const activeDueDates =
+		searchParams.get("due_date")?.split(",").filter(Boolean) || [];
+
+	const sortBy = searchParams.get("sort_by") || "created";
+	const sortOrder =
+		(searchParams.get("sort_order") as "asc" | "desc") || "desc";
+
+	const currentQuery = searchParams.get("q") || "";
+	const [prevQuery, setPrevQuery] = useState(currentQuery);
+	const [localSearch, setLocalSearch] = useState(currentQuery);
+
+	if (currentQuery !== prevQuery) {
+		setPrevQuery(currentQuery);
+		setLocalSearch(currentQuery);
+	}
+
+	const setParams = useCallback(
+		(params: Record<string, string | string[] | null>) => {
+			const newParams = new URLSearchParams(searchParams.toString());
+			for (const [key, value] of Object.entries(params)) {
+				if (
+					value === null ||
+					value === undefined ||
+					value === "" ||
+					(Array.isArray(value) && value.length === 0)
+				) {
+					newParams.delete(key);
+				} else if (Array.isArray(value)) {
+					newParams.set(key, value.join(","));
+				} else {
+					newParams.set(key, value);
+				}
+			}
+			const query = newParams.toString();
+			router.replace(`${pathname}${query ? `?${query}` : ""}`, {
+				scroll: false,
+			});
+		},
+		[searchParams, pathname, router],
+	);
+
+	// Debounce and update URL search query parameter
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			const currentQ = searchParams.get("q") || "";
+			if (localSearch !== currentQ) {
+				setParams({ q: localSearch || null });
+			}
+		}, 300);
+
+		return () => clearTimeout(handler);
+	}, [localSearch, searchParams, setParams]);
+
+	const activeFilterCount =
+		activeStatuses.length + activePriorities.length + activeDueDates.length;
+
+	const toggleFilter = useCallback(
+		(key: string, value: string) => {
+			const current = searchParams.get(key)?.split(",").filter(Boolean) || [];
+			const updated = current.includes(value)
+				? current.filter((v) => v !== value)
+				: [...current, value];
+			setParams({ [key]: updated });
+		},
+		[searchParams, setParams],
+	);
+
+	const statusOptions = [
+		{
+			value: "backlog",
+			label: "Backlog",
+			icon: BacklogIcon,
+			color: "text-zinc-400",
+		},
+		{ value: "todo", label: "Todo", icon: TodoIcon, color: "text-zinc-500" },
+		{
+			value: "in-progress",
+			label: "In Progress",
+			icon: InProgressIcon,
+			color: "text-amber-500",
+		},
+		{ value: "done", label: "Done", icon: DoneIcon, color: "text-indigo-500" },
+		{
+			value: "canceled",
+			label: "Cancel/Delete",
+			icon: CanceledIcon,
+			color: "text-zinc-400",
+		},
+	];
+
+	const priorityOptions = [
+		{ value: "no-priority", label: "No Priority", icon: NoPriorityIcon },
+		{ value: "urgent", label: "Urgent", icon: UrgentPriorityIcon },
+		{ value: "high", label: "High", icon: HighPriorityIcon },
+		{ value: "medium", label: "Medium", icon: MediumPriorityIcon },
+		{ value: "low", label: "Low", icon: LowPriorityIcon },
+	];
+
+	const dueDateOptions = [
+		{ value: "today", label: "Today" },
+		{ value: "tomorrow", label: "Tomorrow" },
+		{ value: "overdue", label: "Overdue" },
+		{ value: "no-due-date", label: "No Due Date" },
+	];
+
+	return (
+		<div className="flex h-11 w-full shrink-0 items-center justify-between border-b border-border bg-background px-4 select-none">
+			{/* Left side: Search, Filter and Sort controls */}
+			<div className="flex items-center gap-2">
+				<SearchInput
+					value={localSearch}
+					onChange={(e) => setLocalSearch(e.target.value)}
+					placeholder="Search title or ID..."
+					size="sm"
+					showShortcut={true}
+					containerClassName="h-7 w-48 border-border bg-card rounded-none shadow-none focus-within:border-ring focus-within:ring-0 focus-within:ring-offset-0 focus-within:ring-transparent focus-within:ring-offset-transparent focus-within:shadow-none text-muted-foreground focus-within:text-foreground"
+				/>
+
+				{/* Filter Dropdown */}
+				<DropdownMenu>
+					<DropdownMenuTrigger className="flex h-7 cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground">
+						<svg
+							className="h-3.5 w-3.5"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<title>Filter</title>
+							<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+						</svg>
+						<span>
+							Filter
+							{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+						</span>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent className="w-48 p-1" align="start">
+						{/* Status Submenu */}
+						<DropdownMenuSub>
+							<DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
+							<DropdownMenuSubContent className="p-0">
+								<Command className="w-48 rounded-none">
+									<CommandInput
+										placeholder="Filter status..."
+										className="h-8 border-none bg-transparent"
+										autoFocus
+									/>
+									<CommandList className="max-h-56">
+										<CommandEmpty>No status found.</CommandEmpty>
+										<CommandGroup>
+											{statusOptions.map((opt) => (
+												<CommandItem
+													key={opt.value}
+													value={opt.label}
+													data-checked={activeStatuses.includes(opt.value)}
+													onSelect={() => toggleFilter("status", opt.value)}
+													className="cursor-pointer rounded-none"
+												>
+													<opt.icon
+														className={cn("mr-2 size-3.5", opt.color)}
+													/>
+													<span>{opt.label}</span>
+												</CommandItem>
+											))}
+										</CommandGroup>
+									</CommandList>
+								</Command>
+							</DropdownMenuSubContent>
+						</DropdownMenuSub>
+
+						{/* Priority Submenu */}
+						<DropdownMenuSub>
+							<DropdownMenuSubTrigger>Priority</DropdownMenuSubTrigger>
+							<DropdownMenuSubContent className="p-0">
+								<Command className="w-48 rounded-none">
+									<CommandInput
+										placeholder="Filter priority..."
+										className="h-8 border-none bg-transparent"
+										autoFocus
+									/>
+									<CommandList className="max-h-56">
+										<CommandEmpty>No priority found.</CommandEmpty>
+										<CommandGroup>
+											{priorityOptions.map((opt) => (
+												<CommandItem
+													key={opt.value}
+													value={opt.label}
+													data-checked={activePriorities.includes(opt.value)}
+													onSelect={() => toggleFilter("priority", opt.value)}
+													className="cursor-pointer rounded-none"
+												>
+													<opt.icon className="mr-2 size-3.5" />
+													<span>{opt.label}</span>
+												</CommandItem>
+											))}
+										</CommandGroup>
+									</CommandList>
+								</Command>
+							</DropdownMenuSubContent>
+						</DropdownMenuSub>
+
+						{/* Due Date Submenu */}
+						<DropdownMenuSub>
+							<DropdownMenuSubTrigger>Due Date</DropdownMenuSubTrigger>
+							<DropdownMenuSubContent className="p-0">
+								<Command className="w-48 rounded-none">
+									<CommandInput
+										placeholder="Filter due date..."
+										className="h-8 border-none bg-transparent"
+										autoFocus
+									/>
+									<CommandList className="max-h-56">
+										<CommandEmpty>No due date found.</CommandEmpty>
+										<CommandGroup>
+											{dueDateOptions.map((opt) => (
+												<CommandItem
+													key={opt.value}
+													value={opt.label}
+													data-checked={activeDueDates.includes(opt.value)}
+													onSelect={() => toggleFilter("due_date", opt.value)}
+													className="cursor-pointer rounded-none"
+												>
+													<HugeiconsIcon
+														icon={Calendar04Icon}
+														className="mr-2 size-3.5 text-zinc-500"
+													/>
+													<span>{opt.label}</span>
+												</CommandItem>
+											))}
+										</CommandGroup>
+									</CommandList>
+								</Command>
+							</DropdownMenuSubContent>
+						</DropdownMenuSub>
+					</DropdownMenuContent>
+				</DropdownMenu>
+
+				{/* Sort Dropdown */}
+				<DropdownMenu>
+					<DropdownMenuTrigger className="flex h-7 cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground">
+						<svg
+							className="h-3.5 w-3.5"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<title>Sort</title>
+							<path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 4v16" />
+						</svg>
+						<span>Sort</span>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent className="w-48 p-1" align="start">
+						<DropdownMenuRadioGroup
+							value={sortBy}
+							onValueChange={(val) => setParams({ sort_by: val })}
+						>
+							<DropdownMenuRadioItem
+								value="created"
+								className="cursor-pointer rounded-none"
+							>
+								Created Date
+							</DropdownMenuRadioItem>
+							<DropdownMenuRadioItem
+								value="dueDate"
+								className="cursor-pointer rounded-none"
+							>
+								Due Date
+							</DropdownMenuRadioItem>
+							<DropdownMenuRadioItem
+								value="priority"
+								className="cursor-pointer rounded-none"
+							>
+								Priority
+							</DropdownMenuRadioItem>
+						</DropdownMenuRadioGroup>
+						<DropdownMenuSeparator />
+						<DropdownMenuRadioGroup
+							value={sortOrder}
+							onValueChange={(val) => setParams({ sort_order: val })}
+						>
+							<DropdownMenuRadioItem
+								value="asc"
+								className="cursor-pointer rounded-none"
+							>
+								Ascending
+							</DropdownMenuRadioItem>
+							<DropdownMenuRadioItem
+								value="desc"
+								className="cursor-pointer rounded-none"
+							>
+								Descending
+							</DropdownMenuRadioItem>
+						</DropdownMenuRadioGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 
 			{/* Right side: View Switcher (Board vs List) */}
-			<div className="flex items-center border border-border bg-muted/10 p-0.5 rounded-none gap-0.5">
+			<div className="flex h-7 items-center gap-0.5 rounded-none border border-border bg-muted/10 p-0.5">
 				<button
 					type="button"
 					onClick={() => onViewChange("list")}
 					className={cn(
-						"flex items-center gap-1.5 px-2.5 py-1 text-xs transition-all duration-200 outline-none cursor-pointer border-none",
+						"flex h-full cursor-pointer items-center gap-1.5 border-none px-2.5 text-xs transition-all duration-200 outline-none",
 						view === "list"
-							? "bg-muted text-foreground font-semibold"
-							: "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+							? "bg-muted font-semibold text-foreground"
+							: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
 					)}
 				>
-					{/* List View Icon */}
 					<svg
-						className="w-3.5 h-3.5"
+						className="h-3.5 w-3.5"
 						viewBox="0 0 24 24"
 						fill="none"
 						stroke="currentColor"
@@ -93,15 +393,14 @@ export function WorkspaceFilters({
 					type="button"
 					onClick={() => onViewChange("board")}
 					className={cn(
-						"flex items-center gap-1.5 px-2.5 py-1 text-xs transition-all duration-200 outline-none cursor-pointer border-none",
+						"flex h-full cursor-pointer items-center gap-1.5 border-none px-2.5 text-xs transition-all duration-200 outline-none",
 						view === "board"
-							? "bg-muted text-foreground font-semibold"
-							: "text-muted-foreground hover:text-foreground hover:bg-muted/40",
+							? "bg-muted font-semibold text-foreground"
+							: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
 					)}
 				>
-					{/* Board (Kanban Columns) Icon */}
 					<svg
-						className="w-3.5 h-3.5"
+						className="h-3.5 w-3.5"
 						viewBox="0 0 24 24"
 						fill="none"
 						stroke="currentColor"

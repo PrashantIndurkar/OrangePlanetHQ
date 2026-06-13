@@ -66,7 +66,7 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
 		return (
 			<div
 				className={cn(
-					"relative flex items-center border border-input bg-muted/10 text-foreground transition-colors focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/40 rounded-none w-full",
+					"relative flex w-full items-center rounded-none border border-input bg-muted/10 text-foreground transition-colors focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/40",
 					sizeClasses[size],
 					containerClassName,
 				)}
@@ -75,20 +75,20 @@ export const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
 					<HugeiconsIcon
 						icon={Icon}
 						size={iconSizes[size]}
-						className="text-muted-foreground shrink-0"
+						className="shrink-0 text-muted-foreground"
 					/>
 				)}
 				<input
 					type={type}
 					ref={localRef}
 					className={cn(
-						"flex-1 bg-transparent py-1 outline-none placeholder:text-muted-foreground w-full border-none focus:ring-0 focus:outline-none text-xs",
+						"w-full flex-1 border-none bg-transparent py-1 text-xs outline-none placeholder:text-muted-foreground focus:ring-0 focus:outline-none",
 						className,
 					)}
 					{...props}
 				/>
 				{showShortcut && (
-					<Kbd className="shrink-0 font-sans font-normal border-none bg-muted/60 text-muted-foreground/80 px-1.5 py-0.5 text-[9px] h-4 min-w-4 flex items-center justify-center">
+					<Kbd className="flex h-4 min-w-4 shrink-0 items-center justify-center border-none bg-muted/60 px-1.5 py-0.5 font-sans text-[9px] font-normal text-muted-foreground/80">
 						{shortcutKey}
 					</Kbd>
 				)}

@@ -27,9 +27,9 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 			<Sidebar />
 
 			{/* Main Content Area */}
-			<div className="relative flex-1 flex flex-col min-w-0 overflow-hidden h-screen">
+			<div className="relative flex h-screen min-w-0 flex-1 flex-col overflow-hidden">
 				{/* Inner Page Content */}
-				<main className="flex-1 w-full min-h-0 relative overflow-hidden">
+				<main className="relative min-h-0 w-full flex-1 overflow-hidden">
 					{children}
 				</main>
 			</div>

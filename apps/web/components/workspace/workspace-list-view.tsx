@@ -2,6 +2,7 @@
 
 import { Calendar04Icon, UserCircleIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
@@ -17,81 +18,43 @@ import {
 	TodoIcon,
 	UrgentPriorityIcon,
 } from "../icons";
+import {
+	TaskContextMenu,
+	type TaskPriority,
+	type TaskStatus,
+} from "../tasks/task-context-menu";
+import type { Task } from "./types";
+import { filterAndSortTasks } from "./types";
 
-interface Task {
-	id: string;
-	title: string;
-	status: "backlog" | "todo" | "in-progress" | "done" | "canceled";
-	priority: string;
-	dueDate?: string;
-	createdDate?: string;
-	assigneeName?: string;
-	assigneeAvatarUrl?: string;
+interface WorkspaceListViewProps {
+	tasks: Task[];
+	setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-export function WorkspaceListView() {
-	const [tasks, setTasks] = useState<Task[]>([
-		...Array.from({ length: 25 }, (_, i) => ({
-			id: `PLO-${25 - i}`,
-			title: `Backlog issue placeholder ${i + 1}`,
-			status: "backlog" as const,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-		})),
-		{
-			id: "PLO-41",
-			title: "Issue title Urgent",
-			status: "in-progress" as const,
-			priority: "urgent",
-			createdDate: "Created Jun 12",
-		},
-		{
-			id: "PLO-35",
-			title: "Issue title High",
-			status: "in-progress" as const,
-			priority: "high",
-			createdDate: "Created Jun 12",
-		},
-		{
-			id: "PLO-33",
-			title: "Issue title medium",
-			status: "in-progress" as const,
-			priority: "medium",
-			createdDate: "Created Jun 12",
-		},
-		{
-			id: "PLO-36",
-			title: "Issue title Low",
-			status: "in-progress" as const,
-			priority: "low",
-			dueDate: "Tomorrow",
-			createdDate: "Created Jun 12",
-		},
-		{
-			id: "PLO-40",
-			title: "test",
-			status: "todo" as const,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-			assigneeName: "Prashant Indurkar",
-			assigneeAvatarUrl:
-				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
-		},
-		{
-			id: "PLO-38",
-			title: "test",
-			status: "done" as const,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-		},
-		{
-			id: "PLO-39",
-			title: "test",
-			status: "canceled" as const,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-		},
-	]);
+export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
+	const searchParams = useSearchParams();
+
+	const activeStatuses =
+		searchParams.get("status")?.split(",").filter(Boolean) || [];
+	const activePriorities =
+		searchParams.get("priority")?.split(",").filter(Boolean) || [];
+	const activeDueDates =
+		searchParams.get("due_date")?.split(",").filter(Boolean) || [];
+
+	const sortBy = searchParams.get("sort_by") || "created";
+	const sortOrder =
+		(searchParams.get("sort_order") as "asc" | "desc") || "desc";
+	const searchQuery = searchParams.get("q") || "";
+
+	const processedTasks = filterAndSortTasks(
+		tasks,
+		activeStatuses,
+		activePriorities,
+		activeDueDates,
+		sortBy,
+		sortOrder,
+		searchQuery,
+	);
 
 	const [collapsed, setCollapsed] = useState<Record<string, boolean>>({
 		backlog: true,
@@ -119,6 +82,8 @@ export function WorkspaceListView() {
 			status,
 			priority: "no-priority",
 			createdDate: "Created Jun 12",
+			// eslint-disable-next-line react-hooks/purity
+			createdAt: Date.now(),
 		};
 		setTasks((prev) => [...prev, newTask]);
 	};
@@ -194,10 +159,12 @@ export function WorkspaceListView() {
 	};
 
 	return (
-		<div className="w-full h-full overflow-y-auto pt-4 px-4 pb-4 select-none bg-background">
-			<div className="flex flex-col gap-[2px] w-full">
+		<div className="h-full w-full overflow-y-auto bg-background px-4 pt-4 pb-4 select-none">
+			<div className="flex w-full flex-col gap-[2px]">
 				{statusGroups.map((group) => {
-					const groupTasks = tasks.filter((t) => t.status === group.id);
+					const groupTasks = processedTasks.filter(
+						(t) => t.status === group.id,
+					);
 					const isCollapsed = collapsed[group.id];
 					const theme = getStatusTheme(group.id);
 
@@ -215,13 +182,13 @@ export function WorkspaceListView() {
 									}
 								}}
 								className={cn(
-									"flex h-9 items-center justify-between px-3 select-none cursor-pointer rounded-none transition-colors",
+									"flex h-9 cursor-pointer items-center justify-between rounded-none px-3 transition-colors select-none",
 									theme.bg,
 								)}
 							>
 								<div className="flex items-center gap-2">
 									{/* Triangle Disclosure Icon Wrapper */}
-									<div className="w-5 shrink-0 flex items-center justify-center">
+									<div className="flex w-5 shrink-0 items-center justify-center">
 										<svg
 											className={cn(
 												"size-2.5 fill-current transition-all duration-200",
@@ -240,7 +207,7 @@ export function WorkspaceListView() {
 									</div>
 
 									{/* Status Icon Wrapper */}
-									<div className="w-6 shrink-0 flex items-center justify-center">
+									<div className="flex w-6 shrink-0 items-center justify-center">
 										<theme.icon
 											className={cn("size-4 shrink-0", theme.iconColor)}
 										/>
@@ -252,7 +219,7 @@ export function WorkspaceListView() {
 									</span>
 
 									{/* Status count */}
-									<span className="text-[14px] font-[450] text-zinc-500 dark:text-zinc-400 ml-1.5">
+									<span className="ml-1.5 text-[14px] font-[450] text-zinc-500 dark:text-zinc-400">
 										{groupTasks.length}
 									</span>
 								</div>
@@ -264,7 +231,7 @@ export function WorkspaceListView() {
 										e.stopPropagation();
 										handleAddTask(group.id);
 									}}
-									className="h-5 w-5 border border-dashed border-border flex items-center justify-center text-muted-foreground text-[10px] font-mono hover:bg-muted hover:text-foreground transition-colors outline-none cursor-pointer rounded-none"
+									className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-none border border-dashed border-border font-mono text-[10px] text-muted-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
 								>
 									+
 								</button>
@@ -278,105 +245,108 @@ export function WorkspaceListView() {
 									const StatusIcon = theme.icon;
 
 									return (
-										<div
+										<TaskContextMenu
 											key={task.id}
-											className="group flex h-9 items-center justify-between text-xs text-foreground px-3 bg-transparent hover:bg-muted/40 transition-colors border-b border-border/40 last:border-b-0 rounded-none cursor-pointer"
+											currentStatus={task.status as TaskStatus}
+											currentPriority={task.priority as TaskPriority}
 										>
-											{/* Left Section: Checkbox, Priority, ID, Status, Title */}
-											<div className="flex-1 flex items-center gap-2 min-w-0">
-												{/* Checkbox (opacity-0 by default, opacity-100 on hover of the row) */}
-												<div className="w-5 shrink-0 flex items-center justify-center">
-													<button
-														type="button"
-														onClick={(e) => {
-															e.stopPropagation();
-															handleToggleTask(task.id);
-														}}
-														className="h-3.5 w-3.5 border border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 bg-card rounded-none transition-all duration-150 opacity-0 group-hover:opacity-100 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
-													>
-														<svg
-															className="w-2.5 h-2.5 opacity-0 hover:opacity-100 transition-opacity"
-															viewBox="0 0 24 24"
-															fill="none"
-															stroke="currentColor"
-															strokeWidth="3"
-															role="img"
-															aria-label="Action"
+											<div className="group flex h-9 cursor-pointer items-center justify-between rounded-none border-b border-border/40 bg-transparent px-3 text-xs text-foreground transition-colors last:border-b-0 hover:bg-muted/40 data-[context-menu-open=true]:bg-muted/50">
+												{/* Left Section: Checkbox, Priority, ID, Status, Title */}
+												<div className="flex min-w-0 flex-1 items-center gap-2">
+													{/* Checkbox (opacity-0 by default, opacity-100 on hover of the row) */}
+													<div className="flex w-5 shrink-0 items-center justify-center">
+														<button
+															type="button"
+															onClick={(e) => {
+																e.stopPropagation();
+																handleToggleTask(task.id);
+															}}
+															className="flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-none border border-zinc-300 bg-card text-muted-foreground opacity-0 transition-all duration-150 group-hover:opacity-100 group-data-[context-menu-open=true]:opacity-100 hover:border-zinc-400 hover:text-foreground dark:border-zinc-700 dark:hover:border-zinc-500"
 														>
-															<title>Action</title>
-															<path
-																d="M20 6L9 17l-5-5"
-																strokeLinecap="round"
-																strokeLinejoin="round"
-															/>
-														</svg>
-													</button>
-												</div>
-
-												{/* Priority Icon Wrapper */}
-												<div className="w-6 shrink-0 flex items-center justify-center">
-													<PriorityComp className="h-[22px] w-[22px] shrink-0" />
-												</div>
-
-												{/* Task Identifier (e.g. PLO-40) */}
-												<span className="text-[13px] font-[450] text-zinc-500 dark:text-zinc-400 font-mono shrink-0 select-text">
-													{task.id}
-												</span>
-
-												{/* Status Icon */}
-												<StatusIcon
-													className={cn("size-3.5 shrink-0", theme.iconColor)}
-												/>
-
-												{/* Task Title */}
-												<span className="truncate text-[13px] font-medium text-zinc-900 dark:text-zinc-100 select-text">
-													{task.title}
-												</span>
-											</div>
-
-											{/* Right Section: Due Date Badge, Assignee Avatar & Date Group */}
-											<div className="flex items-center gap-3 shrink-0 ml-4">
-												{/* Due Date Badge */}
-												{task.dueDate && (
-													<div className="flex items-center gap-1.5 rounded-[3px] border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/50 px-2 py-0.5 text-[12px] font-[450] text-zinc-600 dark:text-zinc-400 leading-none">
-														<HugeiconsIcon
-															icon={Calendar04Icon}
-															className="h-[14px] w-[14px] text-[#f25f4c] shrink-0"
-														/>
-														<span>{task.dueDate}</span>
+															<svg
+																className="h-2.5 w-2.5 opacity-0 transition-opacity hover:opacity-100"
+																viewBox="0 0 24 24"
+																fill="none"
+																stroke="currentColor"
+																strokeWidth="3"
+																role="img"
+																aria-label="Action"
+															>
+																<title>Action</title>
+																<path
+																	d="M20 6L9 17l-5-5"
+																	strokeLinecap="round"
+																	strokeLinejoin="round"
+																/>
+															</svg>
+														</button>
 													</div>
-												)}
 
-												{/* Avatar and Date Group */}
-												<div className="flex items-center gap-1.5 shrink-0 select-none">
-													{task.assigneeAvatarUrl ? (
-														<Avatar className="h-[18px] w-[18px] border-0 bg-transparent rounded-full shrink-0 flex items-center justify-center">
-															<AvatarImage
-																src={task.assigneeAvatarUrl}
-																alt={task.assigneeName || "Assignee"}
-																className="rounded-full h-full w-full object-cover"
-															/>
-														</Avatar>
-													) : (
-														<HugeiconsIcon
-															icon={UserCircleIcon}
-															className="h-[18px] w-[18px] text-zinc-400 dark:text-zinc-500 shrink-0"
-														/>
-													)}
+													{/* Priority Icon Wrapper */}
+													<div className="flex w-6 shrink-0 items-center justify-center">
+														<PriorityComp className="h-[22px] w-[22px] shrink-0" />
+													</div>
 
-													<span className="text-[12px] font-[450] text-zinc-500 dark:text-zinc-400 min-w-[38px] text-right">
-														{task.createdDate
-															? task.createdDate.replace("Created ", "")
-															: "Jun 12"}
+													{/* Task Identifier (e.g. PLO-40) */}
+													<span className="shrink-0 font-mono text-[13px] font-[450] text-zinc-500 select-text dark:text-zinc-400">
+														{task.id}
+													</span>
+
+													{/* Status Icon */}
+													<StatusIcon
+														className={cn("size-3.5 shrink-0", theme.iconColor)}
+													/>
+
+													{/* Task Title */}
+													<span className="truncate text-[13px] font-medium text-zinc-900 select-text dark:text-zinc-100">
+														{task.title}
 													</span>
 												</div>
+
+												{/* Right Section: Due Date Badge, Assignee Avatar & Date Group */}
+												<div className="ml-4 flex shrink-0 items-center gap-3">
+													{/* Due Date Badge */}
+													{task.dueDate && (
+														<div className="flex items-center gap-1.5 rounded-[3px] border border-zinc-200 bg-zinc-50/50 px-2 py-0.5 text-[12px] leading-none font-[450] text-zinc-600 dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:text-zinc-400">
+															<HugeiconsIcon
+																icon={Calendar04Icon}
+																className="h-[14px] w-[14px] shrink-0 text-[#f25f4c]"
+															/>
+															<span>{task.dueDate}</span>
+														</div>
+													)}
+
+													{/* Avatar and Date Group */}
+													<div className="flex shrink-0 items-center gap-1.5 select-none">
+														{task.assigneeAvatarUrl ? (
+															<Avatar className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-0 bg-transparent">
+																<AvatarImage
+																	src={task.assigneeAvatarUrl}
+																	alt={task.assigneeName || "Assignee"}
+																	className="h-full w-full rounded-full object-cover"
+																/>
+															</Avatar>
+														) : (
+															<HugeiconsIcon
+																icon={UserCircleIcon}
+																className="h-[18px] w-[18px] shrink-0 text-zinc-400 dark:text-zinc-500"
+															/>
+														)}
+
+														<span className="min-w-[38px] text-right text-[12px] font-[450] text-zinc-500 dark:text-zinc-400">
+															{task.createdDate
+																? task.createdDate.replace("Created ", "")
+																: "Jun 12"}
+														</span>
+													</div>
+												</div>
 											</div>
-										</div>
+										</TaskContextMenu>
 									);
 								})}
 
 							{!isCollapsed && groupTasks.length === 0 && (
-								<div className="flex h-11 items-center justify-center text-[10px] text-muted-foreground bg-muted/[0.02] rounded-none italic">
+								<div className="flex h-11 items-center justify-center rounded-none bg-muted/[0.02] text-[10px] text-muted-foreground italic">
 									No tasks in this status
 								</div>
 							)}
