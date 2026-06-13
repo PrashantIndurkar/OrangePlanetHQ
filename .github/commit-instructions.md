@@ -1,73 +1,80 @@
-# Generate Git Branch Name and Conventional Commit Message
+# Commit & Changelog Generation Rules
 
-Analyze the staged git diff and determine the PRIMARY change.
+## Commit Messages
 
-Focus on:
+Generate Conventional Commits that describe the user-visible outcome.
 
-* What feature was added?
-* What bug was fixed?
-* What component/module was changed?
-* What user-visible behavior changed?
-* Ignore formatting, linting, imports, comments, and minor refactors unless they are the main change.
+Prioritize:
 
-## Output
+1. User-facing features
+2. Bug fixes
+3. UX improvements
+4. Refactors
 
-Branch: <branch-name>
-Commit: <commit-message>
+Avoid generic messages such as:
 
-## Branch Rules
+* update task management
+* cleanup code
+* various fixes
+* improve UI
 
-* Lowercase only
-* Use hyphens
-* Maximum 4 words after type
-* Format:
+Use specific scope names:
 
-feat/<description>
-fix/<description>
-refactor/<description>
-chore/<description>
-docs/<description>
-test/<description>
-ci/<description>
-build/<description>
+* workspace
+* tasks
+* board
+* list
+* sidebar
+* dashboard
+* reviews
+* inbox
+* filters
 
 Examples:
 
-* feat/task-context-menu
-* fix/sidebar-scroll
-* refactor/task-card-layout
+feat(workspace): add board and list views
+feat(filters): add multi-select filtering
+feat(tasks): add status and priority quick actions
+fix(board): prevent task cards from overflowing
+fix(filters): preserve selected filters in URL
 
-## Commit Rules
+---
 
-* Follow Conventional Commits
-* Be specific to the actual change
-* Mention the affected feature/component
-* Describe the result, not the implementation
+## Changelog Generation
 
-Good:
+Read .agents/changelog-agent.md
 
-* feat(tasks): add nested status and priority menus
-* fix(board): prevent task cards from overflowing column width
-* refactor(ui): simplify task card metadata layout
-* feat(sidebar): add project navigation section
+Generate USER-FACING release notes.
 
-Bad:
+Rules:
 
-* feat: update task management
-* fix: resolve issues
-* refactor: cleanup code
-* chore: changes
+* Focus on what users can do.
+* Merge related commits into a single release note.
+* Avoid implementation details.
+* Avoid words:
 
-## Priority
+  * implement
+  * component
+  * state management
+  * refactor
+  * architecture
+  * internal
 
-1. User-facing feature
-2. Bug fix
-3. Component behavior
-4. Internal refactor
+Group output into:
 
-Generate the most specific branch name and commit message possible from the staged changes.
+### ✨ New Features
 
-Output only:
+### 🚀 Improvements
 
-Branch: <branch-name>
-Commit: <commit-message>
+### 🐛 Fixes
+
+Ignore commits starting with:
+
+* ci:
+* chore:
+* build:
+* docs:
+* release:
+* ai:
+
+unless they directly affect users.
