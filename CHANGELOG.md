@@ -1,3 +1,9 @@
+# [0.8.0](https://github.com/PrashantIndurkar/stride/compare/v0.7.0...v0.8.0) (2026-06-13)
+
+
+### Features
+
+* implement task management module with CRUD operations, validation, and integration tests ([492851f](https://github.com/PrashantIndurkar/stride/commit/492851f3c837e48091c502853cd207aa8ef4134a))
 # [0.7.0](https://github.com/PrashantIndurkar/stride/compare/v0.6.0...v0.7.0) (2026-06-14)
 
 ## 🔐 Authentication System
