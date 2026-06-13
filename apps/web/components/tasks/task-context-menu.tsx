@@ -9,6 +9,7 @@ import {
 	CommandInput,
 	CommandItem,
 	CommandList,
+	CommandShortcut,
 } from "@/components/ui/command";
 import {
 	ContextMenu,
@@ -100,8 +101,8 @@ export function TaskContextMenu({
 				<ContextMenuSub>
 					<ContextMenuSubTrigger className="flex items-center gap-2">
 						<TodoIcon className="h-4 w-4 text-muted-foreground" />
-						<span>Status</span>
-						<span className="ml-auto text-xs text-muted-foreground">S</span>
+						<span className="flex-grow">Status</span>
+						<span className="text-xs text-muted-foreground/60">S</span>
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className="w-48 p-0">
 						<Command>
@@ -119,18 +120,20 @@ export function TaskContextMenu({
 											<s.icon
 												className={`h-4 w-4 ${status === s.value ? "text-primary" : "text-muted-foreground"}`}
 											/>
-											<span>{s.label}</span>
-											{status === s.value && (
-												<HugeiconsIcon
-													icon={Tick02Icon}
-													className="ml-auto h-4 w-4"
-												/>
-											)}
-											<span
-												className={`text-xs text-muted-foreground ${status === s.value ? "ml-2" : "ml-auto"}`}
-											>
-												{s.shortcut}
-											</span>
+											<span className="flex-grow text-left">{s.label}</span>
+											<div className="flex items-center gap-2 shrink-0 ml-auto">
+												{status === s.value ? (
+													<HugeiconsIcon
+														icon={Tick02Icon}
+														className="h-4 w-4 text-primary"
+													/>
+												) : (
+													<div className="w-4 h-4" />
+												)}
+												<CommandShortcut className="min-w-[12px] text-right ml-0 tracking-normal">
+													{s.shortcut}
+												</CommandShortcut>
+											</div>
 										</CommandItem>
 									))}
 								</CommandGroup>
@@ -143,8 +146,8 @@ export function TaskContextMenu({
 				<ContextMenuSub>
 					<ContextMenuSubTrigger className="flex items-center gap-2">
 						<PriorityIcon className="h-4 w-4 text-muted-foreground" />
-						<span>Priority</span>
-						<span className="ml-auto text-xs text-muted-foreground">P</span>
+						<span className="flex-grow">Priority</span>
+						<span className="text-xs text-muted-foreground/60">P</span>
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className="w-48 p-0">
 						<Command>
@@ -162,18 +165,20 @@ export function TaskContextMenu({
 											<p.icon
 												className={`h-4 w-4 ${priority === p.value ? "text-primary" : "text-muted-foreground"}`}
 											/>
-											<span>{p.label}</span>
-											{priority === p.value && (
-												<HugeiconsIcon
-													icon={Tick02Icon}
-													className="ml-auto h-4 w-4"
-												/>
-											)}
-											<span
-												className={`text-xs text-muted-foreground ${priority === p.value ? "ml-2" : "ml-auto"}`}
-											>
-												{p.shortcut}
-											</span>
+											<span className="flex-grow text-left">{p.label}</span>
+											<div className="flex items-center gap-2 shrink-0 ml-auto">
+												{priority === p.value ? (
+													<HugeiconsIcon
+														icon={Tick02Icon}
+														className="h-4 w-4 text-primary"
+													/>
+												) : (
+													<div className="w-4 h-4" />
+												)}
+												<CommandShortcut className="min-w-[12px] text-right ml-0 tracking-normal">
+													{p.shortcut}
+												</CommandShortcut>
+											</div>
 										</CommandItem>
 									))}
 								</CommandGroup>
