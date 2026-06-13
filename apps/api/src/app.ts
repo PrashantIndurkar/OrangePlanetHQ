@@ -3,6 +3,7 @@ import express from "express";
 import morgan from "morgan";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import authRoutes from "./modules/auth/auth.routes.js";
+import tasksRoutes from "./modules/tasks/tasks.routes.js";
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.get("/health", (_req, res) => {
 
 // Register routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/tasks", tasksRoutes);
+
 
 // Error handling middleware (must be registered last)
 app.use(errorHandler);

@@ -1,11 +1,13 @@
 import request from "supertest";
 import app from "../src/app.js";
+import { runTasksTests } from "./tasks.test.js";
 
 async function run() {
 	console.log("🏃 Running Custom Auth Integration Tests...");
 	const uniqueEmail = `test-${Date.now()}-${Math.floor(Math.random() * 1000)}@example.com`;
 
 	try {
+
 		// Test 1: Sign up
 		console.log("➡️ Test 1: Signup User...");
 		const signupRes = await request(app).post("/api/v1/auth/signup").send({
@@ -86,6 +88,9 @@ async function run() {
 			);
 		}
 		console.log("✅ GET /me authorization check passed");
+
+		// Run Tasks module tests
+		await runTasksTests();
 
 		console.log("\n🎉 ALL TESTS PASSED SUCCESSFULLY!");
 		process.exit(0);
