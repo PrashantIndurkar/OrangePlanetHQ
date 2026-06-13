@@ -24,7 +24,7 @@ import {
 	type TaskStatus,
 } from "../tasks/task-context-menu";
 import type { Task } from "./types";
-import { filterAndSortTasks } from "./types";
+import { filterAndSortTasks, getNormalizedFilters } from "./types";
 
 interface WorkspaceListViewProps {
 	tasks: Task[];
@@ -34,16 +34,13 @@ interface WorkspaceListViewProps {
 export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 	const searchParams = useSearchParams();
 
-	const activeStatuses =
-		searchParams.get("status")?.split(",").filter(Boolean) || [];
-	const activePriorities =
-		searchParams.get("priority")?.split(",").filter(Boolean) || [];
-	const activeDueDates =
-		searchParams.get("due_date")?.split(",").filter(Boolean) || [];
-
-	const sortBy = searchParams.get("sort_by") || "created";
-	const sortOrder =
-		(searchParams.get("sort_order") as "asc" | "desc") || "desc";
+	const {
+		activeStatuses,
+		activePriorities,
+		activeDueDates,
+		sortBy,
+		sortOrder,
+	} = getNormalizedFilters(searchParams);
 	const searchQuery = searchParams.get("q") || "";
 
 	const processedTasks = filterAndSortTasks(
@@ -69,6 +66,22 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 	};
 
 	const handleToggleTask = (taskId: string) => {
+		setTasks((prev) => prev.filter((t) => t.id !== taskId));
+	};
+
+	const handleUpdateStatus = (taskId: string, newStatus: TaskStatus) => {
+		setTasks((prev) =>
+			prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)),
+		);
+	};
+
+	const handleUpdatePriority = (taskId: string, newPriority: TaskPriority) => {
+		setTasks((prev) =>
+			prev.map((t) => (t.id === taskId ? { ...t, priority: newPriority } : t)),
+		);
+	};
+
+	const handleDeleteTask = (taskId: string) => {
 		setTasks((prev) => prev.filter((t) => t.id !== taskId));
 	};
 
@@ -249,6 +262,9 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 											key={task.id}
 											currentStatus={task.status as TaskStatus}
 											currentPriority={task.priority as TaskPriority}
+											onUpdateStatus={(newStatus) => handleUpdateStatus(task.id, newStatus)}
+											onUpdatePriority={(newPriority) => handleUpdatePriority(task.id, newPriority)}
+											onDeleteTask={() => handleDeleteTask(task.id)}
 										>
 											<div className="group flex h-9 cursor-pointer items-center justify-between rounded-none border-b border-border/40 bg-transparent px-3 text-xs text-foreground transition-colors last:border-b-0 hover:bg-muted/40 data-[context-menu-open=true]:bg-muted/50">
 												{/* Left Section: Checkbox, Priority, ID, Status, Title */}

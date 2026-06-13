@@ -75,24 +75,56 @@ interface TaskContextMenuProps {
 	children: React.ReactNode;
 	currentStatus?: TaskStatus;
 	currentPriority?: TaskPriority;
+	onUpdateStatus?: (status: TaskStatus) => void;
+	onUpdatePriority?: (priority: TaskPriority) => void;
+	onDeleteTask?: () => void;
 }
 
 export function TaskContextMenu({
 	children,
 	currentStatus = "todo",
 	currentPriority = "no-priority",
+	onUpdateStatus,
+	onUpdatePriority,
+	onDeleteTask,
 }: TaskContextMenuProps) {
 	// Mock state for UI demonstration
+	const [prevCurrentStatus, setPrevCurrentStatus] = React.useState<TaskStatus>(currentStatus);
 	const [status, setStatus] = React.useState<TaskStatus>(currentStatus);
+
+	const [prevCurrentPriority, setPrevCurrentPriority] = React.useState<TaskPriority>(currentPriority);
 	const [priority, setPriority] = React.useState<TaskPriority>(currentPriority);
+
 	const [isOpen, setIsOpen] = React.useState(false);
 
+	if (currentStatus !== prevCurrentStatus) {
+		setPrevCurrentStatus(currentStatus);
+		setStatus(currentStatus);
+	}
+
+	if (currentPriority !== prevCurrentPriority) {
+		setPrevCurrentPriority(currentPriority);
+		setPriority(currentPriority);
+	}
+
+	const handleStatusChange = (newStatus: TaskStatus) => {
+		setStatus(newStatus);
+		onUpdateStatus?.(newStatus);
+		setIsOpen(false);
+	};
+
+	const handlePriorityChange = (newPriority: TaskPriority) => {
+		setPriority(newPriority);
+		onUpdatePriority?.(newPriority);
+		setIsOpen(false);
+	};
+
 	// Shortcuts
-	useHotkeys("1", () => setStatus("backlog"));
-	useHotkeys("2", () => setStatus("todo"));
-	useHotkeys("3", () => setStatus("in-progress"));
-	useHotkeys("4", () => setStatus("done"));
-	useHotkeys("5", () => setStatus("canceled"));
+	useHotkeys("1", () => handleStatusChange("backlog"));
+	useHotkeys("2", () => handleStatusChange("todo"));
+	useHotkeys("3", () => handleStatusChange("in-progress"));
+	useHotkeys("4", () => handleStatusChange("done"));
+	useHotkeys("5", () => handleStatusChange("canceled"));
 
 	const triggerChild = React.isValidElement(children)
 		? React.cloneElement(
@@ -104,7 +136,7 @@ export function TaskContextMenu({
 		: children;
 
 	return (
-		<ContextMenu onOpenChange={setIsOpen}>
+		<ContextMenu open={isOpen} onOpenChange={setIsOpen}>
 			<ContextMenuTrigger render={triggerChild as React.ReactElement} />
 			<ContextMenuContent className="w-56">
 				{/* Status Submenu */}
@@ -124,7 +156,7 @@ export function TaskContextMenu({
 										<CommandItem
 											key={s.value}
 											value={s.label} // Value used for cmdk filtering
-											onSelect={() => setStatus(s.value as TaskStatus)}
+											onSelect={() => handleStatusChange(s.value as TaskStatus)}
 											className="flex items-center gap-2"
 										>
 											<s.icon
@@ -136,6 +168,7 @@ export function TaskContextMenu({
 													<HugeiconsIcon
 														icon={Tick02Icon}
 														className="h-4 w-4 text-primary"
+														data-testid="status-check"
 													/>
 												) : (
 													<div className="h-4 w-4" />
@@ -169,7 +202,7 @@ export function TaskContextMenu({
 										<CommandItem
 											key={p.value}
 											value={p.label}
-											onSelect={() => setPriority(p.value as TaskPriority)}
+											onSelect={() => handlePriorityChange(p.value as TaskPriority)}
 											className="flex items-center gap-2"
 										>
 											<p.icon
@@ -181,6 +214,7 @@ export function TaskContextMenu({
 													<HugeiconsIcon
 														icon={Tick02Icon}
 														className="h-4 w-4 text-primary"
+														data-testid="priority-check"
 													/>
 												) : (
 													<div className="h-4 w-4" />
@@ -200,7 +234,13 @@ export function TaskContextMenu({
 				<ContextMenuSeparator />
 
 				{/* Delete Task */}
-				<ContextMenuItem className="flex items-center gap-2 text-destructive focus:text-destructive">
+				<ContextMenuItem
+					onSelect={() => {
+						onDeleteTask?.();
+						setIsOpen(false);
+					}}
+					className="flex items-center gap-2 text-destructive focus:text-destructive"
+				>
 					<HugeiconsIcon icon={Delete01Icon} className="h-4 w-4" />
 					<span>Delete Task</span>
 					<span className="ml-auto text-xs opacity-60">⌘ ⌫</span>

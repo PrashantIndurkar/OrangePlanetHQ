@@ -36,7 +36,7 @@ export function SidebarNav() {
 				<button
 					type="button"
 					onClick={() => setProjectsExpanded(!projectsExpanded)}
-					className="flex w-full cursor-pointer items-center justify-between px-2 py-1 text-[10px] font-semibold tracking-wider text-muted-foreground uppercase outline-none hover:text-foreground"
+					className="flex w-full cursor-pointer items-center justify-between rounded-none px-2 py-1 text-[10px] font-semibold tracking-wider text-muted-foreground uppercase outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:text-foreground"
 				>
 					<span>Projects</span>
 					<HugeiconsIcon
@@ -71,7 +71,7 @@ export function SidebarNav() {
 								key={project.id}
 								href={project.href}
 								className={cn(
-									"flex w-full items-center gap-2 rounded-none px-2.5 py-1.5 text-xs font-medium transition-colors outline-none",
+									"flex w-full items-center gap-2 rounded-none px-2.5 py-1.5 text-xs font-medium transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring/50",
 									isActive
 										? "border-l-2 border-primary bg-muted pl-2 text-foreground"
 										: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
@@ -90,7 +90,7 @@ export function SidebarNav() {
 					{/* Add Project Item UI (static) */}
 					<button
 						type="button"
-						className="flex w-full cursor-pointer items-center gap-2 rounded-none px-2.5 py-1.5 text-left text-xs font-medium text-muted-foreground transition-colors outline-none hover:bg-muted/40 hover:text-foreground"
+						className="flex w-full cursor-pointer items-center gap-2 rounded-none px-2.5 py-1.5 text-left text-xs font-medium text-muted-foreground transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:bg-muted/40 hover:text-foreground"
 					>
 						<HugeiconsIcon icon={Add01Icon} size={14} className="shrink-0" />
 						<span>Add project</span>

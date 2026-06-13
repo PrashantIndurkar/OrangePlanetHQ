@@ -7,8 +7,9 @@ import {
 	TodoIcon,
 } from "../icons";
 import { TaskCard } from "../tasks/task-card";
+import type { TaskStatus, TaskPriority } from "../tasks/task-context-menu";
 import type { Task } from "./types";
-import { filterAndSortTasks } from "./types";
+import { filterAndSortTasks, getNormalizedFilters } from "./types";
 
 interface WorkspaceBoardViewProps {
 	tasks: Task[];
@@ -21,16 +22,13 @@ export function WorkspaceBoardView({
 }: WorkspaceBoardViewProps) {
 	const searchParams = useSearchParams();
 
-	const activeStatuses =
-		searchParams.get("status")?.split(",").filter(Boolean) || [];
-	const activePriorities =
-		searchParams.get("priority")?.split(",").filter(Boolean) || [];
-	const activeDueDates =
-		searchParams.get("due_date")?.split(",").filter(Boolean) || [];
-
-	const sortBy = searchParams.get("sort_by") || "created";
-	const sortOrder =
-		(searchParams.get("sort_order") as "asc" | "desc") || "desc";
+	const {
+		activeStatuses,
+		activePriorities,
+		activeDueDates,
+		sortBy,
+		sortOrder,
+	} = getNormalizedFilters(searchParams);
 	const searchQuery = searchParams.get("q") || "";
 
 	const processedTasks = filterAndSortTasks(
@@ -85,6 +83,22 @@ export function WorkspaceBoardView({
 			createdAt: Date.now(),
 		};
 		setTasks((prev) => [...prev, newTask]);
+	};
+
+	const handleUpdateStatus = (taskId: string, newStatus: TaskStatus) => {
+		setTasks((prev) =>
+			prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)),
+		);
+	};
+
+	const handleUpdatePriority = (taskId: string, newPriority: TaskPriority) => {
+		setTasks((prev) =>
+			prev.map((t) => (t.id === taskId ? { ...t, priority: newPriority } : t)),
+		);
+	};
+
+	const handleDeleteTask = (taskId: string) => {
+		setTasks((prev) => prev.filter((t) => t.id !== taskId));
 	};
 
 	return (
@@ -169,6 +183,9 @@ export function WorkspaceBoardView({
 									createdDate={task.createdDate}
 									assigneeName={task.assigneeName}
 									assigneeAvatarUrl={task.assigneeAvatarUrl}
+									onUpdateStatus={(newStatus) => handleUpdateStatus(task.id, newStatus)}
+									onUpdatePriority={(newPriority) => handleUpdatePriority(task.id, newPriority)}
+									onDeleteTask={() => handleDeleteTask(task.id)}
 								/>
 							))}
 

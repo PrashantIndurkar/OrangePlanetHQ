@@ -29,6 +29,9 @@ interface TaskCardProps {
 	createdDate?: string;
 	assigneeName?: string;
 	assigneeAvatarUrl?: string;
+	onUpdateStatus?: (status: TaskStatus) => void;
+	onUpdatePriority?: (priority: TaskPriority) => void;
+	onDeleteTask?: () => void;
 }
 
 export function TaskCard({
@@ -40,6 +43,9 @@ export function TaskCard({
 	createdDate = "Created Jun 12",
 	assigneeName = "Prashant Indurkar",
 	assigneeAvatarUrl = "",
+	onUpdateStatus,
+	onUpdatePriority,
+	onDeleteTask,
 }: TaskCardProps) {
 	// Status Icon Resolver (Size 14px)
 	const getStatusIcon = (s: string) => {
@@ -93,6 +99,9 @@ export function TaskCard({
 		<TaskContextMenu
 			currentStatus={status as TaskStatus}
 			currentPriority={priority as TaskPriority}
+			onUpdateStatus={onUpdateStatus}
+			onUpdatePriority={onUpdatePriority}
+			onDeleteTask={onDeleteTask}
 		>
 			<div className="group flex w-[320px] flex-col rounded-none border border-zinc-200 bg-[#ffffff] p-[9px] pb-[11px] text-card-foreground shadow-none select-none data-[context-menu-open=true]:border-zinc-300 data-[context-menu-open=true]:bg-zinc-50 dark:border-zinc-800 dark:bg-[#25272b] dark:data-[context-menu-open=true]:border-zinc-700 dark:data-[context-menu-open=true]:bg-zinc-800/80">
 				{/* Top Section: Issue ID and Assignee */}
