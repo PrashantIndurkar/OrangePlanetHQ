@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import authRoutes from "./modules/auth/auth.routes.js";
 
 const app = express();
 
@@ -15,9 +16,12 @@ app.use(cors());
 app.use(morgan("dev"));
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
 	res.status(200).json({ status: "healthy", timestamp: new Date() });
 });
+
+// Register routes
+app.use("/api/v1/auth", authRoutes);
 
 // Error handling middleware (must be registered last)
 app.use(errorHandler);

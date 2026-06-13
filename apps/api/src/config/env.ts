@@ -1,5 +1,5 @@
+import path from "node:path";
 import dotenv from "dotenv";
-import path from "path";
 import { z } from "zod";
 
 // Load env files from the root of the workspace
