@@ -1,2 +1,2 @@
 // Tasks API service
-export {}
+export {};

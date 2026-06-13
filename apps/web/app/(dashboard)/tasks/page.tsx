@@ -1,3 +1,3 @@
 export default function TasksPage() {
-  return <div>Tasks list view placeholder</div>
+	return <div>Tasks list view placeholder</div>;
 }

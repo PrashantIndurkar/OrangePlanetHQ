@@ -1,2 +1,2 @@
 // Application constants
-export {}
+export {};

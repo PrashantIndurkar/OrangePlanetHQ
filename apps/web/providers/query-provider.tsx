@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // React Query Provider
-export {}
+export {};

@@ -1,2 +1,2 @@
 // API Client
-export {}
+export {};

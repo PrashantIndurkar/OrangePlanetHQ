@@ -1,2 +1,2 @@
 // Tasks schemas
-export {}
+export {};

@@ -1,117 +1,117 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { SearchInput } from "@/components/ui/search-input"
-import { cn } from "@/lib/utils"
-import { useSidebar } from "@/providers/sidebar-provider"
-import { SidebarFooter } from "./sidebar-footer"
-import { SidebarHeader } from "./sidebar-header"
-import { SidebarNav } from "./sidebar-nav"
+import * as React from "react";
+import { SearchInput } from "@/components/ui/search-input";
+import { cn } from "@/lib/utils";
+import { useSidebar } from "@/providers/sidebar-provider";
+import { SidebarFooter } from "./sidebar-footer";
+import { SidebarHeader } from "./sidebar-header";
+import { SidebarNav } from "./sidebar-nav";
 
 export function Sidebar() {
-  const { isOpen, toggle } = useSidebar()
-  const [width, setWidth] = React.useState(260) // default width, resizable between 220px and 330px
-  const [isDragging, setIsDragging] = React.useState(false)
-  const dragStartRef = React.useRef<{ x: number; width: number } | null>(null)
+	const { isOpen, toggle } = useSidebar();
+	const [width, setWidth] = React.useState(260); // default width, resizable between 220px and 330px
+	const [isDragging, setIsDragging] = React.useState(false);
+	const dragStartRef = React.useRef<{ x: number; width: number } | null>(null);
 
-  const handleMouseDown = React.useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault()
-      setIsDragging(true)
-      dragStartRef.current = {
-        x: e.clientX,
-        width: width,
-      }
-    },
-    [width]
-  )
+	const handleMouseDown = React.useCallback(
+		(e: React.MouseEvent) => {
+			e.preventDefault();
+			setIsDragging(true);
+			dragStartRef.current = {
+				x: e.clientX,
+				width: width,
+			};
+		},
+		[width],
+	);
 
-  React.useEffect(() => {
-    if (!isDragging) return
+	React.useEffect(() => {
+		if (!isDragging) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!dragStartRef.current) return
-      const deltaX = e.clientX - dragStartRef.current.x
-      const newWidth = Math.max(
-        220,
-        Math.min(330, dragStartRef.current.width + deltaX)
-      )
-      setWidth(newWidth)
-    }
+		const handleMouseMove = (e: MouseEvent) => {
+			if (!dragStartRef.current) return;
+			const deltaX = e.clientX - dragStartRef.current.x;
+			const newWidth = Math.max(
+				220,
+				Math.min(330, dragStartRef.current.width + deltaX),
+			);
+			setWidth(newWidth);
+		};
 
-    const handleMouseUp = (e: MouseEvent) => {
-      setIsDragging(false)
-      if (dragStartRef.current) {
-        const deltaX = Math.abs(e.clientX - dragStartRef.current.x)
-        if (deltaX < 3) {
-          toggle()
-        }
-      }
-      dragStartRef.current = null
-    }
+		const handleMouseUp = (e: MouseEvent) => {
+			setIsDragging(false);
+			if (dragStartRef.current) {
+				const deltaX = Math.abs(e.clientX - dragStartRef.current.x);
+				if (deltaX < 3) {
+					toggle();
+				}
+			}
+			dragStartRef.current = null;
+		};
 
-    window.addEventListener("mousemove", handleMouseMove)
-    window.addEventListener("mouseup", handleMouseUp)
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove)
-      window.removeEventListener("mouseup", handleMouseUp)
-    }
-  }, [isDragging, toggle])
+		window.addEventListener("mousemove", handleMouseMove);
+		window.addEventListener("mouseup", handleMouseUp);
+		return () => {
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("mouseup", handleMouseUp);
+		};
+	}, [isDragging, toggle]);
 
-  return (
-    <aside
-      style={{ width: isOpen ? `${width}px` : "0px" }}
-      className={cn(
-        "relative flex h-screen shrink-0 flex-col overflow-hidden border-border bg-sidebar text-sidebar-foreground select-none",
-        isOpen && "border-r",
-        !isDragging && "transition-[width] duration-200 ease-in-out"
-      )}
-    >
-      {/* Inner wrapper with fixed width matching sidebar active width to prevent distortion */}
-      <div
-        style={{ width: `${width}px` }}
-        className="relative flex h-full shrink-0 flex-col justify-between"
-      >
-        <div className="flex flex-1 flex-col">
-          {/* Sidebar Header */}
-          <SidebarHeader />
+	return (
+		<aside
+			style={{ width: isOpen ? `${width}px` : "0px" }}
+			className={cn(
+				"relative flex h-screen shrink-0 flex-col overflow-hidden border-border bg-sidebar text-sidebar-foreground select-none",
+				isOpen && "border-r",
+				!isDragging && "transition-[width] duration-200 ease-in-out",
+			)}
+		>
+			{/* Inner wrapper with fixed width matching sidebar active width to prevent distortion */}
+			<div
+				style={{ width: `${width}px` }}
+				className="relative flex h-full shrink-0 flex-col justify-between"
+			>
+				<div className="flex flex-1 flex-col">
+					{/* Sidebar Header */}
+					<SidebarHeader />
 
-          {/* Global Search Section aligned to workspace filters height */}
-          <div className="flex h-11 shrink-0 items-center border-b border-border bg-muted/5 px-4">
-            <div className="flex-1">
-              <SearchInput
-                placeholder="Search..."
-                showShortcut={true}
-                shortcutKey="/"
-              />
-            </div>
-          </div>
+					{/* Global Search Section aligned to workspace filters height */}
+					<div className="flex h-11 shrink-0 items-center border-b border-border bg-muted/5 px-4">
+						<div className="flex-1">
+							<SearchInput
+								placeholder="Search..."
+								showShortcut={true}
+								shortcutKey="/"
+							/>
+						</div>
+					</div>
 
-          {/* Navigation List */}
-          <SidebarNav />
-        </div>
+					{/* Navigation List */}
+					<SidebarNav />
+				</div>
 
-        {/* Sidebar Footer */}
-        <SidebarFooter />
-      </div>
+				{/* Sidebar Footer */}
+				<SidebarFooter />
+			</div>
 
-      {/* Interactive Clickable & Draggable Border Zone */}
-      {isOpen && (
-        <div
-          role="separator"
-          aria-valuenow={width}
-          aria-valuemin={220}
-          aria-valuemax={330}
-          tabIndex={0}
-          onMouseDown={handleMouseDown}
-          className={cn(
-            "absolute top-0 right-0 bottom-0 z-50 w-1 cursor-col-resize transition-all hover:w-1.5 hover:bg-primary/20",
-            isDragging && "w-1.5 bg-primary/30"
-          )}
-          title="Drag to resize, click to collapse"
-        />
-      )}
-    </aside>
-  )
+			{/* Interactive Clickable & Draggable Border Zone */}
+			{isOpen && (
+				<div
+					role="separator"
+					aria-valuenow={width}
+					aria-valuemin={220}
+					aria-valuemax={330}
+					tabIndex={0}
+					onMouseDown={handleMouseDown}
+					className={cn(
+						"absolute top-0 right-0 bottom-0 z-50 w-1 cursor-col-resize transition-all hover:w-1.5 hover:bg-primary/20",
+						isDragging && "w-1.5 bg-primary/30",
+					)}
+					title="Drag to resize, click to collapse"
+				/>
+			)}
+		</aside>
+	);
 }
-export default Sidebar
+export default Sidebar;

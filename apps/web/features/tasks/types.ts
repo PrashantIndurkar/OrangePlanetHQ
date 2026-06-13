@@ -1,2 +1,2 @@
 // Tasks types
-export {}
+export {};
