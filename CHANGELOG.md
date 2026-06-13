@@ -1,3 +1,11 @@
+# [0.5.0](https://github.com/PrashantIndurkar/stride/compare/v0.4.0...v0.5.0) (2026-06-13)
+
+
+### Features
+
+* add IssueDueDateSelect component for managing issue due dates via popover menu ([c4c384f](https://github.com/PrashantIndurkar/stride/commit/c4c384fbcc92f077491e03120d85c2e741428a98))
+* implement issue creation workflow with dialog components and state management ([e978a86](https://github.com/PrashantIndurkar/stride/commit/e978a8693fb09327fe1cdcf2a823080d1584d712))
+* implement workspace task management system including board views, issue status/priority controls, and mock data storage ([190eb7d](https://github.com/PrashantIndurkar/stride/commit/190eb7d9e7d13ec87633ec3bcb1b6b8c606f2c90))
 # 0.4.0 (2026-06-13)
 
 ## ✨ New Features
