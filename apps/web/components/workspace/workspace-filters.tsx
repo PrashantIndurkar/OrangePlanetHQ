@@ -3,6 +3,7 @@
 import { Calendar04Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import {
 	Command,
 	CommandEmpty,
@@ -22,6 +23,7 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SearchInput } from "@/components/ui/search-input";
 import { cn } from "@/lib/utils";
 import {
 	BacklogIcon,
@@ -59,38 +61,65 @@ export function WorkspaceFilters({
 	const sortOrder =
 		(searchParams.get("sort_order") as "asc" | "desc") || "desc";
 
+	const currentQuery = searchParams.get("q") || "";
+	const [prevQuery, setPrevQuery] = useState(currentQuery);
+	const [localSearch, setLocalSearch] = useState(currentQuery);
+
+	if (currentQuery !== prevQuery) {
+		setPrevQuery(currentQuery);
+		setLocalSearch(currentQuery);
+	}
+
+	const setParams = useCallback(
+		(params: Record<string, string | string[] | null>) => {
+			const newParams = new URLSearchParams(searchParams.toString());
+			for (const [key, value] of Object.entries(params)) {
+				if (
+					value === null ||
+					value === undefined ||
+					value === "" ||
+					(Array.isArray(value) && value.length === 0)
+				) {
+					newParams.delete(key);
+				} else if (Array.isArray(value)) {
+					newParams.set(key, value.join(","));
+				} else {
+					newParams.set(key, value);
+				}
+			}
+			const query = newParams.toString();
+			router.replace(`${pathname}${query ? `?${query}` : ""}`, {
+				scroll: false,
+			});
+		},
+		[searchParams, pathname, router],
+	);
+
+	// Debounce and update URL search query parameter
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			const currentQ = searchParams.get("q") || "";
+			if (localSearch !== currentQ) {
+				setParams({ q: localSearch || null });
+			}
+		}, 300);
+
+		return () => clearTimeout(handler);
+	}, [localSearch, searchParams, setParams]);
+
 	const activeFilterCount =
 		activeStatuses.length + activePriorities.length + activeDueDates.length;
 
-	const setParams = (params: Record<string, string | string[] | null>) => {
-		const newParams = new URLSearchParams(searchParams.toString());
-		for (const [key, value] of Object.entries(params)) {
-			if (
-				value === null ||
-				value === undefined ||
-				value === "" ||
-				(Array.isArray(value) && value.length === 0)
-			) {
-				newParams.delete(key);
-			} else if (Array.isArray(value)) {
-				newParams.set(key, value.join(","));
-			} else {
-				newParams.set(key, value);
-			}
-		}
-		const query = newParams.toString();
-		router.replace(`${pathname}${query ? `?${query}` : ""}`, {
-			scroll: false,
-		});
-	};
-
-	const toggleFilter = (key: string, value: string) => {
-		const current = searchParams.get(key)?.split(",").filter(Boolean) || [];
-		const updated = current.includes(value)
-			? current.filter((v) => v !== value)
-			: [...current, value];
-		setParams({ [key]: updated });
-	};
+	const toggleFilter = useCallback(
+		(key: string, value: string) => {
+			const current = searchParams.get(key)?.split(",").filter(Boolean) || [];
+			const updated = current.includes(value)
+				? current.filter((v) => v !== value)
+				: [...current, value];
+			setParams({ [key]: updated });
+		},
+		[searchParams, setParams],
+	);
 
 	const statusOptions = [
 		{
@@ -131,11 +160,20 @@ export function WorkspaceFilters({
 
 	return (
 		<div className="flex h-11 w-full shrink-0 items-center justify-between border-b border-border bg-background px-4 select-none">
-			{/* Left side: Filter and Sort buttons */}
+			{/* Left side: Search, Filter and Sort controls */}
 			<div className="flex items-center gap-2">
+				<SearchInput
+					value={localSearch}
+					onChange={(e) => setLocalSearch(e.target.value)}
+					placeholder="Search title or ID..."
+					size="sm"
+					showShortcut={true}
+					containerClassName="h-7 w-48 border-border bg-card rounded-none shadow-none focus-within:border-ring focus-within:ring-0 focus-within:ring-offset-0 focus-within:ring-transparent focus-within:ring-offset-transparent focus-within:shadow-none text-muted-foreground focus-within:text-foreground"
+				/>
+
 				{/* Filter Dropdown */}
 				<DropdownMenu>
-					<DropdownMenuTrigger className="flex cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-1 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground">
+					<DropdownMenuTrigger className="flex h-7 cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground">
 						<svg
 							className="h-3.5 w-3.5"
 							viewBox="0 0 24 24"
@@ -256,7 +294,7 @@ export function WorkspaceFilters({
 
 				{/* Sort Dropdown */}
 				<DropdownMenu>
-					<DropdownMenuTrigger className="flex cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-1 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground">
+					<DropdownMenuTrigger className="flex h-7 cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground">
 						<svg
 							className="h-3.5 w-3.5"
 							viewBox="0 0 24 24"
@@ -318,12 +356,12 @@ export function WorkspaceFilters({
 			</div>
 
 			{/* Right side: View Switcher (Board vs List) */}
-			<div className="flex items-center gap-0.5 rounded-none border border-border bg-muted/10 p-0.5">
+			<div className="flex h-7 items-center gap-0.5 rounded-none border border-border bg-muted/10 p-0.5">
 				<button
 					type="button"
 					onClick={() => onViewChange("list")}
 					className={cn(
-						"flex cursor-pointer items-center gap-1.5 border-none px-2.5 py-1 text-xs transition-all duration-200 outline-none",
+						"flex h-full cursor-pointer items-center gap-1.5 border-none px-2.5 text-xs transition-all duration-200 outline-none",
 						view === "list"
 							? "bg-muted font-semibold text-foreground"
 							: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
@@ -353,7 +391,7 @@ export function WorkspaceFilters({
 					type="button"
 					onClick={() => onViewChange("board")}
 					className={cn(
-						"flex cursor-pointer items-center gap-1.5 border-none px-2.5 py-1 text-xs transition-all duration-200 outline-none",
+						"flex h-full cursor-pointer items-center gap-1.5 border-none px-2.5 text-xs transition-all duration-200 outline-none",
 						view === "board"
 							? "bg-muted font-semibold text-foreground"
 							: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",

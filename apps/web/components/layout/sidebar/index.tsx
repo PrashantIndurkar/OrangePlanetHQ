@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { SearchInput } from "@/components/ui/search-input";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "@/providers/sidebar-provider";
 import { SidebarFooter } from "./sidebar-footer";
@@ -75,17 +74,6 @@ export function Sidebar() {
 				<div className="flex flex-1 flex-col">
 					{/* Sidebar Header */}
 					<SidebarHeader />
-
-					{/* Global Search Section aligned to workspace filters height */}
-					<div className="flex h-11 shrink-0 items-center border-b border-border bg-muted/5 px-4">
-						<div className="flex-1">
-							<SearchInput
-								placeholder="Search..."
-								showShortcut={true}
-								shortcutKey="/"
-							/>
-						</div>
-					</div>
 
 					{/* Navigation List */}
 					<SidebarNav />

@@ -132,7 +132,7 @@ export function WorkspaceHeader({
 				<div className="hidden h-4 w-px bg-border sm:block" />
 
 				{/* Navigation tabs grouped inside one toggle area with a border but completely boxy (rounded-none) */}
-				<nav className="hidden items-center gap-0.5 rounded-none border border-border bg-muted/10 p-0.5 sm:flex">
+				<nav className="hidden h-7 items-center gap-0.5 rounded-none border border-border bg-muted/10 p-0.5 sm:flex">
 					{tabs.map((tab) => {
 						const isActive = activeTab === tab.id;
 						return (
@@ -141,7 +141,7 @@ export function WorkspaceHeader({
 								type="button"
 								onClick={() => onTabChange(tab.id)}
 								className={cn(
-									"flex cursor-pointer items-center gap-1.5 rounded-none border-none px-2.5 py-1 text-xs transition-colors outline-none",
+									"flex h-full cursor-pointer items-center gap-1.5 rounded-none border-none px-2.5 text-xs transition-colors outline-none",
 									isActive
 										? "bg-muted font-semibold text-foreground"
 										: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",

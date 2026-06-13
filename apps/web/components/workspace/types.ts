@@ -63,10 +63,23 @@ export function filterAndSortTasks(
 	activeDueDates: string[],
 	sortBy: string,
 	sortOrder: "asc" | "desc",
+	searchQuery = "",
+	searchableFields: (keyof Task)[] = ["title", "id"],
 ): Task[] {
-	// 1. Filtering
 	let result = [...tasks];
 
+	// 1. Search (case-insensitive, partial matching)
+	if (searchQuery.trim()) {
+		const query = searchQuery.toLowerCase().trim();
+		result = result.filter((task) => {
+			return searchableFields.some((field) => {
+				const val = task[field];
+				return val != null && String(val).toLowerCase().includes(query);
+			});
+		});
+	}
+
+	// 2. Filtering
 	if (activeStatuses.length > 0) {
 		result = result.filter((task) => activeStatuses.includes(task.status));
 	}

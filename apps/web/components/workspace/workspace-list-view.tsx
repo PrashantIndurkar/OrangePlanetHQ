@@ -44,6 +44,7 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 	const sortBy = searchParams.get("sort_by") || "created";
 	const sortOrder =
 		(searchParams.get("sort_order") as "asc" | "desc") || "desc";
+	const searchQuery = searchParams.get("q") || "";
 
 	const processedTasks = filterAndSortTasks(
 		tasks,
@@ -52,6 +53,7 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 		activeDueDates,
 		sortBy,
 		sortOrder,
+		searchQuery,
 	);
 
 	const [collapsed, setCollapsed] = useState<Record<string, boolean>>({
