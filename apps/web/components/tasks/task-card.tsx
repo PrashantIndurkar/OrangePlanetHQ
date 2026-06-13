@@ -1,5 +1,6 @@
 import { Calendar04Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import {
@@ -35,7 +36,7 @@ interface TaskCardProps {
 }
 
 export function TaskCard({
-	id = "PLO-36",
+	id = "STR-36",
 	title = "Building card ui with fields",
 	status = "todo",
 	priority = "high",
@@ -47,6 +48,8 @@ export function TaskCard({
 	onUpdatePriority,
 	onDeleteTask,
 }: TaskCardProps) {
+	const router = useRouter();
+
 	// Status Icon Resolver (Size 14px)
 	const getStatusIcon = (s: string) => {
 		switch (s) {
@@ -95,6 +98,18 @@ export function TaskCard({
 
 	const isUrgent = priority === "urgent";
 
+	const handleCardClick = (e: React.MouseEvent) => {
+		const target = e.target as HTMLElement;
+		if (
+			target.closest("button") ||
+			target.closest(".avatar") ||
+			target.closest("[role='menuitem']")
+		) {
+			return;
+		}
+		router.push(`/tasks/${id}`);
+	};
+
 	return (
 		<TaskContextMenu
 			currentStatus={status as TaskStatus}
@@ -103,7 +118,18 @@ export function TaskCard({
 			onUpdatePriority={onUpdatePriority}
 			onDeleteTask={onDeleteTask}
 		>
-			<div className="group flex w-[320px] flex-col rounded-none border border-zinc-200 bg-[#ffffff] p-[9px] pb-[11px] text-card-foreground shadow-none select-none data-[context-menu-open=true]:border-zinc-300 data-[context-menu-open=true]:bg-zinc-50 dark:border-zinc-800 dark:bg-[#25272b] dark:data-[context-menu-open=true]:border-zinc-700 dark:data-[context-menu-open=true]:bg-zinc-800/80">
+			<div
+				role="button"
+				onClick={handleCardClick}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						router.push(`/tasks/${id}`);
+					}
+				}}
+				tabIndex={0}
+				className="group flex w-[320px] flex-col rounded-none border border-zinc-200 bg-[#ffffff] p-[9px] pb-[11px] text-card-foreground shadow-none select-none data-[context-menu-open=true]:border-zinc-300 data-[context-menu-open=true]:bg-zinc-50 dark:border-zinc-800 dark:bg-[#25272b] dark:data-[context-menu-open=true]:border-zinc-700 dark:data-[context-menu-open=true]:bg-zinc-800/80 cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-ring/50"
+			>
 				{/* Top Section: Issue ID and Assignee */}
 				<div className="flex items-center justify-between">
 					<span className="text-[12px] leading-none font-[450] text-zinc-700 dark:text-zinc-300">

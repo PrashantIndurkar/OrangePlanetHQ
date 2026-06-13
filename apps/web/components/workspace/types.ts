@@ -2,6 +2,7 @@ export const ALLOWED_STATUSES = [
 	"backlog",
 	"todo",
 	"in-progress",
+	"in-review",
 	"done",
 	"canceled",
 ] as const;
@@ -72,13 +73,29 @@ export function getNormalizedFilters(searchParams: ReadOnlySearchParams) {
 export interface Task {
 	id: string;
 	title: string;
-	status: "backlog" | "todo" | "in-progress" | "done" | "canceled";
+	status:
+		| "backlog"
+		| "todo"
+		| "in-progress"
+		| "in-review"
+		| "done"
+		| "canceled";
 	priority: "urgent" | "high" | "medium" | "low" | "no-priority";
 	dueDate?: string; // e.g. "Today", "Tomorrow", "Overdue", or absent
 	createdDate?: string; // e.g. "Created Jun 12"
 	createdAt: number; // unix timestamp for sorting
 	assigneeName?: string;
 	assigneeAvatarUrl?: string;
+	description?: string;
+	activities?: TaskActivity[];
+}
+
+export interface TaskActivity {
+	id: string;
+	userInitials: string;
+	userName: string;
+	actionText: string;
+	timestamp: number;
 }
 
 export type DueDateCategory = "today" | "tomorrow" | "overdue" | "no-due-date";

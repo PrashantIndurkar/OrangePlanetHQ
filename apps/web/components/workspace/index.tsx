@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { issuesStore } from "@/lib/issues-store";
+import type { TaskStatus } from "../tasks/task-context-menu";
+import { IssueCreateDialog } from "./issue-create-dialog";
 import type { Task } from "./types";
 import { WorkspaceBoardView } from "./workspace-board-view";
 import { WorkspaceFilters } from "./workspace-filters";
@@ -10,92 +13,28 @@ import { WorkspaceListView } from "./workspace-list-view";
 export function WorkspaceLayout() {
 	const [activeTab, setActiveTab] = useState<string>("tasks");
 	const [view, setView] = useState<"board" | "list">("list");
-	const [tasks, setTasks] = useState<Task[]>([
-		...Array.from({ length: 25 }, (_, i) => {
-			const priorities: Task["priority"][] = [
-				"no-priority",
-				"low",
-				"medium",
-				"high",
-				"urgent",
-			];
-			const priority = priorities[i % priorities.length];
-			let dueDate: string | undefined;
-			if (i % 5 === 1) dueDate = "Today";
-			if (i % 5 === 2) dueDate = "Tomorrow";
-			if (i % 5 === 3) dueDate = "Overdue";
+	const [isCreateOpen, setIsCreateOpen] = useState(false);
+	const [createDialogDefaultStatus, setCreateDialogDefaultStatus] =
+		useState<TaskStatus>("todo");
+	const [tasks, setTasksState] = useState<Task[]>(() => issuesStore.getTasks());
 
-			return {
-				id: `PLO-${25 - i}`,
-				title: `Backlog issue placeholder ${i + 1}`,
-				status: "backlog" as const,
-				priority,
-				dueDate,
-				createdDate: `Created Jun ${12 - (i % 10)}`,
-				createdAt: new Date(`2026-06-${12 - (i % 10)}`).getTime(),
-			};
-		}),
-		{
-			id: "PLO-41",
-			title: "Issue title Urgent",
-			status: "in-progress" as const,
-			priority: "urgent",
-			createdDate: "Created Jun 12",
-			createdAt: new Date("2026-06-12").getTime(),
-		},
-		{
-			id: "PLO-35",
-			title: "Issue title High",
-			status: "in-progress" as const,
-			priority: "high",
-			createdDate: "Created Jun 11",
-			createdAt: new Date("2026-06-11").getTime(),
-		},
-		{
-			id: "PLO-33",
-			title: "Issue title medium",
-			status: "in-progress" as const,
-			priority: "medium",
-			createdDate: "Created Jun 10",
-			createdAt: new Date("2026-06-10").getTime(),
-		},
-		{
-			id: "PLO-36",
-			title: "Issue title Low",
-			status: "in-progress" as const,
-			priority: "low",
-			dueDate: "Tomorrow",
-			createdDate: "Created Jun 12",
-			createdAt: new Date("2026-06-12").getTime(),
-		},
-		{
-			id: "PLO-40",
-			title: "test",
-			status: "todo" as const,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-			createdAt: new Date("2026-06-12").getTime(),
-			assigneeName: "Prashant Indurkar",
-			assigneeAvatarUrl:
-				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
-		},
-		{
-			id: "PLO-38",
-			title: "test",
-			status: "done" as const,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-			createdAt: new Date("2026-06-12").getTime(),
-		},
-		{
-			id: "PLO-39",
-			title: "test",
-			status: "canceled" as const,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-			createdAt: new Date("2026-06-12").getTime(),
-		},
-	]);
+	useEffect(() => {
+		return issuesStore.subscribe(() => {
+			setTasksState(issuesStore.getTasks());
+		});
+	}, []);
+
+	const setTasks = (
+		newTasksOrUpdater: Task[] | React.SetStateAction<Task[]>,
+	) => {
+		if (typeof newTasksOrUpdater === "function") {
+			const current = issuesStore.getTasks();
+			const next = (newTasksOrUpdater as (prev: Task[]) => Task[])(current);
+			issuesStore.setTasks(next);
+		} else {
+			issuesStore.setTasks(newTasksOrUpdater);
+		}
+	};
 
 	return (
 		<div className="flex h-full w-full flex-col overflow-hidden bg-background">
@@ -111,9 +50,23 @@ export function WorkspaceLayout() {
 					{/* Workspace Main content scrollable viewport */}
 					<main className="relative min-h-0 flex-1 overflow-hidden">
 						{view === "board" ? (
-							<WorkspaceBoardView tasks={tasks} setTasks={setTasks} />
+							<WorkspaceBoardView
+								tasks={tasks}
+								setTasks={setTasks}
+								onAddTaskClick={(status) => {
+									setCreateDialogDefaultStatus(status);
+									setIsCreateOpen(true);
+								}}
+							/>
 						) : (
-							<WorkspaceListView tasks={tasks} setTasks={setTasks} />
+							<WorkspaceListView
+								tasks={tasks}
+								setTasks={setTasks}
+								onAddTaskClick={(status) => {
+									setCreateDialogDefaultStatus(status);
+									setIsCreateOpen(true);
+								}}
+							/>
 						)}
 					</main>
 				</>
@@ -241,6 +194,24 @@ export function WorkspaceLayout() {
 					</div>
 				</main>
 			)}
+
+			<IssueCreateDialog
+				open={isCreateOpen}
+				onOpenChange={setIsCreateOpen}
+				defaultStatus={createDialogDefaultStatus}
+				onSubmit={(issue) => {
+					const newId = `STR-${tasks.length + 50}`;
+					const newTask: Task = {
+						id: newId,
+						title: issue.title,
+						status: issue.status,
+						priority: issue.priority,
+						createdDate: "Created Jun 12",
+						createdAt: Date.now(),
+					};
+					setTasks((prev) => [...prev, newTask]);
+				}}
+			/>
 		</div>
 	);
 }
