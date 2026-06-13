@@ -1,3 +1,9 @@
+# [0.7.0](https://github.com/PrashantIndurkar/stride/compare/v0.6.1...v0.7.0) (2026-06-13)
+
+
+### Features
+
+* implement full-stack authentication system including signup, login, session management, and integration tests ([9ec3c35](https://github.com/PrashantIndurkar/stride/commit/9ec3c35885e64916d15dde7319fbd133824b6812))
 ## [0.6.1](https://github.com/PrashantIndurkar/stride/compare/v0.6.0...v0.6.1) (2026-06-13)
 # [0.6.0](https://github.com/PrashantIndurkar/stride/compare/v0.5.0...v0.6.0) (2026-06-13)
 
