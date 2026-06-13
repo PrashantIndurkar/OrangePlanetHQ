@@ -1,9 +1,41 @@
 # [0.8.0](https://github.com/PrashantIndurkar/stride/compare/v0.7.0...v0.8.0) (2026-06-13)
 
+## 📋 Task Management API
 
-### Features
+### Task CRUD Operations
 
-* implement task management module with CRUD operations, validation, and integration tests ([492851f](https://github.com/PrashantIndurkar/stride/commit/492851f3c837e48091c502853cd207aa8ef4134a))
+* Added complete task management APIs for creating, viewing, updating, and deleting tasks.
+* Added support for retrieving individual tasks and task collections.
+* Implemented partial task updates for flexible editing workflows.
+
+### Authorization & Data Security
+
+* Enforced user-level task ownership and access control.
+* Prevented users from viewing, editing, or deleting tasks belonging to other users.
+* Added database-level isolation to ensure users only interact with their own data.
+
+### API Validation
+
+* Added request validation using Zod schemas for task operations.
+* Improved API reliability with consistent input validation and error handling.
+
+### Protected Endpoints
+
+* Added authenticated task routes secured by authorization middleware.
+* Protected all task operations behind user authentication.
+
+### Testing
+
+* Added integration tests covering task management workflows.
+* Improved confidence in API stability and authorization behavior.
+
+## 🚀 Improvements
+
+* Connected task management features to the backend architecture.
+* Improved security and ownership controls for user data.
+* Established the foundation for task filtering, search, sorting, and advanced workspace features.
+* Continued building a production-ready task management platform.
+---
 # [0.7.0](https://github.com/PrashantIndurkar/stride/compare/v0.6.0...v0.7.0) (2026-06-14)
 
 ## 🔐 Authentication System
