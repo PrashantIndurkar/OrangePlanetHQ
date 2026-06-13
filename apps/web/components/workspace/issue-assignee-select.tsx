@@ -16,7 +16,7 @@ export function IssueAssigneeSelect({
 		<button
 			type="button"
 			className={cn(
-				"flex h-[26px] items-center gap-1.5 rounded-none border border-border/20 bg-transparent hover:bg-muted/40 px-2 text-xs font-normal text-foreground cursor-pointer outline-none transition-colors select-none",
+				"flex h-[26px] items-center gap-1.5 rounded-none border border-border bg-transparent hover:bg-muted/40 px-2 text-xs font-normal text-foreground cursor-pointer outline-none transition-colors select-none",
 				"focus-visible:ring-1 focus-visible:ring-ring/50",
 			)}
 		>

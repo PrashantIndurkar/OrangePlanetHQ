@@ -16,19 +16,19 @@ interface IssueStatusSelectProps {
 const getStatusColorClass = (status: TaskStatus) => {
 	switch (status) {
 		case "backlog":
-			return "text-zinc-400 dark:text-zinc-500";
+			return "text-zinc-500 dark:text-zinc-400";
 		case "todo":
-			return "text-zinc-500";
+			return "text-zinc-500 dark:text-zinc-400";
 		case "in-progress":
-			return "text-amber-500";
+			return "text-amber-500 dark:text-amber-400";
 		case "in-review":
-			return "text-blue-500";
+			return "text-blue-500 dark:text-blue-400";
 		case "done":
-			return "text-indigo-500";
+			return "text-indigo-500 dark:text-indigo-400";
 		case "canceled":
-			return "text-zinc-400";
+			return "text-zinc-400 dark:text-zinc-500";
 		default:
-			return "text-zinc-500";
+			return "text-zinc-500 dark:text-zinc-400";
 	}
 };
 
@@ -61,7 +61,7 @@ export function IssueStatusSelect({ value, onChange }: IssueStatusSelectProps) {
 					<button
 						type="button"
 						className={cn(
-							"flex h-[26px] items-center gap-1.5 rounded-none border border-border/20 bg-transparent hover:bg-muted/40 px-2 text-xs font-normal text-foreground cursor-pointer outline-none transition-colors select-none",
+							"flex h-[26px] items-center gap-1.5 rounded-none border border-border bg-transparent hover:bg-muted/40 px-2 text-xs font-normal text-foreground cursor-pointer outline-none transition-colors select-none",
 							"focus-visible:ring-1 focus-visible:ring-ring/50",
 						)}
 					/>

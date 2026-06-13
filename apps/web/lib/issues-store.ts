@@ -23,6 +23,7 @@ const INITIAL_MOCK_TASKS = [
 			dueDate,
 			createdDate: `Created Jun ${12 - (i % 10)}`,
 			createdAt: new Date(`2026-06-${12 - (i % 10)}`).getTime(),
+			updatedAt: new Date(`2026-06-${12 - (i % 10)}`).getTime(),
 			description: `This is the default description for task STR-${25 - i}.`,
 			activities: [
 				{
@@ -42,6 +43,7 @@ const INITIAL_MOCK_TASKS = [
 		priority: "urgent" as const,
 		createdDate: "Created Jun 12",
 		createdAt: new Date("2026-06-12").getTime(),
+		updatedAt: new Date("2026-06-12").getTime(),
 		description: "Urgent issue description here.",
 		activities: [
 			{
@@ -60,6 +62,7 @@ const INITIAL_MOCK_TASKS = [
 		priority: "high" as const,
 		createdDate: "Created Jun 11",
 		createdAt: new Date("2026-06-11").getTime(),
+		updatedAt: new Date("2026-06-11").getTime(),
 		description: "High priority task details.",
 		activities: [
 			{
@@ -78,6 +81,7 @@ const INITIAL_MOCK_TASKS = [
 		priority: "medium" as const,
 		createdDate: "Created Jun 10",
 		createdAt: new Date("2026-06-10").getTime(),
+		updatedAt: new Date("2026-06-10").getTime(),
 		description: "Medium priority task details.",
 		activities: [
 			{
@@ -97,6 +101,7 @@ const INITIAL_MOCK_TASKS = [
 		dueDate: "Tomorrow",
 		createdDate: "Created Jun 12",
 		createdAt: new Date("2026-06-12").getTime(),
+		updatedAt: new Date("2026-06-12").getTime(),
 		description: "Low priority task details.",
 		activities: [
 			{
@@ -115,6 +120,7 @@ const INITIAL_MOCK_TASKS = [
 		priority: "no-priority" as const,
 		createdDate: "Created Jun 12",
 		createdAt: new Date("2026-06-12").getTime(),
+		updatedAt: new Date("2026-06-12").getTime(),
 		assigneeName: "Prashant Indurkar",
 		assigneeAvatarUrl:
 			"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
@@ -136,6 +142,7 @@ const INITIAL_MOCK_TASKS = [
 		priority: "no-priority" as const,
 		createdDate: "Created Jun 12",
 		createdAt: new Date("2026-06-12").getTime(),
+		updatedAt: new Date("2026-06-12").getTime(),
 		description: "Test completed item.",
 		activities: [
 			{
@@ -154,6 +161,7 @@ const INITIAL_MOCK_TASKS = [
 		priority: "no-priority" as const,
 		createdDate: "Created Jun 12",
 		createdAt: new Date("2026-06-12").getTime(),
+		updatedAt: new Date("2026-06-12").getTime(),
 		description: "Test canceled item.",
 		activities: [
 			{
@@ -235,7 +243,7 @@ class IssuesStore {
 						timestamp: Date.now(),
 					});
 				}
-				return { ...t, ...updates, activities };
+				return { ...t, ...updates, updatedAt: Date.now(), activities };
 			}
 			return t;
 		});
@@ -246,6 +254,8 @@ class IssuesStore {
 	addTask(task: Task) {
 		const newTask: Task = {
 			...task,
+			createdAt: task.createdAt || Date.now(),
+			updatedAt: Date.now(),
 			activities: task.activities || [
 				{
 					id: `act-${Date.now()}`,

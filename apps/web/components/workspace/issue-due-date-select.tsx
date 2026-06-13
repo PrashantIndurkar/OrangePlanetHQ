@@ -31,6 +31,13 @@ export function IssueDueDateSelect({
 		setOpen(false);
 	};
 
+	const getDueDateColor = (val?: string) => {
+		if (val === "Overdue") return "text-red-500 dark:text-red-400";
+		if (val === "Today") return "text-amber-600 dark:text-amber-400";
+		if (val === "Tomorrow") return "text-blue-600 dark:text-blue-400";
+		return "text-zinc-500 dark:text-zinc-400";
+	};
+
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger
@@ -38,7 +45,7 @@ export function IssueDueDateSelect({
 					<button
 						type="button"
 						className={cn(
-							"flex h-[26px] items-center gap-1.5 rounded-none border border-border/20 bg-transparent hover:bg-muted/40 px-2 text-xs font-normal text-foreground cursor-pointer outline-none transition-colors select-none",
+							"flex h-[26px] items-center gap-1.5 rounded-none border border-border bg-transparent hover:bg-muted/40 px-2 text-xs font-normal text-foreground cursor-pointer outline-none transition-colors select-none",
 							"focus-visible:ring-1 focus-visible:ring-ring/50",
 						)}
 					/>
@@ -46,9 +53,9 @@ export function IssueDueDateSelect({
 			>
 				<HugeiconsIcon
 					icon={Calendar04Icon}
-					className="size-3.5 shrink-0 text-zinc-500"
+					className={cn("size-3.5 shrink-0", getDueDateColor(value))}
 				/>
-				<span className="text-[12px] leading-none font-medium text-foreground">
+				<span className={cn("text-[12px] leading-none font-medium", value ? getDueDateColor(value) : "text-foreground")}>
 					{value || "Due date"}
 				</span>
 			</PopoverTrigger>

@@ -84,6 +84,7 @@ export interface Task {
 	dueDate?: string; // e.g. "Today", "Tomorrow", "Overdue", or absent
 	createdDate?: string; // e.g. "Created Jun 12"
 	createdAt: number; // unix timestamp for sorting
+	updatedAt?: number; // unix timestamp for last update
 	assigneeName?: string;
 	assigneeAvatarUrl?: string;
 	description?: string;

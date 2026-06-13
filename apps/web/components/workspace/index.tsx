@@ -206,6 +206,7 @@ export function WorkspaceLayout() {
 						title: issue.title,
 						status: issue.status,
 						priority: issue.priority,
+						dueDate: issue.dueDate,
 						createdDate: "Created Jun 12",
 						createdAt: Date.now(),
 					};

@@ -266,7 +266,7 @@ export function WorkspaceListView({
 										e.stopPropagation();
 										handleAddTask(group.id);
 									}}
-									className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-none border border-dashed border-border font-mono text-[10px] text-muted-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
+									className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-none border border-dashed border-zinc-400 dark:border-zinc-500 font-sans text-xs font-semibold text-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
 								>
 									+
 								</button>

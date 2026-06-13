@@ -16,17 +16,17 @@ interface IssuePrioritySelectProps {
 const getPriorityColorClass = (priority: TaskPriority) => {
 	switch (priority) {
 		case "no-priority":
-			return "text-zinc-400 dark:text-zinc-500";
+			return "text-zinc-500 dark:text-zinc-400";
 		case "urgent":
-			return "text-red-500";
+			return "text-red-500 dark:text-red-400";
 		case "high":
-			return "text-zinc-700 dark:text-zinc-300";
+			return "text-zinc-800 dark:text-zinc-200";
 		case "medium":
-			return "text-zinc-600 dark:text-zinc-400";
+			return "text-zinc-600 dark:text-zinc-300";
 		case "low":
-			return "text-zinc-400 dark:text-zinc-500";
+			return "text-zinc-500 dark:text-zinc-400";
 		default:
-			return "text-zinc-500";
+			return "text-zinc-500 dark:text-zinc-400";
 	}
 };
 
@@ -63,7 +63,7 @@ export function IssuePrioritySelect({
 					<button
 						type="button"
 						className={cn(
-							"flex h-[26px] items-center gap-1.5 rounded-none border border-border/20 bg-transparent hover:bg-muted/40 px-2 text-xs font-normal text-foreground cursor-pointer outline-none transition-colors select-none",
+							"flex h-[26px] items-center gap-1.5 rounded-none border border-border bg-transparent hover:bg-muted/40 px-2 text-xs font-normal text-foreground cursor-pointer outline-none transition-colors select-none",
 							"focus-visible:ring-1 focus-visible:ring-ring/50",
 						)}
 					/>

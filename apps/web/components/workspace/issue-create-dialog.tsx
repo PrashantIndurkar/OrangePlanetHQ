@@ -5,7 +5,7 @@ import {
 	ArrowExpand01Icon,
 	ArrowShrink02Icon,
 	Cancel01Icon,
-	Task01Icon,
+	FocusPointIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import type { TaskPriority, TaskStatus } from "../tasks/task-metadata";
 import { IssueAssigneeSelect } from "./issue-assignee-select";
 import { IssueAttachmentButton } from "./issue-attachment-button";
+import { IssueDueDateSelect } from "./issue-due-date-select";
 import { IssuePrioritySelect } from "./issue-priority-select";
 import { IssueStatusSelect } from "./issue-status-select";
 
@@ -32,6 +33,7 @@ interface IssueCreateDialogProps {
 		description: string;
 		status: TaskStatus;
 		priority: TaskPriority;
+		dueDate?: string;
 	}) => void;
 }
 
@@ -48,6 +50,7 @@ export function IssueCreateDialog({
 		React.useState<TaskStatus>(defaultStatus);
 	const [status, setStatus] = React.useState<TaskStatus>(defaultStatus);
 	const [priority, setPriority] = React.useState<TaskPriority>("no-priority");
+	const [dueDate, setDueDate] = React.useState<string | undefined>(undefined);
 	const [createMore, setCreateMore] = React.useState(false);
 	const [attachedImages, setAttachedImages] = React.useState<
 		{ name: string; dataUrl: string }[]
@@ -91,6 +94,7 @@ export function IssueCreateDialog({
 		setTitle("");
 		setDescription("");
 		setPriority("no-priority");
+		setDueDate(undefined);
 		setAttachedImages([]);
 		if (textareaRef.current) {
 			textareaRef.current.style.height = "auto";
@@ -105,6 +109,7 @@ export function IssueCreateDialog({
 			description: description.trim(),
 			status,
 			priority,
+			dueDate,
 		});
 
 		if (createMore) {
@@ -154,12 +159,11 @@ export function IssueCreateDialog({
 	return (
 		<DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
 			<DialogPrimitive.Portal>
-				<DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[1px] duration-150 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0" />
+				<DialogPrimitive.Backdrop className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[1px]" />
 				<DialogPrimitive.Popup
 					onKeyDown={handleGlobalKeyDown}
 					className={cn(
-						"fixed top-1/2 left-1/2 z-50 flex flex-col -translate-x-1/2 -translate-y-1/2 bg-popover text-popover-foreground shadow-2xl border-0 rounded-none duration-150 outline-none transition-[width,height,max-width,max-height] ease-in-out",
-						"data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+						"fixed top-1/2 left-1/2 z-50 flex flex-col -translate-x-1/2 -translate-y-1/2 bg-popover text-popover-foreground shadow-2xl border-0 rounded-none outline-none",
 						isExpanded
 							? "w-[818px] h-[90vh] max-h-[1194px]"
 							: "w-[748px] min-h-[260px] max-h-[560px] h-auto",
@@ -170,10 +174,10 @@ export function IssueCreateDialog({
 					<div className="flex items-center justify-between border-b-0 py-3 px-[18px] shrink-0">
 						<div className="flex items-center gap-2">
 							{/* Project Badge - boxy border with issues icon */}
-							<div className="flex items-center gap-1 border border-zinc-300/20 dark:border-zinc-700/20 bg-transparent px-1.5 py-0.5 rounded-none text-foreground font-semibold text-[11px] h-5 select-none">
+							<div className="flex items-center gap-1 border border-zinc-300 dark:border-zinc-700 bg-transparent px-1.5 py-0.5 rounded-none text-foreground font-semibold text-[11px] h-5 select-none">
 								<HugeiconsIcon
-									icon={Task01Icon}
-									className="size-3.5 text-primary"
+									icon={FocusPointIcon}
+									className="size-3.5 text-[#5e6ad2] dark:text-[#8b9bf5]"
 									strokeWidth={2.5}
 								/>
 								<span>STR</span>
@@ -282,6 +286,7 @@ export function IssueCreateDialog({
 						<div className="flex flex-wrap items-center gap-1.5 mt-auto pt-4 border-t-0 select-none">
 							<IssueStatusSelect value={status} onChange={setStatus} />
 							<IssuePrioritySelect value={priority} onChange={setPriority} />
+							<IssueDueDateSelect value={dueDate} onChange={setDueDate} />
 							<IssueAssigneeSelect value="prashantindurkarr" />
 						</div>
 					</div>

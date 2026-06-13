@@ -11,6 +11,7 @@ import type {
 } from "@/components/tasks/task-metadata";
 import { IssueAssigneeSelect } from "@/components/workspace/issue-assignee-select";
 import { IssueAttachmentButton } from "@/components/workspace/issue-attachment-button";
+import { IssueDueDateSelect } from "@/components/workspace/issue-due-date-select";
 import { IssuePrioritySelect } from "@/components/workspace/issue-priority-select";
 import { IssueStatusSelect } from "@/components/workspace/issue-status-select";
 import type { Task } from "@/components/workspace/types";
@@ -23,6 +24,7 @@ export default function NewTaskPage() {
 	const [description, setDescription] = React.useState("");
 	const [status, setStatus] = React.useState<TaskStatus>("todo");
 	const [priority, setPriority] = React.useState<TaskPriority>("no-priority");
+	const [dueDate, setDueDate] = React.useState<string | undefined>(undefined);
 	const [attachedImages, setAttachedImages] = React.useState<
 		{ name: string; dataUrl: string }[]
 	>([]);
@@ -81,6 +83,7 @@ export default function NewTaskPage() {
 			title: title.trim(),
 			status,
 			priority,
+			dueDate,
 			createdDate: "Created Just now",
 			createdAt: Date.now(),
 			description: description.trim(),
@@ -174,6 +177,7 @@ export default function NewTaskPage() {
 					<div className="flex flex-wrap items-center gap-2 pt-4 border-t border-border/40">
 						<IssueStatusSelect value={status} onChange={setStatus} />
 						<IssuePrioritySelect value={priority} onChange={setPriority} />
+						<IssueDueDateSelect value={dueDate} onChange={setDueDate} />
 						<IssueAssigneeSelect value="prashantindurkarr" />
 						<div className="ml-auto">
 							<IssueAttachmentButton onFileSelect={handleFileSelect} />

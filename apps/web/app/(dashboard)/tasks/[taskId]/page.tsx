@@ -25,6 +25,17 @@ import type { Task } from "@/components/workspace/types";
 import { issuesStore } from "@/lib/issues-store";
 import { cn } from "@/lib/utils";
 
+const formatDateTime = (timestamp?: number) => {
+	if (!timestamp) return "—";
+	return new Date(timestamp).toLocaleDateString("en-US", {
+		month: "short",
+		day: "numeric",
+		year: "numeric",
+		hour: "numeric",
+		minute: "2-digit",
+	});
+};
+
 export default function TaskDetailsPage({
 	params,
 }: {
@@ -240,7 +251,7 @@ export default function TaskDetailsPage({
 						href="/"
 						className="flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground transition-colors"
 					>
-						My Issues
+						My Tasks
 					</Link>
 					<span className="text-zinc-500 font-semibold">/</span>
 					<span className="font-semibold text-foreground">{taskId}</span>
@@ -535,6 +546,26 @@ export default function TaskDetailsPage({
 									Assignee
 								</span>
 								<IssueAssigneeSelect value="prashantindurkarr" />
+							</div>
+
+							{/* Created At */}
+							<div className="flex items-center justify-between text-xs">
+								<span className="text-muted-foreground font-medium">
+									Created At
+								</span>
+								<span className="text-[12px] font-medium text-foreground/80 px-2 py-1 select-text">
+									{formatDateTime(task.createdAt)}
+								</span>
+							</div>
+
+							{/* Updated At */}
+							<div className="flex items-center justify-between text-xs">
+								<span className="text-muted-foreground font-medium">
+									Updated At
+								</span>
+								<span className="text-[12px] font-medium text-foreground/80 px-2 py-1 select-text">
+									{formatDateTime(task.updatedAt || task.createdAt)}
+								</span>
 							</div>
 						</div>
 					</div>

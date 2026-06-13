@@ -38,7 +38,7 @@ export function IssueAttachmentButton({
 				variant="ghost"
 				size="icon-sm"
 				onClick={handleClick}
-				className="rounded-none bg-transparent text-muted-foreground hover:bg-muted/40 hover:text-foreground cursor-pointer flex items-center justify-center size-7 shrink-0 border-0"
+				className="rounded-none bg-transparent text-muted-foreground hover:bg-muted/40 hover:text-foreground cursor-pointer flex items-center justify-center h-[26px] w-[26px] shrink-0 border border-border"
 				title="Attach files (images or documents)"
 			>
 				{/* Rotated 45 degrees to the right, increased strokeWidth for boldness */}
