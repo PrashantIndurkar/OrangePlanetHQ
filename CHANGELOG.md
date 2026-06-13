@@ -1,3 +1,17 @@
+# [0.4.0](https://github.com/PrashantIndurkar/stride/compare/v0.3.0...v0.4.0) (2026-06-13)
+
+
+### Features
+
+* ai added back ; , ([06ec041](https://github.com/PrashantIndurkar/stride/commit/06ec0414a19e4e9dbeb587b9f88c602c32dacfda))
+* ai removed the ; , ([5f25b0b](https://github.com/PrashantIndurkar/stride/commit/5f25b0b9330d9062e5ac830f38d1db937934082b))
+* **dashboard:** implement dashboard inbox and reviews pages with sidebar navigation integration ([392a552](https://github.com/PrashantIndurkar/stride/commit/392a5522ae67189fd22f43bb610fbeb56868e074))
+* implement task management components including workspace views, filters, and context menus ([57786f5](https://github.com/PrashantIndurkar/stride/commit/57786f56992aacfb951c944c86617796a622975b))
+* implement task management components, navigation, and placeholder pages for reviews and inbox ([11c9ce3](https://github.com/PrashantIndurkar/stride/commit/11c9ce3949e77eec615d69a5584dc9c5c85a8154))
+* implement TaskContextMenu component with status and priority selection submenus ([ab778cc](https://github.com/PrashantIndurkar/stride/commit/ab778cc335da176c341d4a8b4ef49176041f91ec))
+* implement workspace board, list views, and filter components with URL-based state management ([48888e3](https://github.com/PrashantIndurkar/stride/commit/48888e320c44bf4c9bb79bb5fcf319e2aea01c4f))
+* implement workspace list view with collapsible status groups and task management ([0766765](https://github.com/PrashantIndurkar/stride/commit/0766765f0133d087c11b104ad33abe741feae51d))
+* **workspace:** add multi-select filter and search component, added no-priority value ([3ad001a](https://github.com/PrashantIndurkar/stride/commit/3ad001a8da55db5b6487e58ead639515f0147307))
 
 # [0.3.0](https://github.com/PrashantIndurkar/stride/compare/v0.2.0...v0.3.0) (2026-06-12)
 
