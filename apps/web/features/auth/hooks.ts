@@ -1,10 +1,11 @@
-import { useRouter } from "next/navigation";
+"use client";
+
 import { useState } from "react";
-import { loginApi, signupApi } from "./api";
+import { useAuth } from "@/providers/auth-provider";
 import type { LoginInput, SignupInput } from "./types";
 
 export function useLogin() {
-	const router = useRouter();
+	const { login } = useAuth();
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -12,10 +13,7 @@ export function useLogin() {
 		setIsLoading(true);
 		setError(null);
 		try {
-			const response = await loginApi(data);
-			console.log("Login success:", response);
-			// In a real app, you would set state / cookies here
-			router.push("/tasks");
+			await login(data);
 			return true;
 		} catch (err: unknown) {
 			setError(
@@ -37,7 +35,7 @@ export function useLogin() {
 }
 
 export function useSignup() {
-	const router = useRouter();
+	const { signup } = useAuth();
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -45,10 +43,7 @@ export function useSignup() {
 		setIsLoading(true);
 		setError(null);
 		try {
-			const response = await signupApi(data);
-			console.log("Signup success:", response);
-			// In a real app, you would set state / cookies here
-			router.push("/login");
+			await signup(data);
 			return true;
 		} catch (err: unknown) {
 			setError(

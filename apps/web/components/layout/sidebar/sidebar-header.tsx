@@ -2,16 +2,24 @@
 
 import {
 	ArrowDown01Icon,
+	Logout01Icon,
 	Settings01Icon,
 	Tick01Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/providers/auth-provider";
+
+function getInitials(name: string | null | undefined): string {
+	if (!name) return "U";
+	return name.trim().charAt(0).toUpperCase();
+}
 
 export function SidebarHeader() {
 	const [isOpen, setIsOpen] = React.useState(false);
 	const dropdownRef = React.useRef<HTMLDivElement>(null);
+	const { user, logout } = useAuth();
 
 	React.useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
@@ -107,15 +115,33 @@ export function SidebarHeader() {
 								/>
 								<span>Settings</span>
 							</button>
+							<button
+								type="button"
+								onClick={() => {
+									setIsOpen(false);
+									logout();
+								}}
+								className="flex w-full cursor-pointer items-center gap-2 rounded-none px-3 py-2 text-left text-xs text-destructive outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:bg-muted"
+							>
+								<HugeiconsIcon
+									icon={Logout01Icon}
+									size={12}
+									className="text-destructive"
+								/>
+								<span>Log out</span>
+							</button>
 						</div>
 					</div>
 				)}
 			</div>
 
 			{/* Profile Avatar */}
-			<div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
-				<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-muted to-muted-foreground/20 text-[10px] font-medium text-muted-foreground select-none">
-					ST
+			<div
+				className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-muted"
+				title={user?.name || user?.email || "User"}
+			>
+				<div className="flex h-full w-full items-center justify-center bg-gradient-to-tr from-muted to-muted-foreground/20 text-[10px] font-bold text-muted-foreground select-none">
+					{getInitials(user?.name || user?.email)}
 				</div>
 			</div>
 		</div>
