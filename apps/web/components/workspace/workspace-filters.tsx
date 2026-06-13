@@ -33,6 +33,7 @@ import {
 	InProgressIcon,
 	LowPriorityIcon,
 	MediumPriorityIcon,
+	NoPriorityIcon,
 	TodoIcon,
 	UrgentPriorityIcon,
 } from "../icons";
@@ -145,6 +146,7 @@ export function WorkspaceFilters({
 	];
 
 	const priorityOptions = [
+		{ value: "no-priority", label: "No Priority", icon: NoPriorityIcon },
 		{ value: "urgent", label: "Urgent", icon: UrgentPriorityIcon },
 		{ value: "high", label: "High", icon: HighPriorityIcon },
 		{ value: "medium", label: "Medium", icon: MediumPriorityIcon },

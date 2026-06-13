@@ -1,95 +1,73 @@
 # Generate Git Branch Name and Conventional Commit Message
 
-Generate a Git branch name and Conventional Commit message based on the staged changes.
+Analyze the staged git diff and determine the PRIMARY change.
 
-## Output Format
+Focus on:
+
+* What feature was added?
+* What bug was fixed?
+* What component/module was changed?
+* What user-visible behavior changed?
+* Ignore formatting, linting, imports, comments, and minor refactors unless they are the main change.
+
+## Output
 
 Branch: <branch-name>
 Commit: <commit-message>
 
-## Rules
+## Branch Rules
 
-### Branch Name
-
-* Output first.
-* Lowercase only.
-* Use hyphens (`-`) instead of spaces.
-* Keep concise and descriptive.
+* Lowercase only
+* Use hyphens
+* Maximum 4 words after type
 * Format:
 
-  * feat/short-description
-  * fix/short-description
-  * refactor/short-description
-  * chore/short-description
-  * docs/short-description
-  * test/short-description
-  * ci/short-description
-  * build/short-description
+feat/<description>
+fix/<description>
+refactor/<description>
+chore/<description>
+docs/<description>
+test/<description>
+ci/<description>
+build/<description>
 
-### Commit Message
+Examples:
 
-* Output second.
+* feat/task-context-menu
+* fix/sidebar-scroll
+* refactor/task-card-layout
 
-* Follow Conventional Commits.
+## Commit Rules
 
-* Use one of:
+* Follow Conventional Commits
+* Be specific to the actual change
+* Mention the affected feature/component
+* Describe the result, not the implementation
 
-  * feat
-  * fix
-  * chore
-  * docs
-  * refactor
-  * test
-  * ci
-  * build
+Good:
 
-* Scope is optional:
+* feat(tasks): add nested status and priority menus
+* fix(board): prevent task cards from overflowing column width
+* refactor(ui): simplify task card metadata layout
+* feat(sidebar): add project navigation section
 
-  * feat(auth): add password reset flow
-  * fix(ui): resolve sidebar overflow
+Bad:
 
-* Maximum 150 characters.
+* feat: update task management
+* fix: resolve issues
+* refactor: cleanup code
+* chore: changes
 
-* Prefer 50–80 characters.
+## Priority
 
-* Be specific about what changed.
+1. User-facing feature
+2. Bug fix
+3. Component behavior
+4. Internal refactor
 
-* Mention the main feature, component, file, or tool affected.
-
-* Use present tense.
-
-* Avoid vague messages like:
-
-  * update code
-  * fix bug
-  * changes
-  * cleanup
-
-## Examples
-
-Branch: feat/task-filtering
-Commit: feat: add task filtering to project list
-
-Branch: fix/sidebar-scroll
-Commit: fix(ui): resolve sidebar scrolling issue
-
-Branch: chore/release-workflow
-Commit: chore(ci): add automated release workflow
-
-Branch: docs/changelog-guide
-Commit: docs: update changelog and release workflow guide
-
-Branch: refactor/button-props
-Commit: refactor(ui): simplify button component props
-
-Branch: ci/biome-checks
-Commit: ci: run biome checks on pull requests
-
-## Important
+Generate the most specific branch name and commit message possible from the staged changes.
 
 Output only:
 
 Branch: <branch-name>
 Commit: <commit-message>
-
-Do not include explanations, markdown, code blocks, reasoning, or additional text.
