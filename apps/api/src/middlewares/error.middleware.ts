@@ -3,10 +3,11 @@ import { env } from "../config/env.js";
 import { ApiError } from "../utils/api-error.js";
 
 export const errorHandler = (
+	// biome-ignore lint/suspicious/noExplicitAny: Express error handler expects any type
 	err: any,
-	req: Request,
+	_req: Request,
 	res: Response,
-	next: NextFunction,
+	_next: NextFunction,
 ) => {
 	let { statusCode, message } = err;
 
@@ -15,7 +16,7 @@ export const errorHandler = (
 		message = err.message || "Internal Server Error";
 	}
 
-	res.locals["errorMessage"] = err.message;
+	res.locals.errorMessage = err.message;
 
 	const response = {
 		code: statusCode,

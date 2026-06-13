@@ -19,6 +19,7 @@ export const generateToken = (payload: object): string => {
 	});
 };
 
+// biome-ignore lint/suspicious/noExplicitAny: verifyToken returns a decoded JWT payload
 export const verifyToken = (token: string): any => {
 	return jwt.verify(token, env.JWT_SECRET);
 };
