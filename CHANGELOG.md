@@ -1,16 +1,87 @@
-# [0.7.0](https://github.com/PrashantIndurkar/stride/compare/v0.6.1...v0.7.0) (2026-06-13)
+# [0.7.0](https://github.com/PrashantIndurkar/stride/compare/v0.6.0...v0.7.0) (2026-06-14)
 
+## 🔐 Authentication System
 
-### Features
+### User Authentication
 
-* implement full-stack authentication system including signup, login, session management, and integration tests ([9ec3c35](https://github.com/PrashantIndurkar/stride/commit/9ec3c35885e64916d15dde7319fbd133824b6812))
-## [0.6.1](https://github.com/PrashantIndurkar/stride/compare/v0.6.0...v0.6.1) (2026-06-13)
+* Added user registration and login functionality.
+* Implemented secure password hashing using bcrypt.
+* Added JWT-based authentication with token expiration support.
+* Added authenticated user profile endpoint (`/auth/me`).
+
+### API Security
+
+* Added request validation using Zod schemas.
+* Introduced authentication middleware for protected API routes.
+* Implemented JWT verification and user context injection for authenticated requests.
+* Improved API security with consistent validation and authorization flows.
+
+### Session Management
+
+* Added persistent user sessions across browser refreshes.
+* Implemented secure JWT storage using browser cookies.
+* Added automatic user session restoration on application startup.
+
+### Protected Routes
+
+* Added route protection for authenticated workspace areas.
+* Restricted task management pages to authorized users only.
+* Implemented middleware-based access control for protected application routes.
+
+### Workspace Experience
+
+* Added dynamic user avatar initials in the sidebar.
+* Added logout functionality within the workspace menu.
+* Improved authenticated user experience throughout the application.
+
+## 🚀 Improvements
+
+* Connected frontend authentication flows with backend APIs.
+* Improved application security and session handling.
+* Established the foundation for role-based access control and advanced permissions.
+* Prepared the platform for secure task and user management features.
+
+---
+
 # [0.6.0](https://github.com/PrashantIndurkar/stride/compare/v0.5.0...v0.6.0) (2026-06-13)
 
+## 🚀 Backend Foundation
 
-### Features
+### Express API Setup
 
-* initialize Node.js backend infrastructure with Prisma, custom error handling, and documentation for backend development patterns ([0c88c96](https://github.com/PrashantIndurkar/stride/commit/0c88c966e5050e980545515a663bf80c346b9667))
+* Added a dedicated backend service using Express.
+* Configured the API as a workspace package within the monorepo.
+* Added TypeScript support and development tooling for a scalable backend architecture.
+
+### Environment & Error Handling
+
+* Added environment variable validation using Zod.
+* Introduced centralized error handling and consistent API error responses.
+* Configured logging and middleware for improved debugging and monitoring.
+
+### Database Integration
+
+* Integrated PostgreSQL with Prisma ORM.
+* Created the initial database schema for Users and Tasks.
+* Added database migrations for reliable schema management.
+
+### User & Task Models
+
+* Added user management foundation with roles, authentication fields, and timestamps.
+* Added task management models including status, priority, descriptions, due dates, and ownership relationships.
+
+### Seed Data
+
+* Added database seeding support.
+* Included sample users and tasks to simplify local development and testing.
+
+## 🛠 Developer Experience
+
+* Improved project structure with a dedicated API application.
+* Established a scalable backend architecture for future authentication, task APIs, and role-based access control.
+* Prepared the foundation for production-ready database workflows.
+
+---
 # [0.5.0](https://github.com/PrashantIndurkar/stride/compare/v0.4.0...v0.5.0) (2026-06-13)
 
 ## ✨ New Features (2026-06-13)
@@ -40,7 +111,7 @@
 * Enhanced issue editing and interaction patterns.
 * Refined board-view workflows for a more seamless user experience.
 * Established the foundation for future backend integration and persistent data storage.
-
+---
 # 0.4.0 (2026-06-13)
 
 ## ✨ New Features
