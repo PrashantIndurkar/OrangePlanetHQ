@@ -19,9 +19,11 @@ export const errorHandler = (
 	res.locals.errorMessage = err.message;
 
 	const response = {
-		code: statusCode,
-		message,
-		...(env.NODE_ENV === "development" && { stack: err.stack }),
+		error: {
+			code: statusCode,
+			message,
+			...(env.NODE_ENV === "development" && { stack: err.stack }),
+		},
 	};
 
 	if (env.NODE_ENV === "development") {

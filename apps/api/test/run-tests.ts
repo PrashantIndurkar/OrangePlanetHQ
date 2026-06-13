@@ -1,5 +1,6 @@
 import request from "supertest";
 import app from "../src/app.js";
+import { runTasksTests } from "./tasks.test.js";
 
 async function run() {
 	console.log("🏃 Running Custom Auth Integration Tests...");
@@ -86,6 +87,9 @@ async function run() {
 			);
 		}
 		console.log("✅ GET /me authorization check passed");
+
+		// Run Tasks module tests
+		await runTasksTests();
 
 		console.log("\n🎉 ALL TESTS PASSED SUCCESSFULLY!");
 		process.exit(0);
