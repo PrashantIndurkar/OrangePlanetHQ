@@ -89,10 +89,12 @@ export function TaskContextMenu({
 	onDeleteTask,
 }: TaskContextMenuProps) {
 	// Mock state for UI demonstration
-	const [prevCurrentStatus, setPrevCurrentStatus] = React.useState<TaskStatus>(currentStatus);
+	const [prevCurrentStatus, setPrevCurrentStatus] =
+		React.useState<TaskStatus>(currentStatus);
 	const [status, setStatus] = React.useState<TaskStatus>(currentStatus);
 
-	const [prevCurrentPriority, setPrevCurrentPriority] = React.useState<TaskPriority>(currentPriority);
+	const [prevCurrentPriority, setPrevCurrentPriority] =
+		React.useState<TaskPriority>(currentPriority);
 	const [priority, setPriority] = React.useState<TaskPriority>(currentPriority);
 
 	const [isOpen, setIsOpen] = React.useState(false);
@@ -202,7 +204,9 @@ export function TaskContextMenu({
 										<CommandItem
 											key={p.value}
 											value={p.label}
-											onSelect={() => handlePriorityChange(p.value as TaskPriority)}
+											onSelect={() =>
+												handlePriorityChange(p.value as TaskPriority)
+											}
 											className="flex items-center gap-2"
 										>
 											<p.icon

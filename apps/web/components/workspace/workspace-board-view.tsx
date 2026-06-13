@@ -7,7 +7,7 @@ import {
 	TodoIcon,
 } from "../icons";
 import { TaskCard } from "../tasks/task-card";
-import type { TaskStatus, TaskPriority } from "../tasks/task-context-menu";
+import type { TaskPriority, TaskStatus } from "../tasks/task-context-menu";
 import type { Task } from "./types";
 import { filterAndSortTasks, getNormalizedFilters } from "./types";
 
@@ -183,8 +183,12 @@ export function WorkspaceBoardView({
 									createdDate={task.createdDate}
 									assigneeName={task.assigneeName}
 									assigneeAvatarUrl={task.assigneeAvatarUrl}
-									onUpdateStatus={(newStatus) => handleUpdateStatus(task.id, newStatus)}
-									onUpdatePriority={(newPriority) => handleUpdatePriority(task.id, newPriority)}
+									onUpdateStatus={(newStatus) =>
+										handleUpdateStatus(task.id, newStatus)
+									}
+									onUpdatePriority={(newPriority) =>
+										handleUpdatePriority(task.id, newPriority)
+									}
 									onDeleteTask={() => handleDeleteTask(task.id)}
 								/>
 							))}

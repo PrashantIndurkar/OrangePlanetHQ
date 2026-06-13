@@ -31,26 +31,26 @@ export interface ReadOnlySearchParams {
 export function getNormalizedFilters(searchParams: ReadOnlySearchParams) {
 	const activeStatuses = (searchParams.get("status")?.split(",") || [])
 		.filter(Boolean)
-		.filter((v): v is typeof ALLOWED_STATUSES[number] =>
+		.filter((v): v is (typeof ALLOWED_STATUSES)[number] =>
 			(ALLOWED_STATUSES as readonly string[]).includes(v),
 		);
 
 	const activePriorities = (searchParams.get("priority")?.split(",") || [])
 		.filter(Boolean)
-		.filter((v): v is typeof ALLOWED_PRIORITIES[number] =>
+		.filter((v): v is (typeof ALLOWED_PRIORITIES)[number] =>
 			(ALLOWED_PRIORITIES as readonly string[]).includes(v),
 		);
 
 	const activeDueDates = (searchParams.get("due_date")?.split(",") || [])
 		.filter(Boolean)
-		.filter((v): v is typeof ALLOWED_DUE_DATES[number] =>
+		.filter((v): v is (typeof ALLOWED_DUE_DATES)[number] =>
 			(ALLOWED_DUE_DATES as readonly string[]).includes(v),
 		);
 
 	const rawSortBy = searchParams.get("sort_by");
 	const sortBy =
 		rawSortBy && (ALLOWED_SORT_BY as readonly string[]).includes(rawSortBy)
-			? (rawSortBy as typeof ALLOWED_SORT_BY[number])
+			? (rawSortBy as (typeof ALLOWED_SORT_BY)[number])
 			: "created";
 
 	const rawSortOrder = searchParams.get("sort_order");

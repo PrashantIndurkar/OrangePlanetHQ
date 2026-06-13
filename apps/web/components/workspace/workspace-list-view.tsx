@@ -262,8 +262,12 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 											key={task.id}
 											currentStatus={task.status as TaskStatus}
 											currentPriority={task.priority as TaskPriority}
-											onUpdateStatus={(newStatus) => handleUpdateStatus(task.id, newStatus)}
-											onUpdatePriority={(newPriority) => handleUpdatePriority(task.id, newPriority)}
+											onUpdateStatus={(newStatus) =>
+												handleUpdateStatus(task.id, newStatus)
+											}
+											onUpdatePriority={(newPriority) =>
+												handleUpdatePriority(task.id, newPriority)
+											}
 											onDeleteTask={() => handleDeleteTask(task.id)}
 										>
 											<div className="group flex h-9 cursor-pointer items-center justify-between rounded-none border-b border-border/40 bg-transparent px-3 text-xs text-foreground transition-colors last:border-b-0 hover:bg-muted/40 data-[context-menu-open=true]:bg-muted/50">

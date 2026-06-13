@@ -210,7 +210,9 @@ export function WorkspaceFilters({
 												<CommandItem
 													key={opt.value}
 													value={opt.label}
-													data-checked={(activeStatuses as readonly string[]).includes(opt.value)}
+													data-checked={(
+														activeStatuses as readonly string[]
+													).includes(opt.value)}
 													onSelect={() => toggleFilter("status", opt.value)}
 													className="cursor-pointer rounded-none"
 												>
@@ -243,7 +245,9 @@ export function WorkspaceFilters({
 												<CommandItem
 													key={opt.value}
 													value={opt.label}
-													data-checked={(activePriorities as readonly string[]).includes(opt.value)}
+													data-checked={(
+														activePriorities as readonly string[]
+													).includes(opt.value)}
 													onSelect={() => toggleFilter("priority", opt.value)}
 													className="cursor-pointer rounded-none"
 												>
@@ -274,7 +278,9 @@ export function WorkspaceFilters({
 												<CommandItem
 													key={opt.value}
 													value={opt.label}
-													data-checked={(activeDueDates as readonly string[]).includes(opt.value)}
+													data-checked={(
+														activeDueDates as readonly string[]
+													).includes(opt.value)}
 													onSelect={() => toggleFilter("due_date", opt.value)}
 													className="cursor-pointer rounded-none"
 												>
