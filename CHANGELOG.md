@@ -1,3 +1,9 @@
+# [0.6.0](https://github.com/PrashantIndurkar/stride/compare/v0.5.0...v0.6.0) (2026-06-13)
+
+
+### Features
+
+* initialize Node.js backend infrastructure with Prisma, custom error handling, and documentation for backend development patterns ([0c88c96](https://github.com/PrashantIndurkar/stride/commit/0c88c966e5050e980545515a663bf80c346b9667))
 # [0.5.0](https://github.com/PrashantIndurkar/stride/compare/v0.4.0...v0.5.0) (2026-06-13)
 
 ## ✨ New Features (2026-06-13)
