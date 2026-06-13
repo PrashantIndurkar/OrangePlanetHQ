@@ -1,2 +1,2 @@
 // Tasks hooks
-export {};
+export {}

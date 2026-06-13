@@ -1,2 +1,2 @@
 // Auth route guards
-export {};
+export {}

@@ -1,2 +1,2 @@
 // Auth session management
-export {};
+export {}

@@ -1,3 +1,3 @@
 export default function NewTaskPage() {
-	return <div>Create new task placeholder</div>;
+  return <div>Create new task placeholder</div>
 }

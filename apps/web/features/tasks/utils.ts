@@ -1,2 +1,2 @@
 // Tasks utility functions
-export {};
+export {}
