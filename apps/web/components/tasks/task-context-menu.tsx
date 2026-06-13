@@ -1,16 +1,7 @@
-import { Delete01Icon, Tick02Icon } from "@hugeicons/core-free-icons";
+import { Delete01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-	CommandShortcut,
-} from "@/components/ui/command";
 import {
 	ContextMenu,
 	ContextMenuContent,
@@ -22,54 +13,19 @@ import {
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import {
-	BacklogIcon,
-	CanceledIcon,
-	DoneIcon,
-	HighPriorityIcon,
-	InProgressIcon,
-	LowPriorityIcon,
-	MediumPriorityIcon,
-	NoPriorityIcon,
-	PriorityIcon,
-	TodoIcon,
-	UrgentPriorityIcon,
-} from "../icons";
+	priorities,
+	statuses,
+	type TaskPriority,
+	type TaskStatus,
+} from "./task-metadata";
+import { TaskPriorityList } from "./task-priority-list";
+import { TaskStatusList } from "./task-status-list";
+
+export { priorities, statuses, type TaskPriority, type TaskStatus };
+
+import { PriorityIcon, TodoIcon } from "../icons";
 
 // --- Types & Data ---
-
-export type TaskStatus =
-	| "backlog"
-	| "todo"
-	| "in-progress"
-	| "done"
-	| "canceled";
-export type TaskPriority = "no-priority" | "urgent" | "high" | "medium" | "low";
-
-const statuses = [
-	{ value: "backlog", label: "Backlog", icon: BacklogIcon, shortcut: "1" },
-	{ value: "todo", label: "Todo", icon: TodoIcon, shortcut: "2" },
-	{
-		value: "in-progress",
-		label: "In Progress",
-		icon: InProgressIcon,
-		shortcut: "3",
-	},
-	{ value: "done", label: "Done", icon: DoneIcon, shortcut: "4" },
-	{ value: "canceled", label: "Canceled", icon: CanceledIcon, shortcut: "5" },
-];
-
-const priorities = [
-	{
-		value: "no-priority",
-		label: "No priority",
-		icon: NoPriorityIcon,
-		shortcut: "0",
-	},
-	{ value: "urgent", label: "Urgent", icon: UrgentPriorityIcon, shortcut: "1" },
-	{ value: "high", label: "High", icon: HighPriorityIcon, shortcut: "2" },
-	{ value: "medium", label: "Medium", icon: MediumPriorityIcon, shortcut: "3" },
-	{ value: "low", label: "Low", icon: LowPriorityIcon, shortcut: "4" },
-];
 
 interface TaskContextMenuProps {
 	children: React.ReactNode;
@@ -149,41 +105,7 @@ export function TaskContextMenu({
 						<span className="text-xs text-muted-foreground/60">S</span>
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className="w-48 p-0">
-						<Command>
-							<CommandInput placeholder="Change status..." autoFocus />
-							<CommandList>
-								<CommandEmpty>No status found.</CommandEmpty>
-								<CommandGroup>
-									{statuses.map((s) => (
-										<CommandItem
-											key={s.value}
-											value={s.label} // Value used for cmdk filtering
-											onSelect={() => handleStatusChange(s.value as TaskStatus)}
-											className="flex items-center gap-2"
-										>
-											<s.icon
-												className={`h-4 w-4 ${status === s.value ? "text-primary" : "text-muted-foreground"}`}
-											/>
-											<span className="flex-grow text-left">{s.label}</span>
-											<div className="ml-auto flex shrink-0 items-center gap-2">
-												{status === s.value ? (
-													<HugeiconsIcon
-														icon={Tick02Icon}
-														className="h-4 w-4 text-primary"
-														data-testid="status-check"
-													/>
-												) : (
-													<div className="h-4 w-4" />
-												)}
-												<CommandShortcut className="ml-0 min-w-[12px] text-right tracking-normal">
-													{s.shortcut}
-												</CommandShortcut>
-											</div>
-										</CommandItem>
-									))}
-								</CommandGroup>
-							</CommandList>
-						</Command>
+						<TaskStatusList value={status} onSelect={handleStatusChange} />
 					</ContextMenuSubContent>
 				</ContextMenuSub>
 
@@ -195,43 +117,10 @@ export function TaskContextMenu({
 						<span className="text-xs text-muted-foreground/60">P</span>
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className="w-48 p-0">
-						<Command>
-							<CommandInput placeholder="Set priority to..." autoFocus />
-							<CommandList>
-								<CommandEmpty>No priority found.</CommandEmpty>
-								<CommandGroup>
-									{priorities.map((p) => (
-										<CommandItem
-											key={p.value}
-											value={p.label}
-											onSelect={() =>
-												handlePriorityChange(p.value as TaskPriority)
-											}
-											className="flex items-center gap-2"
-										>
-											<p.icon
-												className={`h-4 w-4 ${priority === p.value ? "text-primary" : "text-muted-foreground"}`}
-											/>
-											<span className="flex-grow text-left">{p.label}</span>
-											<div className="ml-auto flex shrink-0 items-center gap-2">
-												{priority === p.value ? (
-													<HugeiconsIcon
-														icon={Tick02Icon}
-														className="h-4 w-4 text-primary"
-														data-testid="priority-check"
-													/>
-												) : (
-													<div className="h-4 w-4" />
-												)}
-												<CommandShortcut className="ml-0 min-w-[12px] text-right tracking-normal">
-													{p.shortcut}
-												</CommandShortcut>
-											</div>
-										</CommandItem>
-									))}
-								</CommandGroup>
-							</CommandList>
-						</Command>
+						<TaskPriorityList
+							value={priority}
+							onSelect={handlePriorityChange}
+						/>
 					</ContextMenuSubContent>
 				</ContextMenuSub>
 

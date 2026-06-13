@@ -107,7 +107,10 @@ export function WorkspaceHeader({
 
 				{/* Breadcrumb section */}
 				<div className="flex items-center gap-1.5 text-xs">
-					<div className="flex items-center gap-1.5 font-semibold text-foreground">
+					<div
+						className="flex items-center gap-1.5 font-semibold text-foreground"
+						suppressHydrationWarning
+					>
 						{/* Premium Workspace Dashboard Grid Icon */}
 						<svg
 							className="h-3.5 w-3.5 text-blue-600 dark:text-blue-500"

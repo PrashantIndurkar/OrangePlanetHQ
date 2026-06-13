@@ -36,7 +36,10 @@ export function SidebarHeader() {
 					className="flex cursor-pointer items-center gap-2 rounded-none text-foreground transition-opacity outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:opacity-90"
 				>
 					{/* Blue Brand Mark */}
-					<div className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-600 shadow-sm shadow-blue-500/10 dark:bg-blue-500">
+					<div
+						className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-600 shadow-sm shadow-blue-500/10 dark:bg-blue-500"
+						suppressHydrationWarning
+					>
 						<svg
 							className="h-3.5 w-3.5 text-white"
 							viewBox="0 0 24 24"

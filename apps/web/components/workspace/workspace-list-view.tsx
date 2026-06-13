@@ -2,7 +2,7 @@
 
 import { Calendar04Icon, UserCircleIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
@@ -29,10 +29,16 @@ import { filterAndSortTasks, getNormalizedFilters } from "./types";
 interface WorkspaceListViewProps {
 	tasks: Task[];
 	setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+	onAddTaskClick?: (status: TaskStatus) => void;
 }
 
-export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
+export function WorkspaceListView({
+	tasks,
+	setTasks,
+	onAddTaskClick,
+}: WorkspaceListViewProps) {
 	const searchParams = useSearchParams();
+	const router = useRouter();
 
 	const {
 		activeStatuses,
@@ -88,17 +94,33 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 	const handleAddTask = (
 		status: "backlog" | "todo" | "in-progress" | "done" | "canceled",
 	) => {
-		const newId = `PLO-${tasks.length + 50}`;
-		const newTask: Task = {
-			id: newId,
-			title: `New task ${newId}`,
-			status,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-			// eslint-disable-next-line react-hooks/purity
-			createdAt: Date.now(),
-		};
-		setTasks((prev) => [...prev, newTask]);
+		if (onAddTaskClick) {
+			onAddTaskClick(status);
+		} else {
+			const newId = `STR-${tasks.length + 50}`;
+			const newTask: Task = {
+				id: newId,
+				title: `New task ${newId}`,
+				status,
+				priority: "no-priority",
+				createdDate: "Created Jun 12",
+				// eslint-disable-next-line react-hooks/purity
+				createdAt: Date.now(),
+			};
+			setTasks((prev) => [...prev, newTask]);
+		}
+	};
+
+	const handleRowClick = (taskId: string, e: React.MouseEvent) => {
+		const target = e.target as HTMLElement;
+		if (
+			target.closest("button") ||
+			target.closest(".avatar") ||
+			target.closest("[role='menuitem']")
+		) {
+			return;
+		}
+		router.push(`/tasks/${taskId}`);
 	};
 
 	const statusGroups = [
@@ -244,7 +266,7 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 										e.stopPropagation();
 										handleAddTask(group.id);
 									}}
-									className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-none border border-dashed border-border font-mono text-[10px] text-muted-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
+									className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-none border border-dashed border-zinc-400 dark:border-zinc-500 font-sans text-xs font-semibold text-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
 								>
 									+
 								</button>
@@ -270,7 +292,18 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 											}
 											onDeleteTask={() => handleDeleteTask(task.id)}
 										>
-											<div className="group flex h-9 cursor-pointer items-center justify-between rounded-none border-b border-border/40 bg-transparent px-3 text-xs text-foreground transition-colors last:border-b-0 hover:bg-muted/40 data-[context-menu-open=true]:bg-muted/50">
+											<div
+												role="button"
+												onClick={(e) => handleRowClick(task.id, e)}
+												onKeyDown={(e) => {
+													if (e.key === "Enter" || e.key === " ") {
+														e.preventDefault();
+														router.push(`/tasks/${task.id}`);
+													}
+												}}
+												tabIndex={0}
+												className="group flex h-9 cursor-pointer items-center justify-between rounded-none border-b border-border/40 bg-transparent px-3 text-xs text-foreground transition-colors last:border-b-0 hover:bg-muted/40 data-[context-menu-open=true]:bg-muted/50 outline-none focus-visible:ring-1 focus-visible:ring-ring/50"
+											>
 												{/* Left Section: Checkbox, Priority, ID, Status, Title */}
 												<div className="flex min-w-0 flex-1 items-center gap-2">
 													{/* Checkbox (opacity-0 by default, opacity-100 on hover of the row) */}
@@ -307,7 +340,7 @@ export function WorkspaceListView({ tasks, setTasks }: WorkspaceListViewProps) {
 														<PriorityComp className="h-[22px] w-[22px] shrink-0" />
 													</div>
 
-													{/* Task Identifier (e.g. PLO-40) */}
+													{/* Task Identifier (e.g. STR-40) */}
 													<span className="shrink-0 font-mono text-[13px] font-[450] text-zinc-500 select-text dark:text-zinc-400">
 														{task.id}
 													</span>

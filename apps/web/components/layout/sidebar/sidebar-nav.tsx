@@ -9,7 +9,6 @@ import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import * as React from "react";
 import { cn } from "@/lib/utils";
 
 interface NavItem {

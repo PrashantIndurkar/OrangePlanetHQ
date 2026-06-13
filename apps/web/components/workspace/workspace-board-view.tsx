@@ -14,11 +14,13 @@ import { filterAndSortTasks, getNormalizedFilters } from "./types";
 interface WorkspaceBoardViewProps {
 	tasks: Task[];
 	setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+	onAddTaskClick?: (status: TaskStatus) => void;
 }
 
 export function WorkspaceBoardView({
 	tasks,
 	setTasks,
+	onAddTaskClick,
 }: WorkspaceBoardViewProps) {
 	const searchParams = useSearchParams();
 
@@ -72,17 +74,21 @@ export function WorkspaceBoardView({
 	const handleAddTask = (
 		status: "backlog" | "todo" | "in-progress" | "done" | "canceled",
 	) => {
-		const newId = `PLO-${tasks.length + 50}`;
-		const newTask: Task = {
-			id: newId,
-			title: `New task ${newId}`,
-			status,
-			priority: "no-priority",
-			createdDate: "Created Jun 12",
-			// eslint-disable-next-line react-hooks/purity
-			createdAt: Date.now(),
-		};
-		setTasks((prev) => [...prev, newTask]);
+		if (onAddTaskClick) {
+			onAddTaskClick(status);
+		} else {
+			const newId = `STR-${tasks.length + 50}`;
+			const newTask: Task = {
+				id: newId,
+				title: `New task ${newId}`,
+				status,
+				priority: "no-priority",
+				createdDate: "Created Jun 12",
+				// eslint-disable-next-line react-hooks/purity
+				createdAt: Date.now(),
+			};
+			setTasks((prev) => [...prev, newTask]);
+		}
 	};
 
 	const handleUpdateStatus = (taskId: string, newStatus: TaskStatus) => {
