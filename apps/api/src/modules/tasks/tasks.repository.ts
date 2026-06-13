@@ -12,13 +12,16 @@ export interface ListTasksFilters {
 }
 
 export const tasksRepository = {
-	async create(userId: string, data: {
-		title: string;
-		description?: string | null;
-		status?: string;
-		priority?: string;
-		dueDate?: Date | null;
-	}) {
+	async create(
+		userId: string,
+		data: {
+			title: string;
+			description?: string | null;
+			status?: string;
+			priority?: string;
+			dueDate?: Date | null;
+		},
+	) {
 		return prisma.task.create({
 			data: {
 				...data,
@@ -75,13 +78,16 @@ export const tasksRepository = {
 		return { tasks, total };
 	},
 
-	async update(id: string, data: {
-		title?: string;
-		description?: string | null;
-		status?: string;
-		priority?: string;
-		dueDate?: Date | null;
-	}) {
+	async update(
+		id: string,
+		data: {
+			title?: string;
+			description?: string | null;
+			status?: string;
+			priority?: string;
+			dueDate?: Date | null;
+		},
+	) {
 		return prisma.task.update({
 			where: { id },
 			data,

@@ -32,4 +32,3 @@ export const errorHandler = (
 
 	res.status(statusCode).json(response);
 };
-

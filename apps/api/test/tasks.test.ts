@@ -10,7 +10,7 @@ export async function runTasksTests() {
 	let tokenA = "";
 	let tokenB = "";
 	let taskIDA = "";
-	let taskIdB = "";
+	const taskIdB = "";
 
 	try {
 		// Preparation: Signup User A and User B
@@ -21,7 +21,9 @@ export async function runTasksTests() {
 			name: "User A",
 		});
 		if (signupARes.status !== 201) {
-			throw new Error(`Signup User A failed: ${JSON.stringify(signupARes.body)}`);
+			throw new Error(
+				`Signup User A failed: ${JSON.stringify(signupARes.body)}`,
+			);
 		}
 		tokenA = signupARes.body.token;
 
@@ -31,7 +33,9 @@ export async function runTasksTests() {
 			name: "User B",
 		});
 		if (signupBRes.status !== 201) {
-			throw new Error(`Signup User B failed: ${JSON.stringify(signupBRes.body)}`);
+			throw new Error(
+				`Signup User B failed: ${JSON.stringify(signupBRes.body)}`,
+			);
 		}
 		tokenB = signupBRes.body.token;
 
@@ -50,10 +54,14 @@ export async function runTasksTests() {
 			});
 
 		if (createRes.status !== 201) {
-			throw new Error(`Expected 201, got ${createRes.status}: ${JSON.stringify(createRes.body)}`);
+			throw new Error(
+				`Expected 201, got ${createRes.status}: ${JSON.stringify(createRes.body)}`,
+			);
 		}
 		if (!createRes.body.task || !createRes.body.task.id) {
-			throw new Error(`Response does not contain task object: ${JSON.stringify(createRes.body)}`);
+			throw new Error(
+				`Response does not contain task object: ${JSON.stringify(createRes.body)}`,
+			);
 		}
 		taskIDA = createRes.body.task.id;
 		console.log(`✅ Task created with ID: ${taskIDA}`);
@@ -73,21 +81,32 @@ export async function runTasksTests() {
 		console.log("✅ Task retrieval passed");
 
 		// Test 3: User B attempts to retrieve User A's task (isolation check)
-		console.log("➡️ Test 3: User B attempts to retrieve User A's task (Boundary Guard)...");
+		console.log(
+			"➡️ Test 3: User B attempts to retrieve User A's task (Boundary Guard)...",
+		);
 		const getBRes = await request(app)
 			.get(`/api/v1/tasks/${taskIDA}`)
 			.set("Authorization", `Bearer ${tokenB}`);
 
 		if (getBRes.status !== 404) {
-			throw new Error(`Expected 404 for tenant boundary check, got ${getBRes.status}: ${JSON.stringify(getBRes.body)}`);
+			throw new Error(
+				`Expected 404 for tenant boundary check, got ${getBRes.status}: ${JSON.stringify(getBRes.body)}`,
+			);
 		}
-		if (!getBRes.body.error || getBRes.body.error.message !== "Task not found") {
-			throw new Error(`Expected Error message 'Task not found', got: ${JSON.stringify(getBRes.body)}`);
+		if (
+			!getBRes.body.error ||
+			getBRes.body.error.message !== "Task not found"
+		) {
+			throw new Error(
+				`Expected Error message 'Task not found', got: ${JSON.stringify(getBRes.body)}`,
+			);
 		}
 		console.log("✅ User isolation boundary retrieval guard passed");
 
 		// Test 4: User A updates task (partial, setting description to null)
-		console.log("➡️ Test 4: User A updates task description to null and title to updated...");
+		console.log(
+			"➡️ Test 4: User A updates task description to null and title to updated...",
+		);
 		const updateRes = await request(app)
 			.patch(`/api/v1/tasks/${taskIDA}`)
 			.set("Authorization", `Bearer ${tokenA}`)
@@ -97,15 +116,24 @@ export async function runTasksTests() {
 			});
 
 		if (updateRes.status !== 200) {
-			throw new Error(`Expected 200, got ${updateRes.status}: ${JSON.stringify(updateRes.body)}`);
+			throw new Error(
+				`Expected 200, got ${updateRes.status}: ${JSON.stringify(updateRes.body)}`,
+			);
 		}
-		if (updateRes.body.task.title !== "Updated Task 1 for User A" || updateRes.body.task.description !== null) {
-			throw new Error(`Update check failed: ${JSON.stringify(updateRes.body.task)}`);
+		if (
+			updateRes.body.task.title !== "Updated Task 1 for User A" ||
+			updateRes.body.task.description !== null
+		) {
+			throw new Error(
+				`Update check failed: ${JSON.stringify(updateRes.body.task)}`,
+			);
 		}
 		console.log("✅ Partial nullable update passed");
 
 		// Test 5: User B attempts to update User A's task (isolation check)
-		console.log("➡️ Test 5: User B attempts to update User A's task (Boundary Guard)...");
+		console.log(
+			"➡️ Test 5: User B attempts to update User A's task (Boundary Guard)...",
+		);
 		const updateBRes = await request(app)
 			.patch(`/api/v1/tasks/${taskIDA}`)
 			.set("Authorization", `Bearer ${tokenB}`)
@@ -159,7 +187,9 @@ export async function runTasksTests() {
 		console.log("✅ List all tasks passed");
 
 		// List filtering by status
-		console.log("➡️ Test 6b: User A lists and filters by status (todo,in-progress)...");
+		console.log(
+			"➡️ Test 6b: User A lists and filters by status (todo,in-progress)...",
+		);
 		const listFilteredStatusRes = await request(app)
 			.get("/api/v1/tasks?status=todo,in-progress")
 			.set("Authorization", `Bearer ${tokenA}`);
@@ -168,7 +198,9 @@ export async function runTasksTests() {
 			throw new Error("Failed listing with status filter");
 		}
 		if (listFilteredStatusRes.body.total !== 2) {
-			throw new Error(`Expected total 2, got: ${listFilteredStatusRes.body.total}`);
+			throw new Error(
+				`Expected total 2, got: ${listFilteredStatusRes.body.total}`,
+			);
 		}
 		console.log("✅ Status filtering passed");
 
@@ -178,8 +210,13 @@ export async function runTasksTests() {
 			.get("/api/v1/tasks?priority=urgent")
 			.set("Authorization", `Bearer ${tokenA}`);
 
-		if (listFilteredPriorityRes.body.total !== 1 || listFilteredPriorityRes.body.tasks[0].priority !== "urgent") {
-			throw new Error(`Expected urgent task, got: ${JSON.stringify(listFilteredPriorityRes.body)}`);
+		if (
+			listFilteredPriorityRes.body.total !== 1 ||
+			listFilteredPriorityRes.body.tasks[0].priority !== "urgent"
+		) {
+			throw new Error(
+				`Expected urgent task, got: ${JSON.stringify(listFilteredPriorityRes.body)}`,
+			);
 		}
 		console.log("✅ Priority filtering passed");
 
@@ -189,7 +226,10 @@ export async function runTasksTests() {
 			.get("/api/v1/tasks?search=backlog")
 			.set("Authorization", `Bearer ${tokenA}`);
 
-		if (searchRes.body.total !== 1 || !searchRes.body.tasks[0].title.includes("backlog")) {
+		if (
+			searchRes.body.total !== 1 ||
+			!searchRes.body.tasks[0].title.includes("backlog")
+		) {
 			throw new Error(`Search failure: ${JSON.stringify(searchRes.body)}`);
 		}
 		console.log("✅ Text search passed");
@@ -202,13 +242,19 @@ export async function runTasksTests() {
 
 		// Order of priorities desc: urgent, high, low
 		const titles = sortRes.body.tasks.map((t: any) => t.title);
-		if (!titles[0].includes("urgent") || !titles[1].includes("Updated Task 1") || !titles[2].includes("low")) {
+		if (
+			!titles[0].includes("urgent") ||
+			!titles[1].includes("Updated Task 1") ||
+			!titles[2].includes("low")
+		) {
 			throw new Error(`Sort mismatch: ${JSON.stringify(titles)}`);
 		}
 		console.log("✅ Sorting passed");
 
 		// Test 7: User B attempts to delete User A's task (isolation check)
-		console.log("➡️ Test 7: User B attempts to delete User A's task (Boundary Guard)...");
+		console.log(
+			"➡️ Test 7: User B attempts to delete User A's task (Boundary Guard)...",
+		);
 		const deleteBRes = await request(app)
 			.delete(`/api/v1/tasks/${taskIDA}`)
 			.set("Authorization", `Bearer ${tokenB}`);

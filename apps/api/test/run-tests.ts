@@ -7,7 +7,6 @@ async function run() {
 	const uniqueEmail = `test-${Date.now()}-${Math.floor(Math.random() * 1000)}@example.com`;
 
 	try {
-
 		// Test 1: Sign up
 		console.log("➡️ Test 1: Signup User...");
 		const signupRes = await request(app).post("/api/v1/auth/signup").send({

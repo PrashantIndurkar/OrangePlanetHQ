@@ -77,10 +77,7 @@ export const updateTask = async (
 			throw new ApiError(404, "Task not found");
 		}
 
-		const updatedTask = await tasksRepository.update(
-			req.params.id,
-			req.body,
-		);
+		const updatedTask = await tasksRepository.update(req.params.id, req.body);
 		res.status(200).json({ task: updatedTask });
 	} catch (error) {
 		next(error);

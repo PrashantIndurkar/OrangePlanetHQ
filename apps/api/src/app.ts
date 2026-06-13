@@ -25,7 +25,6 @@ app.get("/health", (_req, res) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/tasks", tasksRoutes);
 
-
 // Error handling middleware (must be registered last)
 app.use(errorHandler);
 

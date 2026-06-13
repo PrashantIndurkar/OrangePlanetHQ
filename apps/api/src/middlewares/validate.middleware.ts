@@ -20,7 +20,10 @@ export const validate = (schemas: ValidationSchemas | z.ZodTypeAny) => {
 				const result = await schemas.safeParseAsync(req.body);
 				if (!result.success) {
 					const message = result.error.issues
-						.map((issue: z.ZodIssue) => `${issue.path.join(".")}: ${issue.message}`)
+						.map(
+							(issue: z.ZodIssue) =>
+								`${issue.path.join(".")}: ${issue.message}`,
+						)
 						.join(", ");
 					next(new ApiError(400, message));
 					return;
@@ -65,4 +68,3 @@ export const validate = (schemas: ValidationSchemas | z.ZodTypeAny) => {
 		}
 	};
 };
-
