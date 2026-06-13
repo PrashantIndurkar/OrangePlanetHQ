@@ -17,6 +17,11 @@ import {
 	TodoIcon,
 	UrgentPriorityIcon,
 } from "../icons";
+import {
+	TaskContextMenu,
+	type TaskPriority,
+	type TaskStatus,
+} from "../tasks/task-context-menu";
 
 interface Task {
 	id: string;
@@ -278,100 +283,105 @@ export function WorkspaceListView() {
 									const StatusIcon = theme.icon;
 
 									return (
-										<div
+										<TaskContextMenu
 											key={task.id}
-											className="group flex h-9 items-center justify-between text-xs text-foreground px-3 bg-transparent hover:bg-muted/40 transition-colors border-b border-border/40 last:border-b-0 rounded-none cursor-pointer"
+											currentStatus={task.status as TaskStatus}
+											currentPriority={task.priority as TaskPriority}
 										>
-											{/* Left Section: Checkbox, Priority, ID, Status, Title */}
-											<div className="flex-1 flex items-center gap-2 min-w-0">
-												{/* Checkbox (opacity-0 by default, opacity-100 on hover of the row) */}
-												<div className="w-5 shrink-0 flex items-center justify-center">
-													<button
-														type="button"
-														onClick={(e) => {
-															e.stopPropagation();
-															handleToggleTask(task.id);
-														}}
-														className="h-3.5 w-3.5 border border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 bg-card rounded-none transition-all duration-150 opacity-0 group-hover:opacity-100 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
-													>
-														<svg
-															className="w-2.5 h-2.5 opacity-0 hover:opacity-100 transition-opacity"
-															viewBox="0 0 24 24"
-															fill="none"
-															stroke="currentColor"
-															strokeWidth="3"
-															role="img"
-															aria-label="Action"
+											<div
+												className="group flex h-9 items-center justify-between text-xs text-foreground px-3 bg-transparent hover:bg-muted/40 transition-colors border-b border-border/40 last:border-b-0 rounded-none cursor-pointer"
+											>
+												{/* Left Section: Checkbox, Priority, ID, Status, Title */}
+												<div className="flex-1 flex items-center gap-2 min-w-0">
+													{/* Checkbox (opacity-0 by default, opacity-100 on hover of the row) */}
+													<div className="w-5 shrink-0 flex items-center justify-center">
+														<button
+															type="button"
+															onClick={(e) => {
+																e.stopPropagation();
+																handleToggleTask(task.id);
+															}}
+															className="h-3.5 w-3.5 border border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 bg-card rounded-none transition-all duration-150 opacity-0 group-hover:opacity-100 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
 														>
-															<title>Action</title>
-															<path
-																d="M20 6L9 17l-5-5"
-																strokeLinecap="round"
-																strokeLinejoin="round"
-															/>
-														</svg>
-													</button>
-												</div>
-
-												{/* Priority Icon Wrapper */}
-												<div className="w-6 shrink-0 flex items-center justify-center">
-													<PriorityComp className="h-[22px] w-[22px] shrink-0" />
-												</div>
-
-												{/* Task Identifier (e.g. PLO-40) */}
-												<span className="text-[13px] font-[450] text-zinc-500 dark:text-zinc-400 font-mono shrink-0 select-text">
-													{task.id}
-												</span>
-
-												{/* Status Icon */}
-												<StatusIcon
-													className={cn("size-3.5 shrink-0", theme.iconColor)}
-												/>
-
-												{/* Task Title */}
-												<span className="truncate text-[13px] font-medium text-zinc-900 dark:text-zinc-100 select-text">
-													{task.title}
-												</span>
-											</div>
-
-											{/* Right Section: Due Date Badge, Assignee Avatar & Date Group */}
-											<div className="flex items-center gap-3 shrink-0 ml-4">
-												{/* Due Date Badge */}
-												{task.dueDate && (
-													<div className="flex items-center gap-1.5 rounded-[3px] border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/50 px-2 py-0.5 text-[12px] font-[450] text-zinc-600 dark:text-zinc-400 leading-none">
-														<HugeiconsIcon
-															icon={Calendar04Icon}
-															className="h-[14px] w-[14px] text-[#f25f4c] shrink-0"
-														/>
-														<span>{task.dueDate}</span>
+															<svg
+																className="w-2.5 h-2.5 opacity-0 hover:opacity-100 transition-opacity"
+																viewBox="0 0 24 24"
+																fill="none"
+																stroke="currentColor"
+																strokeWidth="3"
+																role="img"
+																aria-label="Action"
+															>
+																<title>Action</title>
+																<path
+																	d="M20 6L9 17l-5-5"
+																	strokeLinecap="round"
+																	strokeLinejoin="round"
+																/>
+															</svg>
+														</button>
 													</div>
-												)}
 
-												{/* Avatar and Date Group */}
-												<div className="flex items-center gap-1.5 shrink-0 select-none">
-													{task.assigneeAvatarUrl ? (
-														<Avatar className="h-[18px] w-[18px] border-0 bg-transparent rounded-full shrink-0 flex items-center justify-center">
-															<AvatarImage
-																src={task.assigneeAvatarUrl}
-																alt={task.assigneeName || "Assignee"}
-																className="rounded-full h-full w-full object-cover"
-															/>
-														</Avatar>
-													) : (
-														<HugeiconsIcon
-															icon={UserCircleIcon}
-															className="h-[18px] w-[18px] text-zinc-400 dark:text-zinc-500 shrink-0"
-														/>
-													)}
+													{/* Priority Icon Wrapper */}
+													<div className="w-6 shrink-0 flex items-center justify-center">
+														<PriorityComp className="h-[22px] w-[22px] shrink-0" />
+													</div>
 
-													<span className="text-[12px] font-[450] text-zinc-500 dark:text-zinc-400 min-w-[38px] text-right">
-														{task.createdDate
-															? task.createdDate.replace("Created ", "")
-															: "Jun 12"}
+													{/* Task Identifier (e.g. PLO-40) */}
+													<span className="text-[13px] font-[450] text-zinc-500 dark:text-zinc-400 font-mono shrink-0 select-text">
+														{task.id}
+													</span>
+
+													{/* Status Icon */}
+													<StatusIcon
+														className={cn("size-3.5 shrink-0", theme.iconColor)}
+													/>
+
+													{/* Task Title */}
+													<span className="truncate text-[13px] font-medium text-zinc-900 dark:text-zinc-100 select-text">
+														{task.title}
 													</span>
 												</div>
+
+												{/* Right Section: Due Date Badge, Assignee Avatar & Date Group */}
+												<div className="flex items-center gap-3 shrink-0 ml-4">
+													{/* Due Date Badge */}
+													{task.dueDate && (
+														<div className="flex items-center gap-1.5 rounded-[3px] border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/50 dark:bg-zinc-900/50 px-2 py-0.5 text-[12px] font-[450] text-zinc-600 dark:text-zinc-400 leading-none">
+															<HugeiconsIcon
+																icon={Calendar04Icon}
+																className="h-[14px] w-[14px] text-[#f25f4c] shrink-0"
+															/>
+															<span>{task.dueDate}</span>
+														</div>
+													)}
+
+													{/* Avatar and Date Group */}
+													<div className="flex items-center gap-1.5 shrink-0 select-none">
+														{task.assigneeAvatarUrl ? (
+															<Avatar className="h-[18px] w-[18px] border-0 bg-transparent rounded-full shrink-0 flex items-center justify-center">
+																<AvatarImage
+																	src={task.assigneeAvatarUrl}
+																	alt={task.assigneeName || "Assignee"}
+																	className="rounded-full h-full w-full object-cover"
+																/>
+															</Avatar>
+														) : (
+															<HugeiconsIcon
+																icon={UserCircleIcon}
+																className="h-[18px] w-[18px] text-zinc-400 dark:text-zinc-500 shrink-0"
+															/>
+														)}
+
+														<span className="text-[12px] font-[450] text-zinc-500 dark:text-zinc-400 min-w-[38px] text-right">
+															{task.createdDate
+																? task.createdDate.replace("Created ", "")
+																: "Jun 12"}
+														</span>
+													</div>
+												</div>
 											</div>
-										</div>
+										</TaskContextMenu>
 									);
 								})}
 
