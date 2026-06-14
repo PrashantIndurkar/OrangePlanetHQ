@@ -54,6 +54,7 @@ export default function TaskDetailsPage({
 	// Sync local states when query finishes loading
 	React.useEffect(() => {
 		if (task) {
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			setLocalTitle(task.title);
 			setLocalDescription(task.description || "");
 		}
