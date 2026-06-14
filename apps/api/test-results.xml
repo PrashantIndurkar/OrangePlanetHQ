@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="1" failures="0" errors="0" time="5.397535334">
+    <testsuite name="test/auth/login.test.ts" timestamp="2026-06-14T16:52:20.386Z" hostname="Prashants-MacBook-Air.local" tests="1" failures="0" errors="0" skipped="0" time="5.397535334">
+        <testcase classname="test/auth/login.test.ts" name="Auth Integration - Login and Profile &gt; should authenticate valid users, reject invalid credentials, and retrieve user profiles" time="5.115357417">
+            <system-err>
+ApiError: Invalid email or password
+    at login [90m(/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/apps/api/[39msrc/modules/auth/auth.controller.ts:89:10[90m)[39m {
+  statusCode: [33m401[39m,
+  isOperational: [33mtrue[39m
+}
+
+ApiError: Invalid email or password
+    at login [90m(/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/apps/api/[39msrc/modules/auth/auth.controller.ts:83:10[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m {
+  statusCode: [33m401[39m,
+  isOperational: [33mtrue[39m
+}
+
+ApiError: Please authenticate
+    at authMiddleware [90m(/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/apps/api/[39msrc/middlewares/auth.middleware.ts:56:8[90m)[39m
+    at Layer.handleRequest (/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/lib/layer.js:152:17)
+    at next (/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/lib/route.js:157:13)
+    at Route.dispatch (/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/lib/route.js:117:3)
+    at handle (/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/index.js:435:11)
+    at Layer.handleRequest (/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/lib/layer.js:152:17)
+    at /Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/index.js:295:15
+    at processParams (/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/index.js:582:12)
+    at next (/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/index.js:291:5)
+    at router.handle (/Users/prashantindurkar/Code/Interviews/Assesment Rival/stried/node_modules/[4m.pnpm[24m/router@2.2.0/node_modules/[4mrouter[24m/index.js:186:3) {
+  statusCode: [33m401[39m,
+  isOperational: [33mtrue[39m
+}
+
+            </system-err>
+        </testcase>
+    </testsuite>
+</testsuites>
