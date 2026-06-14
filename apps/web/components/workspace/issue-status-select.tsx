@@ -21,8 +21,6 @@ const getStatusColorClass = (status: TaskStatus) => {
 			return "text-zinc-500 dark:text-zinc-400";
 		case "in-progress":
 			return "text-amber-500 dark:text-amber-400";
-		case "in-review":
-			return "text-blue-500 dark:text-blue-400";
 		case "done":
 			return "text-indigo-500 dark:text-indigo-400";
 		case "canceled":
@@ -45,7 +43,7 @@ export function IssueStatusSelect({ value, onChange }: IssueStatusSelectProps) {
 
 	// Handle number keys (1-6) when popover is open
 	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (open && ["1", "2", "3", "4", "5", "6"].includes(e.key)) {
+		if (open && ["1", "2", "3", "4", "5"].includes(e.key)) {
 			e.preventDefault();
 			const index = Number(e.key) - 1;
 			if (index >= 0 && index < statuses.length) {

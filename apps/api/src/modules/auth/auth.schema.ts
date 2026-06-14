@@ -10,6 +10,7 @@ export const signupSchema = z.object({
 		.min(1, "Password is required")
 		.min(6, "Password must be at least 6 characters"),
 	name: z.string().optional(),
+	skipSeed: z.boolean().optional(),
 });
 
 export const loginSchema = z.object({

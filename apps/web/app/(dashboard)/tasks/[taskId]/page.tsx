@@ -16,14 +16,16 @@ import type {
 	TaskPriority,
 	TaskStatus,
 } from "@/components/tasks/task-metadata";
-import { IssueAssigneeSelect } from "@/components/workspace/issue-assignee-select";
 import { IssueAttachmentButton } from "@/components/workspace/issue-attachment-button";
 import { IssueDueDateSelect } from "@/components/workspace/issue-due-date-select";
 import { IssuePrioritySelect } from "@/components/workspace/issue-priority-select";
 import { IssueStatusSelect } from "@/components/workspace/issue-status-select";
-import type { Task } from "@/components/workspace/types";
-import { issuesStore } from "@/lib/issues-store";
 import { cn } from "@/lib/utils";
+import {
+	useDeleteTaskMutation,
+	useTaskQuery,
+	useUpdateTaskMutation,
+} from "../../../../features/tasks/hooks";
 
 const formatDateTime = (timestamp?: number) => {
 	if (!timestamp) return "—";
@@ -44,27 +46,21 @@ export default function TaskDetailsPage({
 	const { taskId } = React.use(params);
 	const router = useRouter();
 
-	const [task, setTask] = React.useState<Task | undefined>(() =>
-		issuesStore.getTask(taskId),
-	);
-	const [localTitle, setLocalTitle] = React.useState(() => {
-		const t = issuesStore.getTask(taskId);
-		return t ? t.title : "";
-	});
-	const [localDescription, setLocalDescription] = React.useState(() => {
-		const t = issuesStore.getTask(taskId);
-		return t ? t.description || "" : "";
-	});
-	const [lastLoggedTitle, setLastLoggedTitle] = React.useState(() => {
-		const t = issuesStore.getTask(taskId);
-		return t ? t.title : "";
-	});
-	const [lastLoggedDescription, setLastLoggedDescription] = React.useState(
-		() => {
-			const t = issuesStore.getTask(taskId);
-			return t ? t.description || "" : "";
-		},
-	);
+	const { data: task, isLoading, isError } = useTaskQuery(taskId);
+
+	const [localTitle, setLocalTitle] = React.useState("");
+	const [localDescription, setLocalDescription] = React.useState("");
+
+	// Sync local states when query finishes loading
+	React.useEffect(() => {
+		if (task) {
+			setLocalTitle(task.title);
+			setLocalDescription(task.description || "");
+		}
+	}, [task]);
+
+	const updateMutation = useUpdateTaskMutation();
+	const deleteMutation = useDeleteTaskMutation();
 
 	// Sidebar resizing states
 	const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
@@ -74,18 +70,6 @@ export default function TaskDetailsPage({
 
 	// Copy action feedback state
 	const [copyStatus, setCopyStatus] = React.useState<string | null>(null);
-
-	// Subscribe to store updates
-	React.useEffect(() => {
-		return issuesStore.subscribe(() => {
-			const updated = issuesStore.getTask(taskId);
-			setTask(updated);
-			if (updated) {
-				setLocalTitle(updated.title);
-				setLocalDescription(updated.description || "");
-			}
-		});
-	}, [taskId]);
 
 	// Drag resize handlers
 	const handleMouseDown = React.useCallback(
@@ -132,14 +116,24 @@ export default function TaskDetailsPage({
 		};
 	}, [isDragging]);
 
-	if (!task) {
+	if (isLoading) {
+		return (
+			<div className="flex h-screen w-full flex-col items-center justify-center bg-background select-none gap-3">
+				<span className="text-sm text-muted-foreground font-medium animate-pulse">
+					Loading task details...
+				</span>
+			</div>
+		);
+	}
+
+	if (isError || !task) {
 		return (
 			<div className="flex h-screen w-full flex-col items-center justify-center bg-background select-none gap-3">
 				<span className="text-sm text-muted-foreground font-medium">
-					Task {taskId} not found.
+					Task {taskId} not found or failed to load.
 				</span>
 				<Link
-					href="/"
+					href="/tasks"
 					className="flex h-8 items-center px-4 rounded-none border border-border text-[12px] font-semibold hover:bg-muted/50 transition-colors"
 				>
 					Back to Issues
@@ -149,60 +143,71 @@ export default function TaskDetailsPage({
 	}
 
 	const handleTitleBlur = () => {
-		if (localTitle.trim() && localTitle !== lastLoggedTitle) {
-			issuesStore.updateTask(
-				taskId,
-				{ title: localTitle.trim() },
-				`changed title from "${lastLoggedTitle}" to "${localTitle.trim()}"`,
-			);
-			setLastLoggedTitle(localTitle.trim());
+		if (localTitle.trim() && localTitle !== task.title) {
+			updateMutation.mutate({
+				id: taskId,
+				data: { title: localTitle.trim() },
+			});
 		}
 	};
 
 	const handleDescriptionBlur = () => {
-		if (localDescription.trim() !== lastLoggedDescription.trim()) {
-			issuesStore.updateTask(
-				taskId,
-				{ description: localDescription.trim() },
-				"updated description",
-			);
-			setLastLoggedDescription(localDescription.trim());
+		if (localDescription.trim() !== (task.description || "").trim()) {
+			updateMutation.mutate({
+				id: taskId,
+				data: { description: localDescription.trim() },
+			});
 		}
 	};
 
 	const handleStatusChange = (newStatus: TaskStatus) => {
 		if (newStatus !== task.status) {
-			issuesStore.updateTask(
-				taskId,
-				{ status: newStatus },
-				`changed status from ${task.status} to ${newStatus}`,
-			);
+			updateMutation.mutate({
+				id: taskId,
+				data: { status: newStatus },
+			});
 		}
 	};
 
 	const handlePriorityChange = (newPriority: TaskPriority) => {
 		if (newPriority !== task.priority) {
-			issuesStore.updateTask(
-				taskId,
-				{ priority: newPriority },
-				`changed priority from ${task.priority} to ${newPriority}`,
-			);
+			updateMutation.mutate({
+				id: taskId,
+				data: { priority: newPriority },
+			});
 		}
 	};
 
 	const handleDueDateChange = (newDueDate?: string) => {
-		if (newDueDate !== task.dueDate) {
-			issuesStore.updateTask(
-				taskId,
-				{ dueDate: newDueDate },
-				`changed due date to ${newDueDate || "No due date"}`,
-			);
+		let isoDueDate: string | null = null;
+		if (newDueDate) {
+			const lower = newDueDate.toLowerCase();
+			const d = new Date();
+			d.setHours(12, 0, 0, 0);
+			if (lower === "today") {
+				isoDueDate = d.toISOString();
+			} else if (lower === "tomorrow") {
+				d.setDate(d.getDate() + 1);
+				isoDueDate = d.toISOString();
+			} else if (lower === "overdue") {
+				d.setDate(d.getDate() - 1);
+				isoDueDate = d.toISOString();
+			} else {
+				isoDueDate = new Date(newDueDate).toISOString();
+			}
 		}
+		updateMutation.mutate({
+			id: taskId,
+			data: { dueDate: isoDueDate },
+		});
 	};
 
 	const handleDelete = () => {
-		issuesStore.deleteTask(taskId);
-		router.push("/");
+		deleteMutation.mutate(taskId, {
+			onSuccess: () => {
+				router.push("/");
+			},
+		});
 	};
 
 	const triggerCopy = (type: string, value: string) => {
@@ -231,11 +236,10 @@ export default function TaskDetailsPage({
 					const markdownLink = `\n![${file.name}](${dataUrl})`;
 					const nextDesc = `${localDescription}${markdownLink}`;
 					setLocalDescription(nextDesc);
-					issuesStore.updateTask(
-						taskId,
-						{ description: nextDesc },
-						"attached image",
-					);
+					updateMutation.mutate({
+						id: taskId,
+						data: { description: nextDesc },
+					});
 				};
 				reader.readAsDataURL(file);
 			}
@@ -248,7 +252,7 @@ export default function TaskDetailsPage({
 			<header className="flex h-14 w-full shrink-0 items-center justify-between border-b border-border px-4 bg-background">
 				<div className="flex items-center gap-1.5 text-xs">
 					<Link
-						href="/"
+						href="/tasks"
 						className="flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground transition-colors"
 					>
 						My Tasks
@@ -402,7 +406,21 @@ export default function TaskDetailsPage({
 							value={task.dueDate}
 							onChange={handleDueDateChange}
 						/>
-						<IssueAssigneeSelect value="prashantindurkarr" />
+						<div className="flex h-7 items-center gap-1.5 border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground select-none">
+							<div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[8px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+								{task.assigneeName
+									? task.assigneeName
+											.split(" ")
+											.map((n) => n[0])
+											.join("")
+											.toUpperCase()
+											.slice(0, 1)
+									: "U"}
+							</div>
+							<span className="text-[11px] font-medium text-foreground/80">
+								{task.assigneeName || "Unassigned"}
+							</span>
+						</div>
 					</div>
 
 					{/* Description field */}
@@ -545,7 +563,21 @@ export default function TaskDetailsPage({
 								<span className="text-muted-foreground font-medium">
 									Assignee
 								</span>
-								<IssueAssigneeSelect value="prashantindurkarr" />
+								<div className="flex items-center gap-1.5 px-2 py-1 select-text">
+									<div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+										{task.assigneeName
+											? task.assigneeName
+													.split(" ")
+													.map((n) => n[0])
+													.join("")
+													.toUpperCase()
+													.slice(0, 1)
+											: "U"}
+									</div>
+									<span className="text-[12px] font-medium text-foreground/80">
+										{task.assigneeName || "Unassigned"}
+									</span>
+								</div>
 							</div>
 
 							{/* Created At */}

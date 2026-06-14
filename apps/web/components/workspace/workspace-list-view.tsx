@@ -1,11 +1,14 @@
 "use client";
 
-import { Calendar04Icon, UserCircleIcon } from "@hugeicons/core-free-icons";
+import { Calendar04Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import {
+	useDeleteTaskMutation,
+	useUpdateTaskMutation,
+} from "../../features/tasks/hooks";
 import {
 	BacklogIcon,
 	CanceledIcon,
@@ -25,6 +28,41 @@ import {
 } from "../tasks/task-context-menu";
 import type { Task } from "./types";
 import { filterAndSortTasks, getNormalizedFilters } from "./types";
+
+const getDueDateBadgeStyles = (val?: string | null) => {
+	if (!val) return { bg: "", border: "", text: "", iconColor: "" };
+	const lower = val.toLowerCase();
+	if (lower.includes("overdue") || lower.includes("ago")) {
+		return {
+			bg: "bg-red-500/10 dark:bg-red-500/20",
+			border: "border-red-200 dark:border-red-900/30",
+			text: "text-red-600 dark:text-red-400",
+			iconColor: "text-red-500 dark:text-red-400",
+		};
+	}
+	if (lower.includes("today")) {
+		return {
+			bg: "bg-amber-500/10 dark:bg-amber-500/20",
+			border: "border-amber-200 dark:border-amber-900/30",
+			text: "text-amber-700 dark:text-amber-400",
+			iconColor: "text-amber-600 dark:text-amber-500",
+		};
+	}
+	if (lower.includes("tomorrow")) {
+		return {
+			bg: "bg-blue-500/10 dark:bg-blue-500/20",
+			border: "border-blue-200 dark:border-blue-900/30",
+			text: "text-blue-700 dark:text-blue-400",
+			iconColor: "text-blue-600 dark:text-blue-500",
+		};
+	}
+	return {
+		bg: "bg-zinc-50/50 dark:bg-zinc-900/50",
+		border: "border-zinc-200 dark:border-zinc-800/80",
+		text: "text-zinc-600 dark:text-zinc-400",
+		iconColor: "text-zinc-500 dark:text-zinc-400",
+	};
+};
 
 interface WorkspaceListViewProps {
 	tasks: Task[];
@@ -71,24 +109,23 @@ export function WorkspaceListView({
 		setCollapsed((prev) => ({ ...prev, [status]: !prev[status] }));
 	};
 
+	const updateMutation = useUpdateTaskMutation();
+	const deleteMutation = useDeleteTaskMutation();
+
 	const handleToggleTask = (taskId: string) => {
-		setTasks((prev) => prev.filter((t) => t.id !== taskId));
+		updateMutation.mutate({ id: taskId, data: { status: "done" } });
 	};
 
 	const handleUpdateStatus = (taskId: string, newStatus: TaskStatus) => {
-		setTasks((prev) =>
-			prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)),
-		);
+		updateMutation.mutate({ id: taskId, data: { status: newStatus } });
 	};
 
 	const handleUpdatePriority = (taskId: string, newPriority: TaskPriority) => {
-		setTasks((prev) =>
-			prev.map((t) => (t.id === taskId ? { ...t, priority: newPriority } : t)),
-		);
+		updateMutation.mutate({ id: taskId, data: { priority: newPriority } });
 	};
 
 	const handleDeleteTask = (taskId: string) => {
-		setTasks((prev) => prev.filter((t) => t.id !== taskId));
+		deleteMutation.mutate(taskId);
 	};
 
 	const handleAddTask = (
@@ -359,32 +396,44 @@ export function WorkspaceListView({
 												{/* Right Section: Due Date Badge, Assignee Avatar & Date Group */}
 												<div className="ml-4 flex shrink-0 items-center gap-3">
 													{/* Due Date Badge */}
-													{task.dueDate && (
-														<div className="flex items-center gap-1.5 rounded-[3px] border border-zinc-200 bg-zinc-50/50 px-2 py-0.5 text-[12px] leading-none font-[450] text-zinc-600 dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:text-zinc-400">
-															<HugeiconsIcon
-																icon={Calendar04Icon}
-																className="h-[14px] w-[14px] shrink-0 text-[#f25f4c]"
-															/>
-															<span>{task.dueDate}</span>
-														</div>
-													)}
+													{task.dueDate &&
+														(() => {
+															const styles = getDueDateBadgeStyles(
+																task.dueDate,
+															);
+															return (
+																<div
+																	className={cn(
+																		"flex items-center gap-1.5 rounded-[3px] border px-2 py-0.5 text-[12px] leading-none font-[450]",
+																		styles.bg,
+																		styles.border,
+																		styles.text,
+																	)}
+																>
+																	<HugeiconsIcon
+																		icon={Calendar04Icon}
+																		className={cn(
+																			"h-[14px] w-[14px] shrink-0",
+																			styles.iconColor,
+																		)}
+																	/>
+																	<span>{task.dueDate}</span>
+																</div>
+															);
+														})()}
 
 													{/* Avatar and Date Group */}
 													<div className="flex shrink-0 items-center gap-1.5 select-none">
-														{task.assigneeAvatarUrl ? (
-															<Avatar className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full border-0 bg-transparent">
-																<AvatarImage
-																	src={task.assigneeAvatarUrl}
-																	alt={task.assigneeName || "Assignee"}
-																	className="h-full w-full rounded-full object-cover"
-																/>
-															</Avatar>
-														) : (
-															<HugeiconsIcon
-																icon={UserCircleIcon}
-																className="h-[18px] w-[18px] shrink-0 text-zinc-400 dark:text-zinc-500"
-															/>
-														)}
+														<div className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+															{task.assigneeName
+																? task.assigneeName
+																		.split(" ")
+																		.map((n) => n[0])
+																		.join("")
+																		.toUpperCase()
+																		.slice(0, 1)
+																: "U"}
+														</div>
 
 														<span className="min-w-[38px] text-right text-[12px] font-[450] text-zinc-500 dark:text-zinc-400">
 															{task.createdDate

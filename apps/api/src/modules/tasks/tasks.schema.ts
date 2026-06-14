@@ -4,7 +4,6 @@ export const taskStatusEnum = z.enum([
 	"backlog",
 	"todo",
 	"in-progress",
-	"in-review",
 	"done",
 	"canceled",
 ]);
@@ -17,7 +16,14 @@ export const taskPriorityEnum = z.enum([
 ]);
 
 export const taskIdParamsSchema = z.object({
-	id: z.string().uuid("Invalid task ID format"),
+	id: z.string().refine((val) => {
+		const isUuid =
+			/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+				val,
+			);
+		const isStrId = /^STR-\d+$/i.test(val);
+		return isUuid || isStrId;
+	}, "Invalid task ID or code format"),
 });
 
 export const createTaskSchema = z.object({
@@ -44,6 +50,15 @@ export const listTasksQuerySchema = z.object({
 		.optional()
 		.transform((val) => (val ? val.split(",") : undefined))
 		.pipe(z.array(taskPriorityEnum).optional()),
+	dueDate: z
+		.string()
+		.optional()
+		.transform((val) => (val ? val.split(",") : undefined))
+		.pipe(
+			z
+				.array(z.enum(["today", "tomorrow", "overdue", "no-due-date"]))
+				.optional(),
+		),
 	search: z.string().optional(),
 	sortBy: z.enum(["createdAt", "dueDate", "priority"]).default("createdAt"),
 	sortOrder: z.enum(["asc", "desc"]).default("desc"),
@@ -53,7 +68,7 @@ export const listTasksQuerySchema = z.object({
 		.default("1")
 		.transform((val) => {
 			const parsed = parseInt(val, 10);
-			return isNaN(parsed) ? 1 : Math.max(1, parsed);
+			return Number.isNaN(parsed) ? 1 : Math.max(1, parsed);
 		})
 		.pipe(z.number()),
 	limit: z
@@ -62,7 +77,7 @@ export const listTasksQuerySchema = z.object({
 		.default("25")
 		.transform((val) => {
 			const parsed = parseInt(val, 10);
-			return isNaN(parsed) ? 25 : Math.min(100, Math.max(1, parsed));
+			return Number.isNaN(parsed) ? 25 : Math.min(100, Math.max(1, parsed));
 		})
 		.pipe(z.number()),
 });

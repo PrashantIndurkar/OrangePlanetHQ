@@ -56,14 +56,17 @@ export const validate = (schemas: ValidationSchemas | z.ZodTypeAny) => {
 				req.body = await targets.body.parseAsync(req.body);
 			}
 			next();
-		} catch (error: any) {
+		} catch (error: unknown) {
 			if (error && typeof error === "object" && "issues" in error) {
-				const message = error.issues
-					.map((issue: any) => `${issue.path.join(".")}: ${issue.message}`)
+				const zodError = error as { issues: z.ZodIssue[] };
+				const message = zodError.issues
+					.map(
+						(issue: z.ZodIssue) => `${issue.path.join(".")}: ${issue.message}`,
+					)
 					.join(", ");
 				next(new ApiError(400, message));
 			} else {
-				next(error);
+				next(error as Error);
 			}
 		}
 	};

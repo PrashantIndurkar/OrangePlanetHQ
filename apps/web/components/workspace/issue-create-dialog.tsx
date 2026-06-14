@@ -17,8 +17,8 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/providers/auth-provider";
 import type { TaskPriority, TaskStatus } from "../tasks/task-metadata";
-import { IssueAssigneeSelect } from "./issue-assignee-select";
 import { IssueAttachmentButton } from "./issue-attachment-button";
 import { IssueDueDateSelect } from "./issue-due-date-select";
 import { IssuePrioritySelect } from "./issue-priority-select";
@@ -43,6 +43,7 @@ export function IssueCreateDialog({
 	defaultStatus = "todo",
 	onSubmit,
 }: IssueCreateDialogProps) {
+	const { user } = useAuth();
 	const [isExpanded, setIsExpanded] = React.useState(false);
 	const [title, setTitle] = React.useState("");
 	const [description, setDescription] = React.useState("");
@@ -287,7 +288,21 @@ export function IssueCreateDialog({
 							<IssueStatusSelect value={status} onChange={setStatus} />
 							<IssuePrioritySelect value={priority} onChange={setPriority} />
 							<IssueDueDateSelect value={dueDate} onChange={setDueDate} />
-							<IssueAssigneeSelect value="prashantindurkarr" />
+							<div className="flex h-7 items-center gap-1.5 border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground select-none">
+								<div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[8px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+									{user?.name
+										? user.name
+												.split(" ")
+												.map((n) => n[0])
+												.join("")
+												.toUpperCase()
+												.slice(0, 1)
+										: "U"}
+								</div>
+								<span className="text-[11px] font-medium text-foreground/80">
+									{user?.name || "Unassigned"}
+								</span>
+							</div>
 						</div>
 					</div>
 

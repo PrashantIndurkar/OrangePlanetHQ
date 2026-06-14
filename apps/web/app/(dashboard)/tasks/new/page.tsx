@@ -9,17 +9,19 @@ import type {
 	TaskPriority,
 	TaskStatus,
 } from "@/components/tasks/task-metadata";
-import { IssueAssigneeSelect } from "@/components/workspace/issue-assignee-select";
 import { IssueAttachmentButton } from "@/components/workspace/issue-attachment-button";
 import { IssueDueDateSelect } from "@/components/workspace/issue-due-date-select";
 import { IssuePrioritySelect } from "@/components/workspace/issue-priority-select";
 import { IssueStatusSelect } from "@/components/workspace/issue-status-select";
-import type { Task } from "@/components/workspace/types";
-import { issuesStore } from "@/lib/issues-store";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/providers/auth-provider";
+import { useCreateTaskMutation } from "../../../../features/tasks/hooks";
 
 export default function NewTaskPage() {
 	const router = useRouter();
+	const { user } = useAuth();
+	const createTaskMutation = useCreateTaskMutation();
+
 	const [title, setTitle] = React.useState("");
 	const [description, setDescription] = React.useState("");
 	const [status, setStatus] = React.useState<TaskStatus>("todo");
@@ -70,39 +72,39 @@ export default function NewTaskPage() {
 	const handleCreate = () => {
 		if (!title.trim()) return;
 
-		// Generate random unique ID
-		const currentTasks = issuesStore.getTasks();
-		const numericIds = currentTasks
-			.map((t) => Number(t.id.replace("PLO-", "").replace("STR-", "")))
-			.filter((n) => !Number.isNaN(n));
-		const maxId = numericIds.length > 0 ? Math.max(...numericIds) : 41;
-		const nextId = `STR-${maxId + 1}`;
+		let isoDueDate: string | null = null;
+		if (dueDate) {
+			const lower = dueDate.toLowerCase();
+			const d = new Date();
+			d.setHours(12, 0, 0, 0);
+			if (lower === "today") {
+				isoDueDate = d.toISOString();
+			} else if (lower === "tomorrow") {
+				d.setDate(d.getDate() + 1);
+				isoDueDate = d.toISOString();
+			} else if (lower === "overdue") {
+				d.setDate(d.getDate() - 1);
+				isoDueDate = d.toISOString();
+			} else {
+				isoDueDate = new Date(dueDate).toISOString();
+			}
+		}
 
-		const newTask: Task = {
-			id: nextId,
-			title: title.trim(),
-			status,
-			priority,
-			dueDate,
-			createdDate: "Created Just now",
-			createdAt: Date.now(),
-			description: description.trim(),
-			assigneeName: "Prashant Indurkar",
-			assigneeAvatarUrl:
-				"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80",
-			activities: [
-				{
-					id: `act-${Date.now()}-created`,
-					userInitials: "PD",
-					userName: "Prashant",
-					actionText: "created this issue",
-					timestamp: Date.now(),
+		createTaskMutation.mutate(
+			{
+				title: title.trim(),
+				description: description.trim(),
+				status,
+				priority,
+				dueDate: isoDueDate,
+			},
+			{
+				onSuccess: (data) => {
+					const nextId = `STR-${data.task.issueNumber}`;
+					router.push(`/tasks/${nextId}`);
 				},
-			],
-		};
-
-		issuesStore.addTask(newTask);
-		router.push(`/tasks/${nextId}`);
+			},
+		);
 	};
 
 	return (
@@ -111,7 +113,7 @@ export default function NewTaskPage() {
 			<header className="flex h-14 w-full shrink-0 items-center justify-between border-b border-border px-4">
 				<div className="flex items-center gap-1.5 text-xs">
 					<Link
-						href="/"
+						href="/tasks"
 						className="flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground transition-colors"
 					>
 						My Issues
@@ -178,7 +180,21 @@ export default function NewTaskPage() {
 						<IssueStatusSelect value={status} onChange={setStatus} />
 						<IssuePrioritySelect value={priority} onChange={setPriority} />
 						<IssueDueDateSelect value={dueDate} onChange={setDueDate} />
-						<IssueAssigneeSelect value="prashantindurkarr" />
+						<div className="flex h-7 items-center gap-1.5 border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground select-none">
+							<div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[8px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+								{user?.name
+									? user.name
+											.split(" ")
+											.map((n) => n[0])
+											.join("")
+											.toUpperCase()
+											.slice(0, 1)
+									: "U"}
+							</div>
+							<span className="text-[11px] font-medium text-foreground/80">
+								{user?.name || "Unassigned"}
+							</span>
+						</div>
 						<div className="ml-auto">
 							<IssueAttachmentButton onFileSelect={handleFileSelect} />
 						</div>
@@ -187,7 +203,7 @@ export default function NewTaskPage() {
 					{/* Actions footer */}
 					<div className="flex items-center justify-end gap-3 pt-4 border-t border-border/40">
 						<Link
-							href="/"
+							href="/tasks"
 							className="flex h-8 items-center px-4 rounded-none border border-border text-[12px] font-semibold text-foreground hover:bg-muted/50 transition-colors select-none"
 						>
 							Cancel
