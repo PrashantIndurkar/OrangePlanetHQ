@@ -1,4 +1,5 @@
 import { useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
 import {
 	useDeleteTaskMutation,
 	useUpdateTaskMutation,
@@ -27,6 +28,70 @@ export function WorkspaceBoardView({
 	onAddTaskClick,
 }: WorkspaceBoardViewProps) {
 	const searchParams = useSearchParams();
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const container = containerRef.current;
+		if (!container) return;
+
+		let isMouseDown = false;
+		let startX = 0;
+		let scrollLeftStart = 0;
+		let hasDragged = false;
+
+		const handleMouseDown = (e: MouseEvent) => {
+			if (e.button !== 0) return;
+
+			const target = e.target as HTMLElement;
+			if (target.closest("button, input, select, textarea, a")) {
+				return;
+			}
+
+			isMouseDown = true;
+			startX = e.pageX - container.offsetLeft;
+			scrollLeftStart = container.scrollLeft;
+			hasDragged = false;
+		};
+
+		const handleMouseMove = (e: MouseEvent) => {
+			if (!isMouseDown) return;
+
+			const x = e.pageX - container.offsetLeft;
+			const walk = (x - startX) * 1.5;
+			if (Math.abs(walk) > 3) {
+				hasDragged = true;
+				container.style.userSelect = "none";
+				document.body.style.userSelect = "none";
+			}
+			container.scrollLeft = scrollLeftStart - walk;
+		};
+
+		const handleMouseUpOrLeave = () => {
+			isMouseDown = false;
+			container.style.userSelect = "";
+			document.body.style.userSelect = "";
+		};
+
+		const handleClick = (e: MouseEvent) => {
+			if (hasDragged) {
+				e.preventDefault();
+				e.stopPropagation();
+				hasDragged = false;
+			}
+		};
+
+		container.addEventListener("mousedown", handleMouseDown);
+		window.addEventListener("mousemove", handleMouseMove);
+		window.addEventListener("mouseup", handleMouseUpOrLeave);
+		container.addEventListener("click", handleClick, true);
+
+		return () => {
+			container.removeEventListener("mousedown", handleMouseDown);
+			window.removeEventListener("mousemove", handleMouseMove);
+			window.removeEventListener("mouseup", handleMouseUpOrLeave);
+			container.removeEventListener("click", handleClick, true);
+		};
+	}, []);
 
 	const {
 		activeStatuses,
@@ -109,9 +174,11 @@ export function WorkspaceBoardView({
 	const handleDeleteTask = (taskId: string) => {
 		deleteMutation.mutate(taskId);
 	};
-
 	return (
-		<div className="flex h-full w-full gap-3 overflow-x-auto bg-[#fcfcfc] px-4 pt-2.5 pb-4 select-none dark:bg-[#1e2024]">
+		<div
+			ref={containerRef}
+			className="flex h-full w-full gap-3 overflow-x-auto bg-[#fcfcfc] px-4 pt-2.5 pb-4 select-none dark:bg-[#1e2024]"
+		>
 			{columns.map((column) => {
 				const columnTasks = processedTasks.filter(
 					(t) => t.status === column.id,
@@ -180,7 +247,7 @@ export function WorkspaceBoardView({
 						</div>
 
 						{/* Column Scrollable Content Area */}
-						<div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto bg-muted/5 p-3 pb-4">
+						<div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden bg-muted/5 p-3 pb-4">
 							{columnTasks.map((task) => (
 								<TaskCard
 									key={task.id}

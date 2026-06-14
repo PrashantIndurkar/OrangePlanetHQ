@@ -80,6 +80,7 @@ export interface Task {
 	createdAt: number; // unix timestamp for sorting
 	updatedAt?: number; // unix timestamp for last update
 	assigneeName?: string;
+	assigneeEmail?: string;
 	assigneeAvatarUrl?: string;
 	description?: string;
 	activities?: TaskActivity[];

@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/providers/auth-provider";
 import {
 	useCreateTaskMutation,
 	useTasksQuery,
@@ -18,6 +19,7 @@ export function WorkspaceLayout() {
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
+	const { user } = useAuth();
 
 	const [activeTab, setActiveTab] = useState<string>("tasks");
 	const [view, setView] = useState<"board" | "list">("list");
@@ -38,6 +40,8 @@ export function WorkspaceLayout() {
 	} = getNormalizedFilters(searchParams);
 
 	const searchQuery = searchParams.get("q") || "";
+	const showAllUsers =
+		user?.role === "admin" && searchParams.get("allUsers") === "true";
 
 	// Fetch server-side tasks
 	const { data, isLoading, isError } = useTasksQuery({
@@ -49,6 +53,7 @@ export function WorkspaceLayout() {
 		sortOrder,
 		page,
 		limit,
+		allUsers: showAllUsers,
 	});
 
 	const createTaskMutation = useCreateTaskMutation();
@@ -106,7 +111,28 @@ export function WorkspaceLayout() {
 			{activeTab === "tasks" && (
 				<>
 					{/* Sub-header filters and toggles */}
-					<WorkspaceFilters view={view} onViewChange={setView} />
+					<WorkspaceFilters
+						view={view}
+						onViewChange={setView}
+						showAllUsers={showAllUsers}
+						onShowAllUsersChange={
+							user?.role === "admin"
+								? (show) => {
+										const newParams = new URLSearchParams(
+											searchParams.toString(),
+										);
+										if (show) {
+											newParams.set("allUsers", "true");
+										} else {
+											newParams.delete("allUsers");
+										}
+										router.replace(`${pathname}?${newParams.toString()}`, {
+											scroll: false,
+										});
+									}
+								: undefined
+						}
+					/>
 
 					{/* Workspace Main content scrollable viewport */}
 					<main className="relative min-h-0 flex-1 overflow-hidden">

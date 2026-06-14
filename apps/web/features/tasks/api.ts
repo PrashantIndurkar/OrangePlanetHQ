@@ -14,6 +14,7 @@ export async function listTasksApi(filters: {
 	sortOrder?: string;
 	page?: number;
 	limit?: number;
+	allUsers?: boolean;
 }): Promise<ListTasksResponse> {
 	const params: Record<string, string> = {};
 	if (filters.status && filters.status.length > 0) {
@@ -36,6 +37,9 @@ export async function listTasksApi(filters: {
 	}
 	if (filters.limit) {
 		params.limit = String(filters.limit);
+	}
+	if (filters.allUsers !== undefined) {
+		params.allUsers = String(filters.allUsers);
 	}
 
 	return apiFetch<ListTasksResponse>("/tasks", {

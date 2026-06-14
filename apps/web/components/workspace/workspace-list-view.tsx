@@ -105,6 +105,20 @@ export function WorkspaceListView({
 		canceled: false,
 	});
 
+	const [openPopoverTaskId, setOpenPopoverTaskId] = useState<string | null>(
+		null,
+	);
+
+	React.useEffect(() => {
+		const handleDocumentClick = () => {
+			setOpenPopoverTaskId(null);
+		};
+		document.addEventListener("click", handleDocumentClick);
+		return () => {
+			document.removeEventListener("click", handleDocumentClick);
+		};
+	}, []);
+
 	const toggleSection = (status: string) => {
 		setCollapsed((prev) => ({ ...prev, [status]: !prev[status] }));
 	};
@@ -318,24 +332,26 @@ export function WorkspaceListView({
 
 									return (
 										<TaskContextMenu
-											key={task.id}
+											key={task.uuid || task.id}
 											currentStatus={task.status as TaskStatus}
 											currentPriority={task.priority as TaskPriority}
 											onUpdateStatus={(newStatus) =>
-												handleUpdateStatus(task.id, newStatus)
+												handleUpdateStatus(task.uuid || task.id, newStatus)
 											}
 											onUpdatePriority={(newPriority) =>
-												handleUpdatePriority(task.id, newPriority)
+												handleUpdatePriority(task.uuid || task.id, newPriority)
 											}
-											onDeleteTask={() => handleDeleteTask(task.id)}
+											onDeleteTask={() =>
+												handleDeleteTask(task.uuid || task.id)
+											}
 										>
 											<div
 												role="button"
-												onClick={(e) => handleRowClick(task.id, e)}
+												onClick={(e) => handleRowClick(task.uuid || task.id, e)}
 												onKeyDown={(e) => {
 													if (e.key === "Enter" || e.key === " ") {
 														e.preventDefault();
-														router.push(`/tasks/${task.id}`);
+														router.push(`/tasks/${task.uuid || task.id}`);
 													}
 												}}
 												tabIndex={0}
@@ -424,15 +440,61 @@ export function WorkspaceListView({
 
 													{/* Avatar and Date Group */}
 													<div className="flex shrink-0 items-center gap-1.5 select-none">
-														<div className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-															{task.assigneeName
-																? task.assigneeName
-																		.split(" ")
-																		.map((n) => n[0])
-																		.join("")
-																		.toUpperCase()
-																		.slice(0, 1)
-																: "U"}
+														<div className="relative flex items-center">
+															<button
+																type="button"
+																onClick={(e) => {
+																	e.stopPropagation();
+																	e.preventDefault();
+																	setOpenPopoverTaskId((prev) =>
+																		prev === (task.uuid || task.id)
+																			? null
+																			: task.uuid || task.id,
+																	);
+																}}
+																className="avatar flex h-[18px] w-[18px] cursor-pointer shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 hover:ring-1 hover:ring-ring transition-all outline-none"
+															>
+																{task.assigneeName
+																	? task.assigneeName
+																			.split(" ")
+																			.map((n) => n[0])
+																			.join("")
+																			.toUpperCase()
+																			.slice(0, 1)
+																	: "U"}
+															</button>
+
+															{openPopoverTaskId === (task.uuid || task.id) && (
+																/* biome-ignore lint/a11y/useKeyWithClickEvents: non-interactive container */
+																/* biome-ignore lint/a11y/noStaticElementInteractions: non-interactive container */
+																<div
+																	onClick={(e) => e.stopPropagation()}
+																	className="absolute right-0 top-full mt-2.5 z-50 w-52 bg-card border border-border p-3 shadow-xl rounded-none animate-in fade-in slide-in-from-top-1 duration-150"
+																>
+																	<div className="flex items-center gap-2.5">
+																		<div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 text-[10px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+																			{task.assigneeName
+																				? task.assigneeName
+																						.split(" ")
+																						.map((n) => n[0])
+																						.join("")
+																						.toUpperCase()
+																						.slice(0, 1)
+																				: "U"}
+																		</div>
+																		<div className="flex flex-col min-w-0">
+																			<span className="text-[11px] font-semibold text-foreground truncate">
+																				{task.assigneeName || "Unassigned"}
+																			</span>
+																			{task.assigneeEmail && (
+																				<span className="text-[9px] text-muted-foreground truncate font-mono">
+																					{task.assigneeEmail}
+																				</span>
+																			)}
+																		</div>
+																	</div>
+																</div>
+															)}
 														</div>
 
 														<span className="min-w-[38px] text-right text-[12px] font-[450] text-zinc-500 dark:text-zinc-400">

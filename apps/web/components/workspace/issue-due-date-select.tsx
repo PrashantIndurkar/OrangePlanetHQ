@@ -31,11 +31,69 @@ export function IssueDueDateSelect({
 		setOpen(false);
 	};
 
+	const getDisplayValue = (val?: string) => {
+		if (!val) return "Due date";
+		if (val === "Today" || val === "Tomorrow" || val === "Overdue") {
+			return val;
+		}
+		const parsed = Date.parse(val);
+		if (!Number.isNaN(parsed)) {
+			const date = new Date(parsed);
+			const today = new Date();
+			today.setHours(0, 0, 0, 0);
+			const tomorrow = new Date(today);
+			tomorrow.setDate(tomorrow.getDate() + 1);
+			const compareDate = new Date(date);
+			compareDate.setHours(0, 0, 0, 0);
+
+			if (compareDate.getTime() === today.getTime()) {
+				return "Today";
+			} else if (compareDate.getTime() === tomorrow.getTime()) {
+				return "Tomorrow";
+			} else if (compareDate.getTime() < today.getTime()) {
+				return "Overdue";
+			} else {
+				return date.toLocaleDateString("en-US", {
+					month: "short",
+					day: "numeric",
+				});
+			}
+		}
+		return val;
+	};
+
 	const getDueDateColor = (val?: string) => {
-		if (val === "Overdue") return "text-red-500 dark:text-red-400";
-		if (val === "Today") return "text-amber-600 dark:text-amber-400";
-		if (val === "Tomorrow") return "text-blue-600 dark:text-blue-400";
-		return "text-zinc-500 dark:text-zinc-400";
+		if (!val) return "text-zinc-500 dark:text-zinc-400";
+		const display = getDisplayValue(val);
+		if (display === "Overdue") return "text-red-500 dark:text-red-400";
+		if (display === "Today") return "text-amber-600 dark:text-amber-400";
+		if (display === "Tomorrow") return "text-blue-600 dark:text-blue-400";
+		return "text-zinc-700 dark:text-zinc-300";
+	};
+
+	const getOptionStyles = (label: string) => {
+		if (label === "Today") {
+			return {
+				icon: "text-amber-500 dark:text-amber-400",
+				text: "text-amber-700 dark:text-amber-400",
+			};
+		}
+		if (label === "Tomorrow") {
+			return {
+				icon: "text-blue-500 dark:text-blue-400",
+				text: "text-blue-700 dark:text-blue-400",
+			};
+		}
+		if (label === "Overdue") {
+			return {
+				icon: "text-red-500 dark:text-red-400",
+				text: "text-red-600 dark:text-red-400",
+			};
+		}
+		return {
+			icon: "text-zinc-400 dark:text-zinc-500",
+			text: "text-zinc-700 dark:text-zinc-300",
+		};
 	};
 
 	return (
@@ -61,7 +119,7 @@ export function IssueDueDateSelect({
 						value ? getDueDateColor(value) : "text-foreground",
 					)}
 				>
-					{value || "Due date"}
+					{getDisplayValue(value)}
 				</span>
 			</PopoverTrigger>
 			<PopoverContent
@@ -71,6 +129,7 @@ export function IssueDueDateSelect({
 				<div className="flex flex-col p-1">
 					{dueDateOptions.map((opt) => {
 						const isSelected = value === opt.value;
+						const styles = getOptionStyles(opt.label);
 						return (
 							<button
 								key={opt.label}
@@ -80,9 +139,11 @@ export function IssueDueDateSelect({
 							>
 								<HugeiconsIcon
 									icon={Calendar04Icon}
-									className="size-3.5 shrink-0 text-muted-foreground"
+									className={cn("size-3.5 shrink-0", styles.icon)}
 								/>
-								<span className="flex-grow text-[12px]">{opt.label}</span>
+								<span className={cn("flex-grow text-[12px]", styles.text)}>
+									{opt.label}
+								</span>
 								{isSelected && (
 									<HugeiconsIcon
 										icon={Tick02Icon}

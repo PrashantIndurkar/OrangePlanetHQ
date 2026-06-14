@@ -37,7 +37,12 @@ export function TaskPriorityList({ value, onSelect }: TaskPriorityListProps) {
 								<Icon
 									className={cn(
 										"h-4 w-4 shrink-0",
-										isSelected ? "text-primary" : "text-muted-foreground",
+										p.value === "no-priority" &&
+											"text-zinc-500 dark:text-zinc-400",
+										p.value === "urgent" && "text-red-500 dark:text-red-400",
+										p.value === "high" && "text-zinc-800 dark:text-zinc-200",
+										p.value === "medium" && "text-zinc-600 dark:text-zinc-300",
+										p.value === "low" && "text-zinc-500 dark:text-zinc-400",
 									)}
 								/>
 								<span className="flex-grow text-left text-[12px] font-medium text-foreground">

@@ -11,7 +11,7 @@ export async function seedInitialTasks(
 	>,
 	userId: string,
 	userName: string,
-	userEmail: string,
+	_userEmail: string,
 ): Promise<void> {
 	const userInitials = userName
 		? userName

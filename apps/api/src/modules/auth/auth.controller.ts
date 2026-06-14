@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
 import { prisma } from "../../lib/prisma.js";
 import { ApiError } from "../../utils/api-error.js";
-import { comparePassword, generateToken, hashPassword } from "./auth.utils.js";
 import { seedInitialTasks } from "../tasks/tasks.seeder.js";
+import { comparePassword, generateToken, hashPassword } from "./auth.utils.js";
 
 export const signup = async (
 	req: Request,
@@ -22,33 +22,36 @@ export const signup = async (
 
 		// Hash password and save user
 		const passwordHash = await hashPassword(password);
-		const { user, token } = await prisma.$transaction(async (tx) => {
-			const newUser = await tx.user.create({
-				data: {
-					email,
-					passwordHash,
-					name,
-				},
-			});
+		const { user, token } = await prisma.$transaction(
+			async (tx) => {
+				const newUser = await tx.user.create({
+					data: {
+						email,
+						passwordHash,
+						name,
+					},
+				});
 
-			if (!skipSeed) {
-				await seedInitialTasks(
-					tx,
-					newUser.id,
-					newUser.name || "Unknown User",
-					newUser.email,
-				);
-			}
+				if (!skipSeed) {
+					await seedInitialTasks(
+						tx,
+						newUser.id,
+						newUser.name || "Unknown User",
+						newUser.email,
+					);
+				}
 
-			const userToken = generateToken({
-				id: newUser.id,
-				email: newUser.email,
-				name: newUser.name,
-				role: newUser.role,
-			});
+				const userToken = generateToken({
+					id: newUser.id,
+					email: newUser.email,
+					name: newUser.name,
+					role: newUser.role,
+				});
 
-			return { user: newUser, token: userToken };
-		}, { maxWait: 20000, timeout: 35000 });
+				return { user: newUser, token: userToken };
+			},
+			{ maxWait: 20000, timeout: 35000 },
+		);
 
 		res.status(201).json({
 			user: {

@@ -45,11 +45,11 @@ export function SidebarHeader() {
 				>
 					{/* Blue Brand Mark */}
 					<div
-						className="flex h-6 w-6 items-center justify-center rounded-md bg-blue-600 shadow-sm shadow-blue-500/10 dark:bg-blue-500"
+						className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 shadow-sm shadow-blue-500/10 dark:bg-blue-500"
 						suppressHydrationWarning
 					>
 						<svg
-							className="h-3.5 w-3.5 text-white"
+							className="h-4.5 w-4.5 text-white"
 							viewBox="0 0 24 24"
 							fill="none"
 							stroke="currentColor"
@@ -64,9 +64,14 @@ export function SidebarHeader() {
 						</svg>
 					</div>
 					{/* Brand Name Typography */}
-					<span className="text-sm font-bold tracking-tight text-blue-600 dark:text-blue-500">
-						stride
+					<span className="text-[16px] font-bold tracking-tight text-blue-600 dark:text-blue-500">
+						Stride
 					</span>
+					{user?.role === "admin" && (
+						<span className="ml-1 inline-flex h-4.5 items-center justify-center rounded-[3px] bg-red-500/10 border border-red-500/20 px-1.5 text-[9px] font-bold tracking-wider text-red-600 dark:text-red-400 uppercase leading-none">
+							Admin
+						</span>
+					)}
 					<HugeiconsIcon
 						icon={ArrowDown01Icon}
 						size={12}
@@ -89,7 +94,7 @@ export function SidebarHeader() {
 								onClick={() => setIsOpen(false)}
 								className="flex w-full cursor-pointer items-center justify-between rounded-none bg-muted/30 px-3 py-2 text-xs font-medium text-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:bg-muted"
 							>
-								<span>stride</span>
+								<span>Stride</span>
 								<HugeiconsIcon
 									icon={Tick01Icon}
 									size={12}

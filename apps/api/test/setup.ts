@@ -1,5 +1,5 @@
+import path from "node:path";
 import dotenv from "dotenv";
-import path from "path";
 import { afterAll } from "vitest";
 
 // Load .env.test environment variables before importing Prisma client

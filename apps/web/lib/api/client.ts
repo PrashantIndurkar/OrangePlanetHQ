@@ -42,7 +42,7 @@ export async function apiFetch<T>(
 		let message = "An error occurred";
 		try {
 			const data = await response.json();
-			message = data.message || message;
+			message = data.error?.message || data.message || message;
 		} catch {
 			// Fallback to text status
 			message = response.statusText || message;
