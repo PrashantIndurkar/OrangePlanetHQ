@@ -1,3 +1,11 @@
+# [0.11.0](https://github.com/PrashantIndurkar/stride/compare/v0.10.0...v0.11.0) (2026-06-14)
+
+
+### Features
+
+* add reusable AuthInput component with password toggle support ([1c3ca63](https://github.com/PrashantIndurkar/stride/commit/1c3ca63a87a886057ae2c92879984ff8d47113bf))
+* create reusable AuthInput component with password toggle and error handling support ([b7a99be](https://github.com/PrashantIndurkar/stride/commit/b7a99be7f058e3d68a096939ceb0ac7fbd7837a8))
+* implement containerized development environment with Docker and add authentication UI components and workspace filters ([2a2833e](https://github.com/PrashantIndurkar/stride/commit/2a2833e2b795365f4740fbd04c39bd1509aff49a))
 
 # [0.11.0](https://github.com/PrashantIndurkar/stride/compare/v0.10.0...v0.11.0) (2026-06-14)
 
