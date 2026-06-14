@@ -1,9 +1,34 @@
-# [0.10.0](https://github.com/PrashantIndurkar/stride/compare/v0.9.1...v0.10.0) (2026-06-14)
 
+# [0.11.0](https://github.com/PrashantIndurkar/stride/compare/v0.10.0...v0.11.0) (2026-06-14)
 
-### Features
+## ✨ Advanced Workspace Features
 
-* implement task management workspace UI, API client, and role-based task access control ([c6333c9](https://github.com/PrashantIndurkar/stride/commit/c6333c9b1080621ee17481ab7934fa5bf1c5b00e))
+### Role-Based Access Control
+
+* Added support for user and admin roles.
+* Enabled administrators to view and manage tasks across all users.
+* Improved authorization controls for advanced workspace management.
+
+### Optimistic User Experience
+
+* Added optimistic UI updates for task actions.
+* Changes now appear instantly in the interface before server confirmation.
+* Added automatic rollback handling when requests fail, ensuring data consistency.
+
+### Activity Tracking
+
+* Added persistent activity logs for task operations.
+* Automatically records task creation and update events.
+* Added activity history support to task details for improved transparency and auditing.
+
+## 🚀 Improvements
+
+* Improved application responsiveness and perceived performance.
+* Enhanced visibility into task history and workspace activity.
+* Strengthened permission management with role-based access controls.
+* Continued preparing the platform for team collaboration and enterprise-scale workflows.
+
+---
 # [0.10.0](https://github.com/PrashantIndurkar/stride/compare/v0.9.0...v0.10.0) (2026-06-14)
 
 ## 🧪 Automated Testing
