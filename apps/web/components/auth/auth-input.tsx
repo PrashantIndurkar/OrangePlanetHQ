@@ -35,7 +35,7 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
 							"focus:border-ring focus:ring-1 focus:ring-ring/40",
 							isPasswordField && "pr-10",
 							error &&
-							"border-destructive focus:border-destructive focus:ring-destructive/30",
+								"border-destructive focus:border-destructive focus:ring-destructive/30",
 							className,
 						)}
 						{...props}
