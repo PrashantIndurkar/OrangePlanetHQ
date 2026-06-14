@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { prisma } from "../../lib/prisma.js";
 import { ApiError } from "../../utils/api-error.js";
 import { comparePassword, generateToken, hashPassword } from "./auth.utils.js";
+import { seedInitialTasks } from "../tasks/tasks.seeder.js";
 
 export const signup = async (
 	req: Request,
@@ -30,73 +31,13 @@ export const signup = async (
 				},
 			});
 
-			const dummyTasksData = skipSeed
-				? []
-				: Array.from({ length: 26 }, (_, idx) => {
-						const num = idx + 1;
-						const statuses: (
-							| "backlog"
-							| "todo"
-							| "in-progress"
-							| "done"
-							| "canceled"
-						)[] = ["backlog", "todo", "in-progress", "done", "canceled"];
-						const priorities: (
-							| "urgent"
-							| "high"
-							| "medium"
-							| "low"
-							| "no-priority"
-						)[] = ["no-priority", "low", "medium", "high", "urgent"];
-
-						const status = statuses[idx % statuses.length];
-						const priority = priorities[idx % priorities.length];
-
-						let dueDate: Date | null = null;
-						if (idx % 4 === 1) {
-							dueDate = new Date(); // Today
-						} else if (idx % 4 === 2) {
-							const tomorrow = new Date();
-							tomorrow.setDate(tomorrow.getDate() + 1);
-							dueDate = tomorrow;
-						} else if (idx % 4 === 3) {
-							const overdue = new Date();
-							overdue.setDate(overdue.getDate() - 2);
-							dueDate = overdue;
-						}
-
-						return {
-							issueNumber: num,
-							title: `Default Assessment Issue #${num}`,
-							description: `This is dummy task #${num} automatically created to verify server-side searching, sorting, pagination, and filters.`,
-							status,
-							priority,
-							dueDate,
-							userId: newUser.id,
-						};
-					});
-
-			for (const taskData of dummyTasksData) {
-				const task = await tx.task.create({
-					data: taskData,
-				});
-
-				await tx.activityLog.create({
-					data: {
-						taskId: task.id,
-						userId: newUser.id,
-						userName: newUser.name || newUser.email,
-						userInitials: newUser.name
-							? newUser.name
-									.split(" ")
-									.map((n) => n[0])
-									.join("")
-									.toUpperCase()
-									.slice(0, 1)
-							: "U",
-						actionText: "created this issue",
-					},
-				});
+			if (!skipSeed) {
+				await seedInitialTasks(
+					tx,
+					newUser.id,
+					newUser.name || "Unknown User",
+					newUser.email,
+				);
 			}
 
 			const userToken = generateToken({
@@ -107,7 +48,7 @@ export const signup = async (
 			});
 
 			return { user: newUser, token: userToken };
-		});
+		}, { maxWait: 20000, timeout: 35000 });
 
 		res.status(201).json({
 			user: {

@@ -9,7 +9,7 @@
     "start": "node dist/server.js",
     "db:migrate": "prisma migrate dev",
     "db:seed": "prisma db seed",
-    "test": "tsx test/run-tests.ts"
+    "test": "vitest run"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -36,7 +36,7 @@
     "supertest": "^7.0.0",
     "tsx": "^4.19.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^3.0.7"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

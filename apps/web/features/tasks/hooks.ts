@@ -70,7 +70,10 @@ export function useUpdateTaskMutation() {
 			await queryClient.cancelQueries({ queryKey: ["task", id] });
 
 			// Snapshot the previous values
-			const previousTasks = queryClient.getQueryData<{ tasks: Task[]; total: number }>(["tasks"]);
+			const previousTasks = queryClient.getQueryData<{
+				tasks: Task[];
+				total: number;
+			}>(["tasks"]);
 			const previousTask = queryClient.getQueryData<Task>(["task", id]);
 
 			// Optimistically update single task query cache
