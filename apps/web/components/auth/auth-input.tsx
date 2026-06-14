@@ -1,7 +1,7 @@
-import React, { useId, useState } from "react";
-import { cn } from "@/lib/utils";
 import { ViewIcon, ViewOffSlashIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import React, { useId, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 	label: string;
@@ -35,7 +35,7 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
 							"focus:border-ring focus:ring-1 focus:ring-ring/40",
 							isPasswordField && "pr-10",
 							error &&
-								"border-destructive focus:border-destructive focus:ring-destructive/30",
+							"border-destructive focus:border-destructive focus:ring-destructive/30",
 							className,
 						)}
 						{...props}
@@ -65,4 +65,3 @@ export const AuthInput = React.forwardRef<HTMLInputElement, AuthInputProps>(
 );
 
 AuthInput.displayName = "AuthInput";
-
