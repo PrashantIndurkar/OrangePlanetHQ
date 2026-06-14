@@ -1,3 +1,9 @@
+# [0.9.0](https://github.com/PrashantIndurkar/stride/compare/v0.8.0...v0.9.0) (2026-06-14)
+
+
+### Features
+
+* implement issue tracking system with custom IDs, activity logging, improved task filtering, and a new dashboard UI. ([665c10d](https://github.com/PrashantIndurkar/stride/commit/665c10d4a36696f6d20d019f33dd2b9ea865cb49))
 # [0.8.0](https://github.com/PrashantIndurkar/stride/compare/v0.7.0...v0.8.0) (2026-06-13)
 
 ## 📋 Task Management API
