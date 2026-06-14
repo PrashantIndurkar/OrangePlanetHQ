@@ -1,5 +1,17 @@
 # [0.12.0](https://github.com/PrashantIndurkar/stride/compare/v0.11.0...v0.12.0) (2026-06-14)
 
+
+### Bug Fixes
+
+* update junit output filename configuration in CI pipeline and include test results artifact ([2fd9e14](https://github.com/PrashantIndurkar/stride/commit/2fd9e142a84f7e9f49d3b6072a23398284cbfcc8))
+
+
+### Features
+
+* add GitHub Actions CI workflow for linting, building, and testing with PostgreSQL service ([aca090b](https://github.com/PrashantIndurkar/stride/commit/aca090b67bac4ecf970c2f3f72826ac91a2abbd2))
+* add issueNumber to Task and implement ActivityLog tracking table ([089c5f5](https://github.com/PrashantIndurkar/stride/commit/089c5f553290eb226d0637a9e6e8504aca1b2964))
+# [0.12.0](https://github.com/PrashantIndurkar/stride/compare/v0.11.0...v0.12.0) (2026-06-14)
+
 ## 🐳 Docker & Deployment
 
 ### Production Dockerization
