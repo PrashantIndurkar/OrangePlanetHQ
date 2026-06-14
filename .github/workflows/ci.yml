@@ -76,7 +76,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stried_test?schema=public
 
       - name: Run Tests
-        run: pnpm --filter api test -- --reporter=default --reporter=junit --outputFile=apps/api/test-results.xml
+        run: pnpm --filter api test -- --reporter=default --reporter=junit --outputFile=test-results.xml
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stried_test?schema=public
           JWT_SECRET: ci-test-secret-key-do-not-use-in-prod
