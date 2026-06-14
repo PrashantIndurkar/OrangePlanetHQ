@@ -1,4 +1,38 @@
-## [0.9.1](https://github.com/PrashantIndurkar/stride/compare/v0.9.0...v0.9.1) (2026-06-14)
+# [0.10.0](https://github.com/PrashantIndurkar/stride/compare/v0.9.0...v0.10.0) (2026-06-14)
+
+## 🧪 Automated Testing
+
+### Integration Test Infrastructure
+
+* Added an automated integration testing environment for backend services.
+* Configured test tooling and isolated test database workflows.
+* Improved confidence in API reliability and future development.
+
+### Authentication Tests
+
+* Added coverage for user registration validation and error scenarios.
+* Verified successful user signup, password hashing, and database persistence.
+* Added login tests validating authentication responses and JWT generation.
+
+### Task Management Tests
+
+* Added integration tests for task creation workflows.
+* Verified task ownership and authorization protections.
+* Ensured users cannot access or modify tasks belonging to other users.
+
+### Pagination & Query Validation
+
+* Added tests for paginated task retrieval.
+* Verified filtering and query parameter handling.
+* Improved confidence in task listing behavior across different scenarios.
+
+## 🚀 Improvements
+
+* Increased backend reliability through automated verification.
+* Reduced risk of regressions when introducing new features.
+* Strengthened security guarantees around authentication and task ownership.
+* Established a foundation for continuous integration and future test coverage expansion.
+
 # [0.9.0](https://github.com/PrashantIndurkar/stride/compare/v0.8.0...v0.9.0) (2026-06-14)
 
 ## 🔄 Backend Integration
