@@ -37,7 +37,7 @@ export function mapBackendTaskToFrontend(bt: BackendTask): Task {
 	const assigneeName = bt.user?.name || bt.user?.email || "Unknown User";
 
 	return {
-		id: `STR-${bt.issueNumber}`,
+		id: `STR-${bt.id.slice(0, 8).toUpperCase()}`,
 		uuid: bt.id,
 		title: bt.title,
 		status: bt.status as Task["status"],
@@ -50,6 +50,7 @@ export function mapBackendTaskToFrontend(bt: BackendTask): Task {
 		createdAt: new Date(bt.createdAt).getTime(),
 		updatedAt: new Date(bt.updatedAt).getTime(),
 		assigneeName,
+		assigneeEmail: bt.user?.email || "",
 		description: bt.description || "",
 		activities,
 	};

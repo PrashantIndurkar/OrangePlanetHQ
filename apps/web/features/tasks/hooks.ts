@@ -24,6 +24,7 @@ export function useTasksQuery(filters: {
 	sortOrder?: string;
 	page?: number;
 	limit?: number;
+	allUsers?: boolean;
 }) {
 	return useQuery({
 		queryKey: ["tasks", filters],

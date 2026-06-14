@@ -43,11 +43,15 @@ import { getNormalizedFilters } from "./types";
 interface WorkspaceFiltersProps {
 	view: "board" | "list";
 	onViewChange: (view: "board" | "list") => void;
+	showAllUsers?: boolean;
+	onShowAllUsersChange?: (show: boolean) => void;
 }
 
 export function WorkspaceFilters({
 	view,
 	onViewChange,
+	showAllUsers = false,
+	onShowAllUsersChange,
 }: WorkspaceFiltersProps) {
 	const router = useRouter();
 	const pathname = usePathname();
@@ -360,6 +364,37 @@ export function WorkspaceFilters({
 						</DropdownMenuRadioGroup>
 					</DropdownMenuContent>
 				</DropdownMenu>
+
+				{/* All Users Toggle (Only visible for Admins when callback is available) */}
+				{onShowAllUsersChange && (
+					<button
+						type="button"
+						onClick={() => onShowAllUsersChange(!showAllUsers)}
+						className={cn(
+							"flex h-7 cursor-pointer items-center gap-1.5 rounded-none border px-2.5 py-0 text-xs font-semibold transition-all duration-200 outline-none",
+							showAllUsers
+								? "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/20"
+								: "border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground",
+						)}
+					>
+						<svg
+							className="h-3.5 w-3.5"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						>
+							<title>All Users</title>
+							<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+							<circle cx="9" cy="7" r="4" />
+							<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+							<path d="M16 3.13a4 4 0 0 1 0 7.75" />
+						</svg>
+						<span>Show All Users' Tasks</span>
+					</button>
+				)}
 			</div>
 
 			{/* Right side: View Switcher (Board vs List) */}

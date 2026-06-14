@@ -37,7 +37,14 @@ export function TaskStatusList({ value, onSelect }: TaskStatusListProps) {
 								<Icon
 									className={cn(
 										"h-4 w-4 shrink-0",
-										isSelected ? "text-primary" : "text-muted-foreground",
+										s.value === "backlog" && "text-zinc-500 dark:text-zinc-400",
+										s.value === "todo" && "text-zinc-500 dark:text-zinc-400",
+										s.value === "in-progress" &&
+											"text-amber-500 dark:text-amber-400",
+										s.value === "done" &&
+											"text-indigo-500 dark:text-indigo-400",
+										s.value === "canceled" &&
+											"text-zinc-400 dark:text-zinc-500",
 									)}
 								/>
 								<span className="flex-grow text-left text-[12px] font-medium text-foreground">

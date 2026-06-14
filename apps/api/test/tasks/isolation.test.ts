@@ -38,37 +38,38 @@ describe("Tasks Integration - Ownership and Tenant Boundary Isolation", () => {
 			});
 		expect(createTaskRes.status).toBe(201);
 		const taskId = createTaskRes.body.task.id;
+		const strUuidCode = `STR-${taskId.slice(0, 8).toUpperCase()}`;
 
 		// 4. User B attempts to GET User A's task -> should return 404 (or 403, but our app returns 404 for security obfustication)
 		const getBRes = await request(app)
-			.get(`/api/v1/tasks/${taskId}`)
+			.get(`/api/v1/tasks/${strUuidCode}`)
 			.set("Authorization", `Bearer ${tokenB}`);
 		expect(getBRes.status).toBe(404);
 		expect(getBRes.body.error.message).toContain("not found");
 
 		// 5. User B attempts to UPDATE User A's task -> should return 404
 		const updateBRes = await request(app)
-			.patch(`/api/v1/tasks/${taskId}`)
+			.patch(`/api/v1/tasks/${strUuidCode}`)
 			.set("Authorization", `Bearer ${tokenB}`)
 			.send({ title: "Hacked Title" });
 		expect(updateBRes.status).toBe(404);
 
 		// 6. User B attempts to DELETE User A's task -> should return 404
 		const deleteBRes = await request(app)
-			.delete(`/api/v1/tasks/${taskId}`)
+			.delete(`/api/v1/tasks/${strUuidCode}`)
 			.set("Authorization", `Bearer ${tokenB}`);
 		expect(deleteBRes.status).toBe(404);
 
 		// 7. Verify User A can fetch the task successfully
 		const getARes = await request(app)
-			.get(`/api/v1/tasks/${taskId}`)
+			.get(`/api/v1/tasks/${strUuidCode}`)
 			.set("Authorization", `Bearer ${tokenA}`);
 		expect(getARes.status).toBe(200);
 		expect(getARes.body.task.title).toBe("User A Task");
 
 		// 8. Verify User A can update the task successfully
 		const updateARes = await request(app)
-			.patch(`/api/v1/tasks/${taskId}`)
+			.patch(`/api/v1/tasks/${strUuidCode}`)
 			.set("Authorization", `Bearer ${tokenA}`)
 			.send({ title: "User A Updated Task" });
 		expect(updateARes.status).toBe(200);
@@ -76,13 +77,13 @@ describe("Tasks Integration - Ownership and Tenant Boundary Isolation", () => {
 
 		// 9. Verify User A can delete the task successfully
 		const deleteARes = await request(app)
-			.delete(`/api/v1/tasks/${taskId}`)
+			.delete(`/api/v1/tasks/${strUuidCode}`)
 			.set("Authorization", `Bearer ${tokenA}`);
 		expect(deleteARes.status).toBe(204);
 
 		// 10. Verify User A gets a 404 now that the task is deleted
 		const getADeletedRes = await request(app)
-			.get(`/api/v1/tasks/${taskId}`)
+			.get(`/api/v1/tasks/${strUuidCode}`)
 			.set("Authorization", `Bearer ${tokenA}`);
 		expect(getADeletedRes.status).toBe(404);
 	});

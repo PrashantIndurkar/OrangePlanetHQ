@@ -32,12 +32,14 @@ describe("Auth Integration - Signup Validation Errors", () => {
 	});
 
 	it("should return a 400 error when password is too short", async () => {
-		const res = await request(app).post("/api/v1/auth/signup").send({
-			email: `valid-${Date.now()}@example.com`,
-			password: "123",
-			name: "Test User",
-			skipSeed: true,
-		});
+		const res = await request(app)
+			.post("/api/v1/auth/signup")
+			.send({
+				email: `valid-${Date.now()}@example.com`,
+				password: "123",
+				name: "Test User",
+				skipSeed: true,
+			});
 
 		expect(res.status).toBe(400);
 		expect(res.body).toHaveProperty("error");

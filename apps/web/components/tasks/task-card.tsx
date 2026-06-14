@@ -161,7 +161,7 @@ export function TaskCard({
 					}
 				}}
 				tabIndex={0}
-				className="group flex w-[320px] flex-col rounded-none border border-zinc-200 bg-[#ffffff] p-[9px] pb-[11px] text-card-foreground shadow-none select-none data-[context-menu-open=true]:border-zinc-300 data-[context-menu-open=true]:bg-zinc-50 dark:border-zinc-800 dark:bg-[#25272b] dark:data-[context-menu-open=true]:border-zinc-700 dark:data-[context-menu-open=true]:bg-zinc-800/80 cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-ring/50"
+				className="group flex w-full flex-col rounded-none border border-zinc-200 bg-[#ffffff] p-[9px] pb-[11px] text-card-foreground shadow-none select-none data-[context-menu-open=true]:border-zinc-300 data-[context-menu-open=true]:bg-zinc-50 dark:border-zinc-800 dark:bg-[#25272b] dark:data-[context-menu-open=true]:border-zinc-700 dark:data-[context-menu-open=true]:bg-zinc-800/80 outline-none focus-visible:ring-1 focus-visible:ring-ring/50"
 			>
 				{/* Top Section: Issue ID and Assignee */}
 				<div className="flex items-center justify-between">

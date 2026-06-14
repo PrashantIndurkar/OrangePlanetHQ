@@ -2,9 +2,11 @@ import path from "node:path";
 import dotenv from "dotenv";
 import { z } from "zod";
 
-// Load env files from the root of the workspace
+// Load env files
+if (process.env.NODE_ENV === "test") {
+	dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
+}
 dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
-// Fallback to local if not loaded
 dotenv.config();
 
 const envSchema = z.object({

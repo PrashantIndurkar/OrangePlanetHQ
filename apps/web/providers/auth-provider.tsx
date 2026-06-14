@@ -36,6 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				id: userData.id,
 				email: userData.email,
 				name: userData.name || "",
+				role: userData.role,
 			});
 		} catch (error) {
 			console.error("Failed to restore session:", error);
@@ -58,6 +59,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				id: response.user.id,
 				email: response.user.email,
 				name: response.user.name || "",
+				role: response.user.role,
 			});
 			router.push("/tasks");
 			return true;
@@ -74,6 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				id: response.user.id,
 				email: response.user.email,
 				name: response.user.name || "",
+				role: response.user.role,
 			});
 			router.push("/tasks");
 			return true;

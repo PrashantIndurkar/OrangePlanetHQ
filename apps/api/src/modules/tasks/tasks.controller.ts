@@ -32,6 +32,7 @@ export const getTask = async (
 		const task = await tasksRepository.findByIdAndUser(
 			req.params.id,
 			req.user.id,
+			req.user.role,
 		);
 		if (!task) {
 			throw new ApiError(404, "Task not found");
@@ -60,6 +61,7 @@ export const listTasks = async (
 			sortOrder,
 			page,
 			limit,
+			allUsers,
 		} = req.query as unknown as z.infer<typeof listTasksQuerySchema>;
 
 		const { tasks, total } = await tasksRepository.list({
@@ -72,6 +74,8 @@ export const listTasks = async (
 			sortOrder,
 			page,
 			limit,
+			allUsers,
+			userRole: req.user.role,
 		});
 
 		res.status(200).json({
@@ -95,6 +99,7 @@ export const updateTask = async (
 		const check = await tasksRepository.findByIdAndUser(
 			req.params.id,
 			req.user.id,
+			req.user.role,
 		);
 		if (!check) {
 			throw new ApiError(404, "Task not found");
@@ -104,6 +109,7 @@ export const updateTask = async (
 			check.id,
 			req.user.id,
 			req.body,
+			req.user.role,
 		);
 		res.status(200).json({ task: updatedTask });
 	} catch (error) {
@@ -123,6 +129,7 @@ export const deleteTask = async (
 		const check = await tasksRepository.findByIdAndUser(
 			req.params.id,
 			req.user.id,
+			req.user.role,
 		);
 		if (!check) {
 			throw new ApiError(404, "Task not found");

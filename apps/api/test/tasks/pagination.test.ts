@@ -62,7 +62,9 @@ describe("Tasks Integration - Pagination, Sorting, and Filtering", () => {
 			.set("Authorization", `Bearer ${token}`);
 
 		expect(sortedPriorityRes.status).toBe(200);
-		const priorities = sortedPriorityRes.body.tasks.map((t: { priority: string }) => t.priority);
+		const priorities = sortedPriorityRes.body.tasks.map(
+			(t: { priority: string }) => t.priority,
+		);
 		// With desc sort, urgent tasks should appear at the top. Let's make sure the first one is indeed urgent
 		expect(priorities[0]).toBe("urgent");
 	});

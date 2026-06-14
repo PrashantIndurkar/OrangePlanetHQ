@@ -44,6 +44,8 @@ describe("Auth Integration - Signup Success", () => {
 
 		expect(duplicateRes.status).toBe(400);
 		expect(duplicateRes.body).toHaveProperty("error");
-		expect(duplicateRes.body.error.message.toLowerCase()).toContain("already registered");
+		expect(duplicateRes.body.error.message.toLowerCase()).toContain(
+			"already registered",
+		);
 	});
 });

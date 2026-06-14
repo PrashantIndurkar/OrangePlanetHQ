@@ -11,6 +11,8 @@ export interface ListTasksFilters {
 	sortOrder: "asc" | "desc";
 	page: number;
 	limit: number;
+	allUsers?: boolean;
+	userRole?: string;
 }
 
 export const tasksRepository = {
@@ -63,15 +65,46 @@ export const tasksRepository = {
 		});
 	},
 
-	async findByIdOrNumberAndUser(idOrCode: string, userId: string) {
+	async findByIdOrNumberAndUser(
+		idOrCode: string,
+		userId: string,
+		userRole?: string,
+	) {
+		const isadmin = userRole === "admin";
 		if (idOrCode.toUpperCase().startsWith("STR-")) {
-			const numPart = idOrCode.slice(4);
-			const issueNumber = parseInt(numPart, 10);
+			const suffix = idOrCode.slice(4);
+			const isHexPrefix = /^[0-9a-f]{8}$/i.test(suffix);
+
+			if (isHexPrefix) {
+				return prisma.task.findFirst({
+					where: {
+						id: { startsWith: suffix.toLowerCase() },
+						...(isadmin ? {} : { userId }),
+					},
+					include: {
+						activities: {
+							orderBy: {
+								timestamp: "asc",
+							},
+						},
+						user: {
+							select: {
+								id: true,
+								email: true,
+								name: true,
+								role: true,
+							},
+						},
+					},
+				});
+			}
+
+			const issueNumber = parseInt(suffix, 10);
 			if (Number.isNaN(issueNumber)) return null;
 			return prisma.task.findFirst({
 				where: {
 					issueNumber,
-					userId,
+					...(isadmin ? {} : { userId }),
 				},
 				include: {
 					activities: {
@@ -101,7 +134,7 @@ export const tasksRepository = {
 		return prisma.task.findFirst({
 			where: {
 				id: idOrCode,
-				userId,
+				...(isadmin ? {} : { userId }),
 			},
 			include: {
 				activities: {
@@ -121,8 +154,8 @@ export const tasksRepository = {
 		});
 	},
 
-	async findByIdAndUser(id: string, userId: string) {
-		return this.findByIdOrNumberAndUser(id, userId);
+	async findByIdAndUser(id: string, userId: string, userRole?: string) {
+		return this.findByIdOrNumberAndUser(id, userId, userRole);
 	},
 
 	async list(filters: ListTasksFilters) {
@@ -136,12 +169,18 @@ export const tasksRepository = {
 			sortOrder,
 			page,
 			limit,
+			allUsers,
+			userRole,
 		} = filters;
 		const skip = (page - 1) * limit;
 
-		const whereClause: Prisma.TaskWhereInput = {
-			userId,
-		};
+		const whereClause: Prisma.TaskWhereInput = {};
+
+		// If user is admin and allUsers is requested, do not filter by userId.
+		const isadmin = userRole === "admin";
+		if (!isadmin || !allUsers) {
+			whereClause.userId = userId;
+		}
 
 		if (status && status.length > 0) {
 			whereClause.status = { in: status };
@@ -251,6 +290,7 @@ export const tasksRepository = {
 			priority?: string;
 			dueDate?: Date | null;
 		},
+		_userRole?: string,
 	) {
 		const user = await prisma.user.findUnique({ where: { id: userId } });
 		const userName = user?.name || "Unknown User";

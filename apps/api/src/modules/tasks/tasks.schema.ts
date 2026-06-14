@@ -22,7 +22,8 @@ export const taskIdParamsSchema = z.object({
 				val,
 			);
 		const isStrId = /^STR-\d+$/i.test(val);
-		return isUuid || isStrId;
+		const isStrUuidPrefix = /^STR-[0-9a-f]{8}$/i.test(val);
+		return isUuid || isStrId || isStrUuidPrefix;
 	}, "Invalid task ID or code format"),
 });
 
@@ -80,4 +81,9 @@ export const listTasksQuerySchema = z.object({
 			return Number.isNaN(parsed) ? 25 : Math.min(100, Math.max(1, parsed));
 		})
 		.pipe(z.number()),
+	allUsers: z
+		.string()
+		.optional()
+		.transform((val) => (val === undefined ? undefined : val === "true"))
+		.pipe(z.boolean().optional()),
 });

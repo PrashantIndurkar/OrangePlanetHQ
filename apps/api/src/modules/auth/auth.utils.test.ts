@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { comparePassword, generateToken, hashPassword, verifyToken } from "./auth.utils.js";
+import {
+	comparePassword,
+	generateToken,
+	hashPassword,
+	verifyToken,
+} from "./auth.utils.js";
 
 describe("Auth Utilities Unit Tests", () => {
 	describe("Password Cryptography", () => {
@@ -23,7 +28,11 @@ describe("Auth Utilities Unit Tests", () => {
 
 	describe("JWT Handling", () => {
 		it("should sign and verify JWT tokens successfully", () => {
-			const payload = { id: "user-123", email: "test@example.com", role: "admin" };
+			const payload = {
+				id: "user-123",
+				email: "test@example.com",
+				role: "admin",
+			};
 			const token = generateToken(payload);
 
 			expect(token).toBeTypeOf("string");

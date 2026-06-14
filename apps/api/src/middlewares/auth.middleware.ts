@@ -32,14 +32,26 @@ export const authMiddleware = (
 		}
 
 		const decoded = verifyToken(token);
-		req.user = {
-			id: decoded.id,
-			email: decoded.email,
-			name: decoded.name,
-			role: decoded.role,
-		};
-
-		next();
+		// Fetch the user from DB to verify latest role status (handles manual role escalations dynamically)
+		import("../lib/prisma.js")
+			.then(({ prisma }) => {
+				prisma.user
+					.findUnique({ where: { id: decoded.id } })
+					.then((user) => {
+						if (!user) {
+							return next(new ApiError(401, "Please authenticate"));
+						}
+						req.user = {
+							id: user.id,
+							email: user.email,
+							name: user.name,
+							role: user.role,
+						};
+						next();
+					})
+					.catch((err) => next(err));
+			})
+			.catch((err) => next(err));
 	} catch (_error) {
 		next(new ApiError(401, "Please authenticate"));
 	}
