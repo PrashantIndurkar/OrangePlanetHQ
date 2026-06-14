@@ -1,11 +1,48 @@
-# [0.11.0](https://github.com/PrashantIndurkar/stride/compare/v0.10.0...v0.11.0) (2026-06-14)
+# [0.12.0](https://github.com/PrashantIndurkar/stride/compare/v0.11.0...v0.12.0) (2026-06-14)
 
+## 🐳 Docker & Deployment
 
-### Features
+### Production Dockerization
 
-* add reusable AuthInput component with password toggle support ([1c3ca63](https://github.com/PrashantIndurkar/stride/commit/1c3ca63a87a886057ae2c92879984ff8d47113bf))
-* create reusable AuthInput component with password toggle and error handling support ([b7a99be](https://github.com/PrashantIndurkar/stride/commit/b7a99be7f058e3d68a096939ceb0ac7fbd7837a8))
-* implement containerized development environment with Docker and add authentication UI components and workspace filters ([2a2833e](https://github.com/PrashantIndurkar/stride/commit/2a2833e2b795365f4740fbd04c39bd1509aff49a))
+* Added optimized Docker configurations for both frontend and backend services.
+* Enabled Next.js standalone builds for lightweight production deployments.
+* Reduced deployment complexity by shipping only the assets required at runtime.
+
+### Container Security
+
+* Configured application containers to run as non-root users.
+* Improved security posture by following container security best practices.
+
+### Developer Experience
+
+* Added automated startup workflows for local development environments.
+* Simplified database initialization and setup processes.
+* Improved onboarding experience with a one-command development setup.
+
+### Database Automation
+
+* Added automated database schema synchronization during development startup.
+* Added intelligent database seeding that avoids duplicate seed data.
+* Improved consistency between local development environments.
+
+### Documentation
+
+* Expanded Docker setup documentation.
+* Added deployment, database, and local development setup guidance.
+* Improved project setup instructions for contributors and reviewers.
+
+### Code Quality
+
+* Resolved linting issues that could impact production builds.
+* Improved overall build reliability and deployment readiness.
+
+## 🚀 Improvements
+
+* Improved deployment readiness across environments.
+* Reduced production image size and runtime overhead.
+* Enhanced container security and operational reliability.
+* Established a production-ready foundation for cloud deployment and scaling.
+
 
 # [0.11.0](https://github.com/PrashantIndurkar/stride/compare/v0.10.0...v0.11.0) (2026-06-14)
 
