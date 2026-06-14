@@ -4,7 +4,6 @@ import {
 	DoneIcon,
 	HighPriorityIcon,
 	InProgressIcon,
-	InReviewIcon,
 	LowPriorityIcon,
 	MediumPriorityIcon,
 	NoPriorityIcon,
@@ -16,7 +15,6 @@ export type TaskStatus =
 	| "backlog"
 	| "todo"
 	| "in-progress"
-	| "in-review"
 	| "done"
 	| "canceled";
 
@@ -36,18 +34,12 @@ export const statuses = [
 		icon: InProgressIcon,
 		shortcut: "3",
 	},
-	{
-		value: "in-review" as const,
-		label: "In Review",
-		icon: InReviewIcon,
-		shortcut: "4",
-	},
-	{ value: "done" as const, label: "Done", icon: DoneIcon, shortcut: "5" },
+	{ value: "done" as const, label: "Done", icon: DoneIcon, shortcut: "4" },
 	{
 		value: "canceled" as const,
 		label: "Canceled",
 		icon: CanceledIcon,
-		shortcut: "6",
+		shortcut: "5",
 	},
 ];
 

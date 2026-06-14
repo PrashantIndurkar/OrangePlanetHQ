@@ -42,46 +42,70 @@ async function main() {
 
 	console.log("👤 Users seeded:", { user: user.email, admin: admin.email });
 
-	// 3. Create initial tasks for the regular user
-	const tasks = await prisma.task.createMany({
-		data: [
-			{
-				title: "Integrate Prisma and Postgres",
-				description: "Set up schema.prisma and migrate tables using Prisma CLI",
-				status: "done",
-				priority: "high",
-				dueDate: new Date(),
-				userId: user.id,
-			},
-			{
-				title: "Implement Custom JWT Auth",
-				description:
-					"Develop custom JWT signup, login, and token verification routes",
-				status: "in-progress",
-				priority: "urgent",
-				dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000), // tomorrow
-				userId: user.id,
-			},
-			{
-				title: "Write Route Guard Middlewares",
-				description:
-					"Protect REST API routes using authenticated JWT verification middleware",
-				status: "todo",
-				priority: "medium",
-				userId: user.id,
-			},
-			{
-				title: "Add Pagination Controls",
-				description:
-					"Integrate pagination parameters and page selection buttons on the frontend list",
-				status: "backlog",
-				priority: "low",
-				userId: user.id,
-			},
-		],
-	});
+	const taskItems = [
+		{
+			issueNumber: 1,
+			title: "Integrate Prisma and Postgres",
+			description: "Set up schema.prisma and migrate tables using Prisma CLI",
+			status: "done",
+			priority: "high",
+			dueDate: new Date(),
+			userId: user.id,
+		},
+		{
+			issueNumber: 2,
+			title: "Implement Custom JWT Auth",
+			description:
+				"Develop custom JWT signup, login, and token verification routes",
+			status: "in-progress",
+			priority: "urgent",
+			dueDate: new Date(Date.now() + 24 * 60 * 60 * 1000), // tomorrow
+			userId: user.id,
+		},
+		{
+			issueNumber: 3,
+			title: "Write Route Guard Middlewares",
+			description:
+				"Protect REST API routes using authenticated JWT verification middleware",
+			status: "todo",
+			priority: "medium",
+			userId: user.id,
+		},
+		{
+			issueNumber: 4,
+			title: "Add Pagination Controls",
+			description:
+				"Integrate pagination parameters and page selection buttons on the frontend list",
+			status: "backlog",
+			priority: "low",
+			userId: user.id,
+		},
+	];
 
-	console.log(`✅ Seeded ${tasks.count} tasks.`);
+	for (const t of taskItems) {
+		const createdTask = await prisma.task.create({
+			data: t,
+		});
+
+		await prisma.activityLog.create({
+			data: {
+				taskId: createdTask.id,
+				userId: user.id,
+				userName: user.name || user.email,
+				userInitials: user.name
+					? user.name
+							.split(" ")
+							.map((n) => n[0])
+							.join("")
+							.toUpperCase()
+							.slice(0, 1)
+					: "U",
+				actionText: "created this issue",
+			},
+		});
+	}
+
+	console.log(`✅ Seeded ${taskItems.length} tasks with activity logs.`);
 }
 
 main()

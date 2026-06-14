@@ -1,7 +1,6 @@
 import { Calendar04Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useRouter } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import {
 	BacklogIcon,
@@ -20,6 +19,41 @@ import {
 	type TaskPriority,
 	type TaskStatus,
 } from "./task-context-menu";
+
+const getDueDateBadgeStyles = (val?: string | null) => {
+	if (!val) return { bg: "", border: "", text: "", iconColor: "" };
+	const lower = val.toLowerCase();
+	if (lower.includes("overdue") || lower.includes("ago")) {
+		return {
+			bg: "bg-red-500/10 dark:bg-red-500/20",
+			border: "border-red-200 dark:border-red-900/30",
+			text: "text-red-600 dark:text-red-400",
+			iconColor: "text-red-500 dark:text-red-400",
+		};
+	}
+	if (lower.includes("today")) {
+		return {
+			bg: "bg-amber-500/10 dark:bg-amber-500/20",
+			border: "border-amber-200 dark:border-amber-900/30",
+			text: "text-amber-700 dark:text-amber-400",
+			iconColor: "text-amber-600 dark:text-amber-500",
+		};
+	}
+	if (lower.includes("tomorrow")) {
+		return {
+			bg: "bg-blue-500/10 dark:bg-blue-500/20",
+			border: "border-blue-200 dark:border-blue-900/30",
+			text: "text-blue-700 dark:text-blue-400",
+			iconColor: "text-blue-600 dark:text-blue-500",
+		};
+	}
+	return {
+		bg: "bg-zinc-50/50 dark:bg-zinc-900/50",
+		border: "border-zinc-200 dark:border-zinc-800/80",
+		text: "text-zinc-600 dark:text-zinc-400",
+		iconColor: "text-zinc-500 dark:text-zinc-400",
+	};
+};
 
 interface TaskCardProps {
 	id?: string;
@@ -43,7 +77,6 @@ export function TaskCard({
 	dueDate = "Tomorrow",
 	createdDate = "Created Jun 12",
 	assigneeName = "Prashant Indurkar",
-	assigneeAvatarUrl = "",
 	onUpdateStatus,
 	onUpdatePriority,
 	onDeleteTask,
@@ -135,30 +168,16 @@ export function TaskCard({
 					<span className="text-[12px] leading-none font-[450] text-zinc-700 dark:text-zinc-300">
 						{id}
 					</span>
-					<Avatar className="h-6 w-6 rounded-full border-0">
-						{assigneeAvatarUrl ? (
-							<AvatarImage
-								src={assigneeAvatarUrl}
-								alt={assigneeName}
-								className="rounded-full"
-							/>
-						) : null}
-						<AvatarFallback className="flex items-center justify-center rounded-full bg-transparent text-zinc-500">
-							<svg
-								className="h-4.5 w-4.5 text-zinc-400"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="1.8"
-								role="img"
-								aria-label="User avatar fallback"
-							>
-								<title>User avatar fallback</title>
-								<circle cx="12" cy="8" r="4.5" />
-								<path d="M5 21v-1.5a4.5 4.5 0 0 1 4.5-4.5h5a4.5 4.5 0 0 1 4.5 4.5v1.5" />
-							</svg>
-						</AvatarFallback>
-					</Avatar>
+					<div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+						{assigneeName
+							? assigneeName
+									.split(" ")
+									.map((n) => n[0])
+									.join("")
+									.toUpperCase()
+									.slice(0, 1)
+							: "U"}
+					</div>
 				</div>
 
 				{/* Title and Status Icon (Gap of 6px from Issue ID, aligned center) */}
@@ -197,16 +216,26 @@ export function TaskCard({
 						</button>
 					)}
 
-					{/* Due Date Badge */}
-					{dueDate && (
-						<div className="flex items-center justify-center gap-1.5 rounded-none border border-zinc-200 bg-transparent px-2 py-1 pr-2.5 pl-2 text-[12px] leading-none font-[450] text-zinc-700 dark:border-zinc-800 dark:text-zinc-300">
-							<HugeiconsIcon
-								icon={Calendar04Icon}
-								className="h-3.5 w-3.5 shrink-0 text-[#f25f4c]"
-							/>
-							<span>{dueDate}</span>
-						</div>
-					)}
+					{dueDate &&
+						(() => {
+							const styles = getDueDateBadgeStyles(dueDate);
+							return (
+								<div
+									className={cn(
+										"flex items-center justify-center gap-1.5 rounded-none border px-2 py-1 pr-2.5 pl-2 text-[12px] leading-none font-[450]",
+										styles.bg,
+										styles.border,
+										styles.text,
+									)}
+								>
+									<HugeiconsIcon
+										icon={Calendar04Icon}
+										className={cn("h-3.5 w-3.5 shrink-0", styles.iconColor)}
+									/>
+									<span>{dueDate}</span>
+								</div>
+							);
+						})()}
 				</div>
 
 				{/* Footer text (11px distance from bottom of card, 12px font size, weight 450, gap of 11px from meta row) */}

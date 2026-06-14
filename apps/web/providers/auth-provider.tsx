@@ -84,7 +84,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const logout = React.useCallback(() => {
 		removeToken();
 		setUser(null);
-		router.push("/login");
+		router.push("/");
 	}, [router]);
 
 	const value = React.useMemo(

@@ -10,7 +10,7 @@ export async function runTasksTests() {
 	let tokenA = "";
 	let tokenB = "";
 	let taskIDA = "";
-	const taskIdB = "";
+	const _taskIdB = "";
 
 	try {
 		// Preparation: Signup User A and User B
@@ -19,6 +19,7 @@ export async function runTasksTests() {
 			email: emailA,
 			password,
 			name: "User A",
+			skipSeed: true,
 		});
 		if (signupARes.status !== 201) {
 			throw new Error(
@@ -31,6 +32,7 @@ export async function runTasksTests() {
 			email: emailB,
 			password,
 			name: "User B",
+			skipSeed: true,
 		});
 		if (signupBRes.status !== 201) {
 			throw new Error(
@@ -58,7 +60,7 @@ export async function runTasksTests() {
 				`Expected 201, got ${createRes.status}: ${JSON.stringify(createRes.body)}`,
 			);
 		}
-		if (!createRes.body.task || !createRes.body.task.id) {
+		if (!createRes.body.task?.id) {
 			throw new Error(
 				`Response does not contain task object: ${JSON.stringify(createRes.body)}`,
 			);
@@ -93,10 +95,7 @@ export async function runTasksTests() {
 				`Expected 404 for tenant boundary check, got ${getBRes.status}: ${JSON.stringify(getBRes.body)}`,
 			);
 		}
-		if (
-			!getBRes.body.error ||
-			getBRes.body.error.message !== "Task not found"
-		) {
+		if (getBRes.body.error?.message !== "Task not found") {
 			throw new Error(
 				`Expected Error message 'Task not found', got: ${JSON.stringify(getBRes.body)}`,
 			);
@@ -241,7 +240,7 @@ export async function runTasksTests() {
 			.set("Authorization", `Bearer ${tokenA}`);
 
 		// Order of priorities desc: urgent, high, low
-		const titles = sortRes.body.tasks.map((t: any) => t.title);
+		const titles = sortRes.body.tasks.map((t: { title: string }) => t.title);
 		if (
 			!titles[0].includes("urgent") ||
 			!titles[1].includes("Updated Task 1") ||

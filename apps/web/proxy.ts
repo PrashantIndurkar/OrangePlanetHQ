@@ -8,15 +8,18 @@ export function proxy(req: NextRequest) {
 	// Define route conditions
 	const isAuthRoute =
 		pathname.startsWith("/login") || pathname.startsWith("/signup");
-	const isPrivateRoute = pathname === "/" || pathname.startsWith("/tasks");
+	const isPrivateRoute =
+		pathname.startsWith("/tasks") ||
+		pathname.startsWith("/inbox") ||
+		pathname.startsWith("/reviews");
 
 	// If trying to access protected route without token, redirect to login
 	if (isPrivateRoute && !token) {
 		return NextResponse.redirect(new URL("/login", req.url));
 	}
 
-	// If trying to access login/signup with token, redirect to dashboard
-	if (isAuthRoute && token) {
+	// If trying to access login/signup or root "/" with token, redirect to tasks
+	if ((isAuthRoute || pathname === "/") && token) {
 		return NextResponse.redirect(new URL("/tasks", req.url));
 	}
 
@@ -25,9 +28,11 @@ export function proxy(req: NextRequest) {
 
 export const config = {
 	matcher: [
-		// Match dashboard paths and authentication pages
+		// Match dashboard paths, root, and authentication pages
 		"/",
 		"/tasks/:path*",
+		"/inbox/:path*",
+		"/reviews/:path*",
 		"/login",
 		"/signup",
 	],

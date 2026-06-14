@@ -2,7 +2,6 @@ export const ALLOWED_STATUSES = [
 	"backlog",
 	"todo",
 	"in-progress",
-	"in-review",
 	"done",
 	"canceled",
 ] as const;
@@ -72,14 +71,9 @@ export function getNormalizedFilters(searchParams: ReadOnlySearchParams) {
 
 export interface Task {
 	id: string;
+	uuid?: string;
 	title: string;
-	status:
-		| "backlog"
-		| "todo"
-		| "in-progress"
-		| "in-review"
-		| "done"
-		| "canceled";
+	status: "backlog" | "todo" | "in-progress" | "done" | "canceled";
 	priority: "urgent" | "high" | "medium" | "low" | "no-priority";
 	dueDate?: string; // e.g. "Today", "Tomorrow", "Overdue", or absent
 	createdDate?: string; // e.g. "Created Jun 12"

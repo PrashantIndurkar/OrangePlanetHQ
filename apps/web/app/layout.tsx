@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/providers/auth-provider";
+import { QueryProvider } from "@/providers/query-provider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
 	subsets: ["latin"],
@@ -32,9 +33,11 @@ export default function RootLayout({
 			)}
 		>
 			<body suppressHydrationWarning>
-				<AuthProvider>
-					<ThemeProvider>{children}</ThemeProvider>
-				</AuthProvider>
+				<QueryProvider>
+					<AuthProvider>
+						<ThemeProvider>{children}</ThemeProvider>
+					</AuthProvider>
+				</QueryProvider>
 			</body>
 		</html>
 	);

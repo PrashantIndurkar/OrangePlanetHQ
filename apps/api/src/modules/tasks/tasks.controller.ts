@@ -1,6 +1,8 @@
 import type { NextFunction, Request, Response } from "express";
+import type { z } from "zod";
 import { ApiError } from "../../utils/api-error.js";
 import { tasksRepository } from "./tasks.repository.js";
+import type { listTasksQuerySchema } from "./tasks.schema.js";
 
 export const createTask = async (
 	req: Request,
@@ -8,7 +10,10 @@ export const createTask = async (
 	next: NextFunction,
 ): Promise<void> => {
 	try {
-		const task = await tasksRepository.create(req.user!.id, req.body);
+		if (!req.user) {
+			throw new ApiError(401, "Unauthorized");
+		}
+		const task = await tasksRepository.create(req.user.id, req.body);
 		res.status(201).json({ task });
 	} catch (error) {
 		next(error);
@@ -21,9 +26,12 @@ export const getTask = async (
 	next: NextFunction,
 ): Promise<void> => {
 	try {
+		if (!req.user) {
+			throw new ApiError(401, "Unauthorized");
+		}
 		const task = await tasksRepository.findByIdAndUser(
 			req.params.id,
-			req.user!.id,
+			req.user.id,
 		);
 		if (!task) {
 			throw new ApiError(404, "Task not found");
@@ -40,13 +48,25 @@ export const listTasks = async (
 	next: NextFunction,
 ): Promise<void> => {
 	try {
-		const { status, priority, search, sortBy, sortOrder, page, limit } =
-			req.query as any;
-
-		const { tasks, total } = await tasksRepository.list({
-			userId: req.user!.id,
+		if (!req.user) {
+			throw new ApiError(401, "Unauthorized");
+		}
+		const {
 			status,
 			priority,
+			dueDate,
+			search,
+			sortBy,
+			sortOrder,
+			page,
+			limit,
+		} = req.query as unknown as z.infer<typeof listTasksQuerySchema>;
+
+		const { tasks, total } = await tasksRepository.list({
+			userId: req.user.id,
+			status,
+			priority,
+			dueDate,
 			search,
 			sortBy,
 			sortOrder,
@@ -69,15 +89,22 @@ export const updateTask = async (
 	next: NextFunction,
 ): Promise<void> => {
 	try {
+		if (!req.user) {
+			throw new ApiError(401, "Unauthorized");
+		}
 		const check = await tasksRepository.findByIdAndUser(
 			req.params.id,
-			req.user!.id,
+			req.user.id,
 		);
 		if (!check) {
 			throw new ApiError(404, "Task not found");
 		}
 
-		const updatedTask = await tasksRepository.update(req.params.id, req.body);
+		const updatedTask = await tasksRepository.update(
+			check.id,
+			req.user.id,
+			req.body,
+		);
 		res.status(200).json({ task: updatedTask });
 	} catch (error) {
 		next(error);
@@ -90,15 +117,18 @@ export const deleteTask = async (
 	next: NextFunction,
 ): Promise<void> => {
 	try {
+		if (!req.user) {
+			throw new ApiError(401, "Unauthorized");
+		}
 		const check = await tasksRepository.findByIdAndUser(
 			req.params.id,
-			req.user!.id,
+			req.user.id,
 		);
 		if (!check) {
 			throw new ApiError(404, "Task not found");
 		}
 
-		await tasksRepository.delete(req.params.id);
+		await tasksRepository.delete(check.id);
 		res.status(204).send();
 	} catch (error) {
 		next(error);

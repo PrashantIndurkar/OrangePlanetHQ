@@ -13,6 +13,7 @@ async function run() {
 			email: uniqueEmail,
 			password: "password123",
 			name: "Test User",
+			skipSeed: true,
 		});
 
 		if (signupRes.status !== 201) {
@@ -33,6 +34,7 @@ async function run() {
 				email: uniqueEmail,
 				password: "password123",
 				name: "Test User",
+				skipSeed: true,
 			});
 
 		if (doubleSignupRes.status !== 400) {

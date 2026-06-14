@@ -1,5 +1,9 @@
 import { useSearchParams } from "next/navigation";
 import {
+	useDeleteTaskMutation,
+	useUpdateTaskMutation,
+} from "../../features/tasks/hooks";
+import {
 	BacklogIcon,
 	CanceledIcon,
 	DoneIcon,
@@ -91,20 +95,19 @@ export function WorkspaceBoardView({
 		}
 	};
 
+	const updateMutation = useUpdateTaskMutation();
+	const deleteMutation = useDeleteTaskMutation();
+
 	const handleUpdateStatus = (taskId: string, newStatus: TaskStatus) => {
-		setTasks((prev) =>
-			prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t)),
-		);
+		updateMutation.mutate({ id: taskId, data: { status: newStatus } });
 	};
 
 	const handleUpdatePriority = (taskId: string, newPriority: TaskPriority) => {
-		setTasks((prev) =>
-			prev.map((t) => (t.id === taskId ? { ...t, priority: newPriority } : t)),
-		);
+		updateMutation.mutate({ id: taskId, data: { priority: newPriority } });
 	};
 
 	const handleDeleteTask = (taskId: string) => {
-		setTasks((prev) => prev.filter((t) => t.id !== taskId));
+		deleteMutation.mutate(taskId);
 	};
 
 	return (

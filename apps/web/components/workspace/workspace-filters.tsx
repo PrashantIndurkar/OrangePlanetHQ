@@ -102,7 +102,7 @@ export function WorkspaceFilters({
 			if (localSearch !== currentQ) {
 				setParams({ q: localSearch || null });
 			}
-		}, 300);
+		}, 500);
 
 		return () => clearTimeout(handler);
 	}, [localSearch, searchParams, setParams]);

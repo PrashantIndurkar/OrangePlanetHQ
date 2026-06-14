@@ -32,7 +32,7 @@ export function SidebarNav() {
 		{
 			id: "my-issues",
 			name: "My issues",
-			href: "/",
+			href: "/tasks",
 			icon: CenterFocusIcon,
 		},
 		{
@@ -50,13 +50,7 @@ export function SidebarNav() {
 				{navItems.map((item) => {
 					const isActive =
 						pathname === item.href ||
-						(item.href === "/" &&
-							(pathname === "/" ||
-								pathname.startsWith("/tasks") ||
-								(/^\/[a-zA-Z0-9_-]+$/.test(pathname) &&
-									pathname !== "/" &&
-									!pathname.startsWith("/inbox") &&
-									!pathname.startsWith("/reviews"))));
+						(item.href === "/tasks" && pathname.startsWith("/tasks"));
 
 					return (
 						<Link
