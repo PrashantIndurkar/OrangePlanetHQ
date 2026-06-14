@@ -11,11 +11,14 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-	// Clean up database before seeding
-	await prisma.task.deleteMany();
-	await prisma.user.deleteMany();
+	// Check if database already has data
+	const userCount = await prisma.user.count();
+	if (userCount > 0) {
+		console.log("🌱 Database already has users. Skipping seeding.");
+		return;
+	}
 
-	console.log("🧹 Database cleaned.");
+	console.log("🌱 Empty database detected. Running seeding...");
 
 	// Hash standard password for the test users
 	const passwordHash = await bcrypt.hash("password123", 10);

@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "prisma generate && tsx watch src/server.ts",
-    "build": "prisma generate && tsc",
+    "dev": "prisma generate --schema=prisma/schema.prisma && tsx watch src/server.ts",
+    "dev:studio": "prisma studio --port 5555 --browser none",
+    "build": "prisma generate --schema=prisma/schema.prisma && tsc",
     "start": "node dist/server.js",
-    "db:migrate": "prisma migrate dev",
+    "db:migrate": "prisma migrate dev --schema=prisma/schema.prisma",
     "db:seed": "prisma db seed",
     "test": "vitest run"
   },
@@ -39,6 +40,7 @@
     "vitest": "^3.0.7"
   },
   "prisma": {
+    "schema": "prisma/schema.prisma",
     "seed": "tsx prisma/seed.ts"
   }
 }

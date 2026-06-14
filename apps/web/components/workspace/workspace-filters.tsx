@@ -392,7 +392,7 @@ export function WorkspaceFilters({
 							<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
 							<path d="M16 3.13a4 4 0 0 1 0 7.75" />
 						</svg>
-						<span>Show All Users' Tasks</span>
+						<span>Show All Users&apos; Tasks</span>
 					</button>
 				)}
 			</div>
