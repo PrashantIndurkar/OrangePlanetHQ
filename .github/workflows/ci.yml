@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - dev
+      - ci/github-actions
+      - ci/gh-actions-automation
+  pull_request:
+    branches:
+      - main
+      - master
+      - dev
+
+jobs:
+  test:
+    name: Lint, Build & Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: stried_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.3
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run Linting
+        run: pnpm run lint
+
+      - name: Generate Prisma Client
+        run: pnpm --filter api exec prisma generate
+
+      - name: Setup Database Schema
+        run: pnpm --filter api exec prisma db push
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stried_test?schema=public
+
+      - name: Run Tests
+        run: pnpm --filter api test -- --reporter=default --reporter=junit --outputFile=apps/api/test-results.xml
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stried_test?schema=public
+          JWT_SECRET: ci-test-secret-key-do-not-use-in-prod
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Vitest Tests
+          path: apps/api/test-results.xml
+          reporter: jest-junit
