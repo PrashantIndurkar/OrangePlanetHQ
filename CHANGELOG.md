@@ -1,3 +1,9 @@
+# [0.10.0](https://github.com/PrashantIndurkar/stride/compare/v0.9.1...v0.10.0) (2026-06-14)
+
+
+### Features
+
+* implement task management workspace UI, API client, and role-based task access control ([c6333c9](https://github.com/PrashantIndurkar/stride/commit/c6333c9b1080621ee17481ab7934fa5bf1c5b00e))
 # [0.10.0](https://github.com/PrashantIndurkar/stride/compare/v0.9.0...v0.10.0) (2026-06-14)
 
 ## 🧪 Automated Testing
