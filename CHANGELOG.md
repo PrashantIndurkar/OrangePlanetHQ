@@ -1,9 +1,44 @@
 # [0.9.0](https://github.com/PrashantIndurkar/stride/compare/v0.8.0...v0.9.0) (2026-06-14)
 
+## 🔄 Backend Integration
 
-### Features
+### Server-Driven Task Management
 
-* implement issue tracking system with custom IDs, activity logging, improved task filtering, and a new dashboard UI. ([665c10d](https://github.com/PrashantIndurkar/stride/commit/665c10d4a36696f6d20d019f33dd2b9ea865cb49))
+* Replaced local task storage with a fully integrated backend-powered task management system.
+* Connected task creation, editing, retrieval, and deletion workflows to the REST API.
+* Ensured task data remains synchronized across sessions and devices.
+
+### API Client & Authentication
+
+* Added a centralized API client for managing server requests.
+* Implemented automatic authentication handling for protected API calls.
+* Improved communication between the frontend and backend services.
+
+### Pagination
+
+* Added server-side pagination for task collections.
+* Introduced page-based navigation controls for browsing large task lists.
+* Improved performance by loading only the data required for the current page.
+
+### Task Data Synchronization
+
+* Connected task detail pages to live backend data.
+* Added support for fetching, updating, and deleting tasks directly from the server.
+* Improved consistency between workspace views and task details.
+
+### Loading & Error States
+
+* Added loading skeletons for a smoother user experience during data fetching.
+* Added user-friendly error handling and notifications for failed requests.
+* Improved application resilience when network or server issues occur.
+
+## 🚀 Improvements
+
+* Reduced reliance on client-side state and local storage.
+* Improved scalability for larger task datasets.
+* Enhanced overall application performance and data consistency.
+* Established the foundation for advanced filtering, sorting, and real-time task management features.
+
 # [0.8.0](https://github.com/PrashantIndurkar/stride/compare/v0.7.0...v0.8.0) (2026-06-13)
 
 ## 📋 Task Management API
