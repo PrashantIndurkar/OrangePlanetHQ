@@ -40,17 +40,17 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
+        uses: actions/setup-node@v4
         with:
           node-version: 22
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@a51f1a4e21703657b98028f921588820c74ce924 # v4.0.0
+        uses: pnpm/action-setup@v4
         with:
           version: 11.5.3
 
@@ -60,7 +60,7 @@ jobs:
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - name: Cache pnpm store
-        uses: actions/cache@1c6c59d9c8789d675661b016259062327a1c7263 # v4.2.2
+        uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -68,7 +68,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Cache Turborepo Build Cache
-        uses: actions/cache@1c6c59d9c8789d675661b016259062327a1c7263 # v4.2.2
+        uses: actions/cache@v4
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
@@ -99,7 +99,7 @@ jobs:
           JWT_SECRET: ci-test-secret-key-do-not-use-in-prod
 
       - name: Publish Test Report
-        uses: dorny/test-reporter@883648a662da3f8fd8b491f85f1617182992df67 # v1.9.1
+        uses: dorny/test-reporter@v1
         if: always()
         with:
           name: Vitest Tests
