@@ -115,13 +115,13 @@ jobs:
             echo "⚠️ migrate reset failed – trying deploy"
             if ! pnpm --filter api exec prisma migrate deploy --schema=prisma/schema.prisma; then
               echo "::error::Prisma migrations failed"
-              pnpm --filter api exec prisma migrate status --schema=prisma/schema.prisma --verbose || true
+              pnpm --filter api exec prisma migrate status --schema=prisma/schema.prisma || true
               exit 1
             fi
           fi
 
           echo "Prisma migration status:"
-          pnpm --filter api exec prisma migrate status --schema=prisma/schema.prisma --verbose
+          pnpm --filter api exec prisma migrate status --schema=prisma/schema.prisma
 
       - name: Compile and Build Apps
         run: pnpm run build
