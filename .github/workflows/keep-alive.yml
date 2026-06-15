@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Ping API Server
         run: |
-          curl -f "https://stride-api.onrender.com/api/v1/health" || echo "Ping failed or API is sleeping, but request was sent"
+          curl -f "https://stride-api-sfie.onrender.com/health" || echo "Ping failed or API is sleeping, but request was sent"
       - name: Ping Web Server
         run: |
-          curl -f "https://stride-web.onrender.com" || echo "Ping failed or Web is sleeping, but request was sent"
+          curl -f "https://stride-web-kldi.onrender.com" || echo "Ping failed or Web is sleeping, but request was sent"
