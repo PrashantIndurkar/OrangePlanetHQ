@@ -37,6 +37,8 @@ services:
       DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@db:5432/stried}
       JWT_SECRET: ${JWT_SECRET:-supersecretjwtkeyassessmentrival123!}
       NODE_ENV: development
+      CI: "true"
+      PNPM_CONFIG_CONFIRM_MODULES_PURGE: "false"
     depends_on:
       db:
         condition: service_healthy
@@ -61,6 +63,8 @@ services:
       PORT: 3000
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3002/api/v1}
       NODE_ENV: development
+      CI: "true"
+      PNPM_CONFIG_CONFIRM_MODULES_PURGE: "false"
     depends_on:
       - api
 
