@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { getMeApi, loginApi, signupApi } from "@/features/auth/api";
 import type { AuthUser, LoginInput, SignupInput } from "@/features/auth/types";
-import { getToken, removeToken, setToken } from "@/lib/auth/session";
 import { ApiError } from "@/lib/api/errors";
+import { getToken, removeToken, setToken } from "@/lib/auth/session";
 
 interface AuthContextType {
 	user: AuthUser | null;

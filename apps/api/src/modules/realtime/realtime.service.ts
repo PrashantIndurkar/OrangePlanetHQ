@@ -1,5 +1,5 @@
-import type { Response } from "express";
 import crypto from "crypto";
+import type { Response } from "express";
 
 interface Client {
 	id: string;
@@ -22,7 +22,7 @@ class RealtimeService {
 	 */
 	registerClient(userId: string, role: string, res: Response): string {
 		const clientId = crypto.randomUUID();
-		
+
 		const client: Client = {
 			id: clientId,
 			userId,
@@ -31,7 +31,9 @@ class RealtimeService {
 		};
 
 		this.clients.set(clientId, client);
-		console.log(`[Realtime] Client connected. Active clients: ${this.clients.size}`);
+		console.log(
+			`[Realtime] Client connected. Active clients: ${this.clients.size}`,
+		);
 
 		// Send initial handshake event
 		this.sendEventToClient(client, "connected", { status: "connected" }, "0");
@@ -45,7 +47,9 @@ class RealtimeService {
 	unregisterClient(clientId: string): void {
 		if (this.clients.has(clientId)) {
 			this.clients.delete(clientId);
-			console.log(`[Realtime] Client disconnected. Active clients: ${this.clients.size}`);
+			console.log(
+				`[Realtime] Client disconnected. Active clients: ${this.clients.size}`,
+			);
 		}
 	}
 
@@ -57,7 +61,7 @@ class RealtimeService {
 		data: { id: string; userId: string; [key: string]: any },
 	): void {
 		const eventId = String(this.nextEventId++);
-		
+
 		for (const client of this.clients.values()) {
 			// Delivery scopes:
 			// 1. The client is the owner of the task (task owner's userId matches client's userId).
@@ -106,7 +110,10 @@ class RealtimeService {
 					// SSE Keep-Alive heartbeat comment
 					client.res.write(":\n\n");
 				} catch (error) {
-					console.error(`[Realtime] Heartbeat failed for client ${client.id}:`, error);
+					console.error(
+						`[Realtime] Heartbeat failed for client ${client.id}:`,
+						error,
+					);
 					this.unregisterClient(client.id);
 				}
 			}

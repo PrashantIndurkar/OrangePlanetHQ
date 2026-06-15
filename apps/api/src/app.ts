@@ -1,11 +1,11 @@
-import cors from "cors";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import authRoutes from "./modules/auth/auth.routes.js";
-import tasksRoutes from "./modules/tasks/tasks.routes.js";
 import realtimeRoutes from "./modules/realtime/realtime.routes.js";
+import tasksRoutes from "./modules/tasks/tasks.routes.js";
 
 const app = express();
 
