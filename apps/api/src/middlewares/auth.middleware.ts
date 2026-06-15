@@ -28,6 +28,8 @@ export const authMiddleware = (
 			token = authHeader.split(" ")[1];
 		} else if (req.cookies?.token) {
 			token = req.cookies.token;
+		} else if (req.query?.token) {
+			token = req.query.token as string;
 		}
 
 		if (!token) {
