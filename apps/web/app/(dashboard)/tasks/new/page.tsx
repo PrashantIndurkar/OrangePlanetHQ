@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Cancel01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import Image from "next/image";
+import type { Editor } from "@tiptap/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import { toast } from "sonner";
+import { TaskEditor } from "@/components/tasks/task-editor";
 import type {
 	TaskPriority,
 	TaskStatus,
@@ -14,6 +15,7 @@ import { IssueAttachmentButton } from "@/components/workspace/issue-attachment-b
 import { IssueDueDateSelect } from "@/components/workspace/issue-due-date-select";
 import { IssuePrioritySelect } from "@/components/workspace/issue-priority-select";
 import { IssueStatusSelect } from "@/components/workspace/issue-status-select";
+import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import { useCreateTaskMutation } from "../../../../features/tasks/hooks";
@@ -28,12 +30,11 @@ export default function NewTaskPage() {
 	const [status, setStatus] = React.useState<TaskStatus>("todo");
 	const [priority, setPriority] = React.useState<TaskPriority>("no-priority");
 	const [dueDate, setDueDate] = React.useState<string | undefined>(undefined);
-	const [attachedImages, setAttachedImages] = React.useState<
-		{ name: string; dataUrl: string }[]
-	>([]);
+	const [isUploading, setIsUploading] = React.useState(false);
 
 	const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 	const titleInputRef = React.useRef<HTMLInputElement>(null);
+	const editorRef = React.useRef<Editor | null>(null);
 
 	React.useEffect(() => {
 		titleInputRef.current?.focus();
@@ -48,30 +49,99 @@ export default function NewTaskPage() {
 		}
 	}, [description]);
 
-	const handleFileSelect = (files: File[]) => {
+	const handleFileSelect = async (files: File[]) => {
+		if (!editorRef.current) return;
+		const editor = editorRef.current;
+
+		const allowedTypes = [
+			"image/png",
+			"image/jpeg",
+			"image/jpg",
+			"image/webp",
+			"image/gif",
+		];
+
+		const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+		setIsUploading(true);
 		for (const file of files) {
+			if (!allowedTypes.includes(file.type)) {
+				toast.error(
+					`File "${file.name}" format is not supported. Please upload PNG, JPG, WEBP, or GIF images.`,
+				);
+				continue;
+			}
+			if (file.size > MAX_IMAGE_SIZE) {
+				toast.error(`File "${file.name}" exceeds the 5 MB size limit.`);
+				continue;
+			}
 			if (file.type.startsWith("image/")) {
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					const dataUrl = e.target?.result as string;
-					setAttachedImages((prev) => [...prev, { name: file.name, dataUrl }]);
-					setDescription(
-						(prev) => `${prev}${prev ? "\n" : ""}![${file.name}](${dataUrl})`,
+				const localUrl = URL.createObjectURL(file);
+
+				// Insert image loading preview
+				editor.commands.insertContent({
+					type: "image",
+					attrs: {
+						src: localUrl,
+						alt: "Uploading...",
+					},
+				});
+
+				try {
+					const result = await uploadImage(file);
+					// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
+					editor.commands.command(({ tr, state }: any) => {
+						let found = false;
+						// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
+						state.doc.descendants((node: any, pos: number) => {
+							if (node.type.name === "image" && node.attrs.src === localUrl) {
+								tr.setNodeMarkup(pos, undefined, {
+									...node.attrs,
+									src: result.url,
+									alt: file.name,
+								});
+								found = true;
+								return false;
+							}
+						});
+						return found;
+					});
+					toast.success("Image uploaded successfully");
+				} catch (err) {
+					// Remove the preview if failed
+					// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
+					editor.commands.command(({ tr, state }: any) => {
+						let found = false;
+						// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
+						state.doc.descendants((node: any, pos: number) => {
+							if (node.type.name === "image" && node.attrs.src === localUrl) {
+								tr.delete(pos, pos + node.nodeSize);
+								found = true;
+								return false;
+							}
+						});
+						return found;
+					});
+					toast.error(
+						err instanceof Error ? err.message : "Failed to upload image",
 					);
-				};
-				reader.readAsDataURL(file);
+				}
 			}
 		}
-	};
-
-	const handleRemoveImage = (index: number, name: string, dataUrl: string) => {
-		setAttachedImages((prev) => prev.filter((_, idx) => idx !== index));
-		const markdownLink = `![${name}](${dataUrl})`;
-		setDescription((prev) => prev.replace(markdownLink, "").trim());
+		setIsUploading(false);
 	};
 
 	const handleCreate = () => {
-		if (!title.trim()) return;
+		if (!title.trim() || isUploading) return;
+
+		let finalDesc = description.trim();
+		// Clean up empty Tiptap paragraphs/placeholders
+		if (
+			finalDesc === "<p></p>" ||
+			finalDesc === "<p></p><p></p>" ||
+			finalDesc === "<p></p><p></p><p></p>"
+		) {
+			finalDesc = "";
+		}
 
 		let isoDueDate: string | null = null;
 		if (dueDate) {
@@ -94,7 +164,7 @@ export default function NewTaskPage() {
 		createTaskMutation.mutate(
 			{
 				title: title.trim(),
-				description: description.trim(),
+				description: finalDesc,
 				status,
 				priority,
 				dueDate: isoDueDate,
@@ -125,7 +195,7 @@ export default function NewTaskPage() {
 			</header>
 
 			{/* Main Scrollable Form Area */}
-			<div className="flex-1 overflow-y-auto p-6 flex justify-center">
+			<div className="flex-1 overflow-y-auto p-6 flex justify-center pb-24">
 				<div className="w-full max-w-3xl flex flex-col gap-6 bg-card border border-border p-6 shadow-sm rounded-none h-fit">
 					<div className="flex flex-col gap-4">
 						{/* Title field */}
@@ -139,47 +209,34 @@ export default function NewTaskPage() {
 						/>
 
 						{/* Description field */}
-						<textarea
-							ref={textareaRef}
-							placeholder="Add description..."
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-							className="w-full resize-none text-[14px] leading-relaxed text-foreground placeholder:text-muted-foreground/45 border-none bg-transparent outline-none p-0 focus:ring-0 min-h-[120px] focus:outline-none"
-						/>
-
-						{/* Attached Images */}
-						{attachedImages.length > 0 && (
-							<div className="grid grid-cols-2 gap-2 mt-2">
-								{attachedImages.map((img, idx) => (
-									<div
-										key={img.dataUrl}
-										className="relative group rounded-none overflow-hidden border border-border bg-muted/40 aspect-video max-h-[160px] flex items-center justify-center"
-									>
-										<Image
-											src={img.dataUrl}
-											alt={img.name}
-											width={280}
-											height={160}
-											unoptimized
-											className="object-contain max-h-full max-w-full"
-										/>
-										<button
-											type="button"
-											onClick={() =>
-												handleRemoveImage(idx, img.name, img.dataUrl)
-											}
-											className="absolute top-2 right-2 size-6 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center cursor-pointer transition-opacity opacity-0 group-hover:opacity-100 border-0"
-										>
-											<HugeiconsIcon icon={Cancel01Icon} className="size-3.5" />
-										</button>
-									</div>
-								))}
-							</div>
-						)}
+						{/* biome-ignore lint/a11y/useKeyWithClickEvents: Container focusing */}
+						{/* biome-ignore lint/a11y/noStaticElementInteractions: Container focusing */}
+						<div
+							className="flex-1 min-h-[260px] overflow-y-auto w-full pb-10 cursor-text"
+							onClick={() => {
+								if (editorRef.current) {
+									editorRef.current.commands.focus();
+								}
+							}}
+						>
+							<TaskEditor
+								value={description}
+								onChange={setDescription}
+								onBlur={() => {}}
+								onEditorCreated={(editor) => {
+									editorRef.current = editor;
+								}}
+							/>
+						</div>
 					</div>
 
 					{/* Metadata row selector */}
-					<div className="flex flex-wrap items-center gap-2 pt-4 border-t border-border/40">
+					{/* biome-ignore lint/a11y/useKeyWithClickEvents: Stop propagation container */}
+					{/* biome-ignore lint/a11y/noStaticElementInteractions: Stop propagation container */}
+					<div
+						className="flex flex-wrap items-center gap-2 pt-6 border-t border-border/40 mt-6 relative z-20 bg-card"
+						onClick={(e) => e.stopPropagation()}
+					>
 						<IssueStatusSelect value={status} onChange={setStatus} />
 						<IssuePrioritySelect value={priority} onChange={setPriority} />
 						<IssueDueDateSelect value={dueDate} onChange={setDueDate} />
@@ -204,7 +261,7 @@ export default function NewTaskPage() {
 					</div>
 
 					{/* Actions footer */}
-					<div className="flex items-center justify-end gap-3 pt-4 border-t border-border/40">
+					<div className="flex items-center justify-end gap-3 pt-4 border-t border-border/40 sticky bottom-0 bg-card z-10">
 						<Link
 							href="/tasks"
 							className="flex h-8 items-center px-4 rounded-none border border-border text-[12px] font-semibold text-foreground hover:bg-muted/50 transition-colors select-none"
@@ -213,14 +270,14 @@ export default function NewTaskPage() {
 						</Link>
 						<button
 							type="button"
-							disabled={!title.trim()}
+							disabled={!title.trim() || isUploading}
 							onClick={handleCreate}
 							className={cn(
 								"h-8 px-4 rounded-none text-[12px] font-semibold transition-all select-none cursor-pointer outline-none border-0",
 								"bg-[#5e6ad2] text-white hover:bg-[#5e6ad2]/90 disabled:opacity-50 disabled:pointer-events-none disabled:bg-[#5e6ad2]/60",
 							)}
 						>
-							Create Task
+							{isUploading ? "Uploading..." : "Create Task"}
 						</button>
 					</div>
 				</div>

@@ -22,6 +22,7 @@ import { IssueAttachmentButton } from "@/components/workspace/issue-attachment-b
 import { IssueDueDateSelect } from "@/components/workspace/issue-due-date-select";
 import { IssuePrioritySelect } from "@/components/workspace/issue-priority-select";
 import { IssueStatusSelect } from "@/components/workspace/issue-status-select";
+import { isValidImage } from "@/lib/image-validation";
 import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
 import {
@@ -62,6 +63,13 @@ export default function TaskDetailsPage({
 			setLocalDescription(task.description || "");
 		}
 	}, [task]);
+
+	// Silent URL update to STR-XXXX format if UUID was passed
+	React.useEffect(() => {
+		if (task && taskId !== task.id) {
+			window.history.replaceState(null, "", `/tasks/${task.id}`);
+		}
+	}, [task, taskId]);
 
 	const updateMutation = useUpdateTaskMutation();
 	const deleteMutation = useDeleteTaskMutation();
@@ -122,10 +130,96 @@ export default function TaskDetailsPage({
 
 	if (isLoading) {
 		return (
-			<div className="flex h-screen w-full flex-col items-center justify-center bg-background select-none gap-3">
-				<span className="text-sm text-muted-foreground font-medium animate-pulse">
-					Loading task details...
-				</span>
+			<div className="flex h-screen w-full flex-col bg-background select-none overflow-hidden animate-pulse">
+				{/* Top Header / Breadcrumb Bar Skeleton */}
+				<header className="flex h-14 w-full shrink-0 items-center justify-between border-b border-border px-4 bg-background">
+					<div className="flex items-center gap-1.5">
+						<div className="h-4 w-16 bg-muted rounded" />
+						<span className="text-zinc-500 font-semibold">/</span>
+						<div className="h-4 w-24 bg-muted rounded" />
+					</div>
+					<div className="flex items-center gap-1.5">
+						<div className="size-8 bg-muted rounded" />
+						<div className="size-8 bg-muted rounded" />
+						<div className="size-8 bg-muted rounded" />
+						<div className="size-8 bg-muted rounded" />
+					</div>
+				</header>
+
+				{/* Content Wrapper Skeleton */}
+				<div className="flex flex-1 min-h-0 w-full flex-row overflow-hidden">
+					{/* Main details body */}
+					<div className="flex flex-1 flex-col overflow-y-auto p-6 min-w-0">
+						{/* Title input skeleton */}
+						<div className="h-8 w-2/3 bg-muted rounded mb-5" />
+
+						{/* Description field skeleton */}
+						<div className="flex flex-col gap-2.5 mb-6">
+							<div className="h-4 w-full bg-muted rounded" />
+							<div className="h-4 w-5/6 bg-muted rounded" />
+							<div className="h-4 w-4/5 bg-muted rounded" />
+							<div className="h-4 w-2/3 bg-muted rounded" />
+						</div>
+
+						{/* Attachments inline triggers skeleton */}
+						<div className="flex items-center gap-1.5 mt-2 mb-6">
+							<div className="h-7 w-24 bg-muted rounded" />
+							<div className="size-7 bg-muted rounded-full" />
+						</div>
+
+						<hr className="border-border/50 my-6" />
+
+						{/* Activity log skeleton */}
+						<div className="flex flex-col gap-4">
+							<div className="h-3.5 w-16 bg-muted rounded" />
+							<div className="relative flex flex-col pl-4 gap-6 border-l border-border/80 ml-2">
+								<div className="relative flex items-center gap-3">
+									<div className="absolute -left-[21px] size-2 rounded-full border-2 border-background bg-zinc-400 shrink-0" />
+									<div className="size-5 bg-muted rounded-full shrink-0" />
+									<div className="h-3.5 w-48 bg-muted rounded" />
+								</div>
+								<div className="relative flex items-center gap-3">
+									<div className="absolute -left-[21px] size-2 rounded-full border-2 border-background bg-zinc-400 shrink-0" />
+									<div className="size-5 bg-muted rounded-full shrink-0" />
+									<div className="h-3.5 w-64 bg-muted rounded" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+					{/* Properties Sidebar (Desktop Only) */}
+					<aside className="hidden lg:flex h-full w-[280px] shrink-0 flex-col overflow-hidden border-l border-border bg-sidebar text-sidebar-foreground p-4 gap-4 animate-pulse">
+						<div className="h-4 w-20 bg-muted rounded border-b border-border/30 pb-2" />
+
+						<div className="flex flex-col gap-3.5 mt-2">
+							{/* Status */}
+							<div className="flex items-center justify-between">
+								<div className="h-3.5 w-12 bg-muted rounded" />
+								<div className="h-7 w-20 bg-muted rounded" />
+							</div>
+							{/* Priority */}
+							<div className="flex items-center justify-between">
+								<div className="h-3.5 w-12 bg-muted rounded" />
+								<div className="h-7 w-24 bg-muted rounded" />
+							</div>
+							{/* Due Date */}
+							<div className="flex items-center justify-between">
+								<div className="h-3.5 w-16 bg-muted rounded" />
+								<div className="h-7 w-24 bg-muted rounded" />
+							</div>
+							{/* Assignee */}
+							<div className="flex items-center justify-between">
+								<div className="h-3.5 w-16 bg-muted rounded" />
+								<div className="h-7 w-24 bg-muted rounded" />
+							</div>
+							{/* Created At */}
+							<div className="flex items-center justify-between">
+								<div className="h-3.5 w-16 bg-muted rounded" />
+								<div className="h-4 w-24 bg-muted rounded" />
+							</div>
+						</div>
+					</aside>
+				</div>
 			</div>
 		);
 	}
@@ -233,6 +327,12 @@ export default function TaskDetailsPage({
 
 	const handleFileSelect = async (files: File[]) => {
 		for (const file of files) {
+			// Use centralized validation
+			const validation = isValidImage(file);
+			if (!validation.valid) {
+				toast.error(validation.error ?? "Invalid image");
+				continue;
+			}
 			if (file.type.startsWith("image/")) {
 				try {
 					const result = await uploadImage(file);

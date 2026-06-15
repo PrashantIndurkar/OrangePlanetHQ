@@ -19,6 +19,7 @@ export const tasksRepository = {
 	async create(
 		userId: string,
 		data: {
+			id?: string;
 			title: string;
 			description?: string | null;
 			status?: string;

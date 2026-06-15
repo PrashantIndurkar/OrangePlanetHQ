@@ -129,14 +129,68 @@
 }
 
 /* Tiptap Image Custom Styles */
-.kaneo-editor-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.kaneo-editor-image,
+.tiptap img {
+  max-width: 100% !important;
+  max-height: 280px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 4px !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+  margin: 16px 0 !important;
+  display: block !important;
+}
+
+/* Ensure editor has clickable area at the bottom */
+.tiptap {
+  padding-bottom: 80px !important;
+}
+
+/* Style for uploading/blob images inside Tiptap */
+.tiptap img[src^="blob:"],
+.tiptap img[alt="Uploading..."] {
+  opacity: 0.55;
+  filter: blur(0.5px);
+  border: 2px dashed #5e6ad2 !important;
+  border-radius: 4px;
+  animation: tiptap-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes tiptap-pulse {
+  0%, 100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* Tiptap Placeholder Style */
+.tiptap p.is-editor-empty:first-child::before {
+  color: var(--muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Image Upload Skeleton Styles */
+.image-upload-skeleton {
+  width: 100%;
+  max-width: 320px;
+  height: 160px;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--muted-foreground);
+  background: var(--muted);
   margin: 16px 0;
-  display: block;
 }
 
 /* Changelog Prose Custom Styles */

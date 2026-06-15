@@ -37,6 +37,7 @@ export interface TaskResponse {
 }
 
 export interface CreateTaskInput {
+	id?: string;
 	title: string;
 	description?: string;
 	status?: string;

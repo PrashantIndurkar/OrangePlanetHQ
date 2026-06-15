@@ -85,8 +85,8 @@ export async function seedInitialTasks(
 			dueDate = overdue;
 		}
 
-		// Distribute at least 10 images across seed data (e.g. index 0, 2, 5, 7, 10, 12, 15, 17, 20, 22)
-		const imageIndexes = [0, 2, 5, 7, 10, 12, 15, 17, 20, 22];
+		// Distribute at least 10 images across seed data (e.g. index 0, 2, 5, 7, 10, 12, 15, 17, 20)
+		const imageIndexes = [0, 2, 5, 7, 10, 12, 15, 17, 20];
 		const imageIndexInArray = imageIndexes.indexOf(idx);
 
 		let description = `<p>This task involves ${realLifeTitles[idx].toLowerCase()}. Please review and assign to the correct team member.</p>`;

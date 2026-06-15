@@ -31,7 +31,7 @@ export function IssueAttachmentButton({
 				onChange={handleFileChange}
 				className="hidden"
 				multiple
-				accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx,.txt"
+				accept="image/png,image/jpeg,image/webp,image/gif"
 			/>
 			<Button
 				type="button"
@@ -39,7 +39,7 @@ export function IssueAttachmentButton({
 				size="icon-sm"
 				onClick={handleClick}
 				className="rounded-none bg-transparent text-muted-foreground hover:bg-muted/40 hover:text-foreground cursor-pointer flex items-center justify-center h-[26px] w-[26px] shrink-0 border border-border"
-				title="Attach files (images or documents)"
+				title="Attach images (PNG, JPG, WEBP, GIF)"
 			>
 				{/* Rotated 45 degrees to the right, increased strokeWidth for boldness */}
 				<HugeiconsIcon

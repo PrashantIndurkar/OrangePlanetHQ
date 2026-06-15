@@ -36,7 +36,7 @@ jobs:
           --health-cmd "pg_isready -U postgres -d stride_test"
           --health-interval 10s
           --health-timeout 5s
-          --health-retries 5
+          --health-retries 10
 
     steps:
       - name: Checkout repository
@@ -81,13 +81,32 @@ jobs:
       - name: Run Linting
         run: pnpm run lint
 
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h 127.0.0.1 -p 5432 -U postgres; do
+            echo 'Waiting for PostgreSQL to be ready...'
+            sleep 2
+          done
+        env:
+          PGPASSWORD: postgres
+
       - name: Generate Prisma Client
         run: pnpm --filter api exec prisma generate
 
-      - name: Run Database Migrations
-        run: pnpm --filter api exec prisma migrate deploy
+      - name: Run Database Migrations (CI-safe)
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stride_test?schema=public
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/stride_test?schema=public
+        run: |
+          echo "Waiting for PostgreSQL..."
+          until pg_isready -h 127.0.0.1 -p 5432 -U postgres; do
+            sleep 1
+          done
+
+          echo "Generating Prisma client"
+          pnpm --filter api exec prisma generate --schema=prisma/schema.prisma
+
+          echo "Pushing database schema (CI-safe)"
+          pnpm --filter api exec prisma db push --force-reset --schema=prisma/schema.prisma
 
       - name: Compile and Build Apps
         run: pnpm run build
@@ -95,7 +114,7 @@ jobs:
       - name: Run Tests
         run: pnpm --filter api test -- --reporter=default --reporter=junit --outputFile.junit=test-results.xml
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stride_test?schema=public
+          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/stride_test?schema=public
           JWT_SECRET: ci-test-secret-key-do-not-use-in-prod
 
       - name: Publish Test Report
