@@ -7,7 +7,6 @@
 .coderabbit.yaml
 biome.json
 commitlint.config.js
-CHANGELOG.md
 README.md
 checklist.md
 skills-lock.json
