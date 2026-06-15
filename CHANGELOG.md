@@ -1,3 +1,59 @@
+## [0.14.1](https://github.com/PrashantIndurkar/stride/compare/v0.14.0...v0.14.1) (2026-06-15)
+# [0.14.0](https://github.com/PrashantIndurkar/stride/compare/v0.13.0...v0.14.0) (2026-06-15)
+
+
+### Features
+
+* implement image upload functionality for task descriptions using Tiptap and Cloudinary ([3288b1c](https://github.com/PrashantIndurkar/stride/commit/3288b1c2b5d96a53acf3b518de76fa40e6eff2ad))
+# [0.14.0](https://github.com/PrashantIndurkar/stride/compare/v0.13.0...v0.14.0) (2026-06-15)
+
+## ⚡ Real-Time Collaboration
+
+### Real-Time Updates
+
+* Added live task synchronization using Server-Sent Events (SSE).
+* Task creations, updates, and deletions now appear automatically across active sessions.
+* Improved data consistency across multiple browser tabs and users.
+
+### Optimistic User Experience
+
+* Enhanced task creation, updates, and deletion workflows with smoother optimistic UI updates.
+* Improved perceived performance by reflecting changes instantly before server confirmation.
+
+## 🎨 User Experience Improvements
+
+### Notifications & Feedback
+
+* Added global toast notifications throughout the application.
+* Added step-by-step feedback during login and signup workflows.
+* Improved visibility of successful actions and error states.
+
+### Workspace Usability
+
+* Added tooltips across workspace controls for improved discoverability.
+* Improved task interaction feedback and overall workspace navigation.
+
+### Visual Enhancements
+
+* Temporary tasks are now visually distinguished with dimmed states.
+* Improved image preview experience.
+* Added better loading indicators across task workflows.
+
+## 🐛 Bug Fixes
+
+* Fixed task search to correctly match task identifiers.
+* Corrected activity history ordering to display events chronologically.
+* Fixed authentication token retrieval from browser cookies.
+* Improved local storage persistence behavior.
+* Resolved naming inconsistencies across the application.
+
+## 🚀 Improvements
+
+* Enhanced collaboration experience through real-time synchronization.
+* Improved responsiveness and perceived application performance.
+* Increased reliability of authentication and persistence workflows.
+* Continued refining the overall workspace experience.
+---
 # [0.13.0](https://github.com/PrashantIndurkar/stride/compare/v0.12.0...v0.13.0) (2026-06-14)
 
 ## 🤖 Continuous Integration

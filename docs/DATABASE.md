@@ -1,12 +1,12 @@
 # 🗄️ Database Design & Schema Specifications
 
-This document outlines the schema design, tables, relationships, integrity rules, and database seeding strategy of Stried.
+This document outlines the schema design, tables, relationships, integrity rules, and database seeding strategy of Stride.
 
 ---
 
 ## 🗺️ Schema Design (Entity-Relationship Model)
 
-Stried uses **PostgreSQL** configured via the **Prisma ORM**. The database is structured into three primary tables: `User`, `Task`, and `ActivityLog`.
+Stride uses **PostgreSQL** configured via the **Prisma ORM**. The database is structured into three primary tables: `User`, `Task`, and `ActivityLog`.
 
 ```text
   ┌─────────────────┐             ┌─────────────────┐             ┌─────────────────┐
@@ -66,10 +66,10 @@ Represents audit logs tracking property changes made to a task (e.g., status cha
 
 ## 🌱 Database Seeding & Development Accounts
 
-The database seed script is located at [seed.ts](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stried/apps/api/prisma/seed.ts).
+The database seed script is located at [seed.ts](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stride/apps/api/prisma/seed.ts).
 
 ### Idempotent Seeding Guard (Protection Strategy)
-Running seeders in Docker environments can cause duplicate entries or primary key crashes if the container restarts. To prevent this, Stried implements an **idempotent check** at the entry of the seeder script:
+Running seeders in Docker environments can cause duplicate entries or primary key crashes if the container restarts. To prevent this, Stride implements an **idempotent check** at the entry of the seeder script:
 ```ts
 // apps/api/prisma/seed.ts
 const userCount = await prisma.user.count();

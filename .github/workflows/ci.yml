@@ -29,11 +29,11 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: stried_test
+          POSTGRES_DB: stride_test
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres -d stried_test"
+          --health-cmd "pg_isready -U postgres -d stride_test"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -87,7 +87,7 @@ jobs:
       - name: Run Database Migrations
         run: pnpm --filter api exec prisma migrate deploy
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stried_test?schema=public
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stride_test?schema=public
 
       - name: Compile and Build Apps
         run: pnpm run build
@@ -95,7 +95,7 @@ jobs:
       - name: Run Tests
         run: pnpm --filter api test -- --reporter=default --reporter=junit --outputFile.junit=test-results.xml
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stried_test?schema=public
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stride_test?schema=public
           JWT_SECRET: ci-test-secret-key-do-not-use-in-prod
 
       - name: Publish Test Report

@@ -388,7 +388,7 @@ export function WorkspaceListView({
 																			type="button"
 																			onClick={(e) => {
 																				e.stopPropagation();
-																				handleToggleTask(task.id);
+																				handleToggleTask(task.uuid || task.id);
 																			}}
 																			className="flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-none border border-zinc-300 bg-card text-muted-foreground opacity-0 transition-all duration-150 group-hover:opacity-100 group-data-[context-menu-open=true]:opacity-100 hover:border-zinc-400 hover:text-foreground dark:border-zinc-700 dark:hover:border-zinc-500"
 																		/>
