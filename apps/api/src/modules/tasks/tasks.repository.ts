@@ -80,7 +80,11 @@ export const tasksRepository = {
 				},
 			});
 
-			return createdTask!;
+			if (!createdTask) {
+				throw new Error("Failed to retrieve created task");
+			}
+
+			return createdTask;
 		});
 	},
 
@@ -360,7 +364,7 @@ export const tasksRepository = {
 		}
 
 		return prisma.$transaction(async (tx) => {
-			const updated = await tx.task.update({
+			await tx.task.update({
 				where: { id },
 				data,
 			});
@@ -396,7 +400,11 @@ export const tasksRepository = {
 				},
 			});
 
-			return updatedTask!;
+			if (!updatedTask) {
+				throw new Error("Failed to retrieve updated task");
+			}
+
+			return updatedTask;
 		});
 	},
 

@@ -1,8 +1,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import type { Task } from "@/components/workspace/types";
 import { mapBackendTaskToFrontend } from "@/features/tasks/utils";
 import { API_BASE_URL } from "@/lib/api/client";
 import { useAuth } from "@/providers/auth-provider";
+
+interface TasksQueryData {
+	tasks: Task[];
+	total: number;
+}
 
 export function useRealtime() {
 	const queryClient = useQueryClient();
@@ -42,15 +48,18 @@ export function useRealtime() {
 				const mapped = mapBackendTaskToFrontend(data);
 
 				// Insert newly created task into all matching task list caches immediately
-				queryClient.setQueriesData({ queryKey: ["tasks"] }, (old: any) => {
-					if (!old?.tasks) return { tasks: [mapped], total: 1 };
-					if (old.tasks.some((t: any) => t.uuid === mapped.uuid)) return old;
-					return {
-						...old,
-						tasks: [mapped, ...old.tasks],
-						total: old.total + 1,
-					};
-				});
+				queryClient.setQueriesData(
+					{ queryKey: ["tasks"] },
+					(old: TasksQueryData | undefined) => {
+						if (!old?.tasks) return { tasks: [mapped], total: 1 };
+						if (old.tasks.some((t) => t.uuid === mapped.uuid)) return old;
+						return {
+							...old,
+							tasks: [mapped, ...old.tasks],
+							total: old.total + 1,
+						};
+					},
+				);
 
 				// Background refetch to ensure correct sorting/filtering
 				queryClient.invalidateQueries({ queryKey: ["tasks"] });
@@ -71,15 +80,18 @@ export function useRealtime() {
 				queryClient.setQueryData(["task", mapped.id], mapped);
 
 				// Synchronously update task item in all list queries for instant re-render
-				queryClient.setQueriesData({ queryKey: ["tasks"] }, (old: any) => {
-					if (!old?.tasks) return old;
-					return {
-						...old,
-						tasks: old.tasks.map((t: any) =>
-							t.uuid === mapped.uuid || t.id === mapped.id ? mapped : t,
-						),
-					};
-				});
+				queryClient.setQueriesData(
+					{ queryKey: ["tasks"] },
+					(old: TasksQueryData | undefined) => {
+						if (!old?.tasks) return old;
+						return {
+							...old,
+							tasks: old.tasks.map((t) =>
+								t.uuid === mapped.uuid || t.id === mapped.id ? mapped : t,
+							),
+						};
+					},
+				);
 
 				// Trigger background invalidation to keep pagination and custom sorts consistent
 				queryClient.invalidateQueries({ queryKey: ["tasks"] });
@@ -100,16 +112,19 @@ export function useRealtime() {
 				queryClient.removeQueries({ queryKey: ["task", mapped.id] });
 
 				// Synchronously remove item from lists queries cache
-				queryClient.setQueriesData({ queryKey: ["tasks"] }, (old: any) => {
-					if (!old?.tasks) return old;
-					return {
-						...old,
-						tasks: old.tasks.filter(
-							(t: any) => t.uuid !== mapped.uuid && t.id !== mapped.id,
-						),
-						total: Math.max(0, old.total - 1),
-					};
-				});
+				queryClient.setQueriesData(
+					{ queryKey: ["tasks"] },
+					(old: TasksQueryData | undefined) => {
+						if (!old?.tasks) return old;
+						return {
+							...old,
+							tasks: old.tasks.filter(
+								(t) => t.uuid !== mapped.uuid && t.id !== mapped.id,
+							),
+							total: Math.max(0, old.total - 1),
+						};
+					},
+				);
 
 				// Trigger background list invalidation
 				queryClient.invalidateQueries({ queryKey: ["tasks"] });

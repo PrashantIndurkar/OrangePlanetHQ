@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "node:crypto";
 import type { Response } from "express";
 
 interface Client {
@@ -58,7 +58,7 @@ class RealtimeService {
 	 */
 	broadcast(
 		event: "task.created" | "task.updated" | "task.deleted",
-		data: { id: string; userId: string; [key: string]: any },
+		data: { id: string; userId: string; [key: string]: unknown },
 	): void {
 		const eventId = String(this.nextEventId++);
 
@@ -81,7 +81,7 @@ class RealtimeService {
 	private sendEventToClient(
 		client: Client,
 		event: string,
-		data: any,
+		data: unknown,
 		id?: string,
 	): void {
 		try {
