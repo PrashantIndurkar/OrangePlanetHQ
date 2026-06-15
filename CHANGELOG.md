@@ -1,5 +1,11 @@
 # [0.14.0](https://github.com/PrashantIndurkar/stride/compare/v0.13.0...v0.14.0) (2026-06-15)
 
+
+### Features
+
+* implement image upload functionality for task descriptions using Tiptap and Cloudinary ([3288b1c](https://github.com/PrashantIndurkar/stride/commit/3288b1c2b5d96a53acf3b518de76fa40e6eff2ad))
+# [0.14.0](https://github.com/PrashantIndurkar/stride/compare/v0.13.0...v0.14.0) (2026-06-15)
+
 ## ⚡ Real-Time Collaboration
 
 ### Real-Time Updates
