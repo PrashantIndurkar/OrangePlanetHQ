@@ -1,0 +1,47 @@
+# Exclude source control and tool configurations
+.git
+.github
+.gitignore
+.husky
+.vscode
+.coderabbit.yaml
+biome.json
+commitlint.config.js
+CHANGELOG.md
+README.md
+checklist.md
+skills-lock.json
+
+# Exclude package manager files and caches
+node_modules
+**/node_modules
+.pnpm-store
+pnpm-debug.log
+
+# Exclude build artifacts and caches
+dist
+**/dist
+.turbo
+**/.turbo
+.next
+**/.next
+out
+**/out
+tsconfig.tsbuildinfo
+**/*.tsbuildinfo
+test-results.xml
+
+# Exclude local environments and secrets
+.env
+.env.local
+.env.test
+.env.sample
+.env.example
+.env.production
+.env.development
+**/.env
+**/.env.test
+
+# OS Files
+.DS_Store
+Thumbs.db

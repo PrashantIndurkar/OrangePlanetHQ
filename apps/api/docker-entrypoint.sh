@@ -11,19 +11,21 @@ if [ "$NODE_ENV" = "production" ]; then
   echo "🎬 Starting production server..."
   exec node dist/server.js
 else
+  # Ensure we run commands inside the api package directory context
+  cd /app/apps/api
+
   echo "🛠️ Running development database setup (db push)..."
-  pnpm --filter api exec prisma db push --accept-data-loss
+  npx prisma db push --accept-data-loss
   
   echo "⚙️ Generating Prisma Client..."
-  pnpm --filter api exec prisma generate
+  npx prisma generate
   
   echo "🌱 Seeding database (if empty)..."
-  # Run the seed script via pnpm from apps/api context
-  pnpm --filter api run db:seed
+  npx tsx prisma/seed.ts
   
   echo "📸 Starting Prisma Studio in the background on port 5555..."
-  pnpm --filter api exec prisma studio --port 5555 --browser none &
+  npx prisma studio --port 5555 --browser none &
   
   echo "🚀 Starting development server..."
-  exec pnpm --filter api run dev
+  exec npx tsx watch src/server.ts
 fi

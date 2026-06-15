@@ -1,22 +1,25 @@
-# Base stage
+# 1. Base stage for all builds
 FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+RUN apk add --no-cache libc6-compat
 
-# Dependencies stage
+# 2. Prune stage: extracts only the files needed for the API workspace
+FROM base AS pruner
+WORKDIR /app
+RUN npm install -g turbo@2.9.18
+COPY . .
+RUN turbo prune --scope=api --docker
+
+# 3. Dependencies installer stage: installs node_modules for all workspaces
 FROM base AS deps
 WORKDIR /app
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./
-COPY apps/api/package.json ./apps/api/
-COPY apps/web/package.json ./apps/web/
-COPY apps/docs/package.json ./apps/docs/
-COPY packages/eslint-config/package.json ./packages/eslint-config/
-COPY packages/typescript-config/package.json ./packages/typescript-config/
-COPY packages/ui/package.json ./packages/ui/
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --no-frozen-lockfile
+COPY --from=pruner /app/out/json/ ./
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --ignore-scripts
 
-# Development stage (Skips build compilation, run directly via tsx/dev)
+# 4. Development stage: used for local development mounts via docker-compose
 FROM deps AS development
 WORKDIR /app
 COPY . .
@@ -26,41 +29,45 @@ EXPOSE 3002
 RUN chmod +x apps/api/docker-entrypoint.sh
 CMD ["/app/apps/api/docker-entrypoint.sh"]
 
-# Production builder stage (Compiles TypeScript and generates Prisma client)
-FROM development AS builder
+# 5. Production builder stage: compiles the code and generates Prisma client
+FROM base AS builder
 WORKDIR /app
+COPY --from=pruner /app/out/json/ ./
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=pruner /app/out/full/ ./
 RUN pnpm --filter api run build
 
-# Production dependencies install stage
+# 6. Production dependencies installer stage: installs only production dependencies
 FROM base AS prod-deps
 WORKDIR /app
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./
-COPY apps/api/package.json ./apps/api/
-COPY packages/eslint-config/package.json ./packages/eslint-config/
-COPY packages/typescript-config/package.json ./packages/typescript-config/
-COPY packages/ui/package.json ./packages/ui/
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --no-frozen-lockfile --ignore-scripts
+COPY --from=pruner /app/out/json/ ./
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile --ignore-scripts
+COPY apps/api/prisma ./apps/api/prisma
+RUN npx prisma generate --schema=apps/api/prisma/schema.prisma
 
-# Production runner stage (Runs compiled JavaScript)
-FROM base AS runner
+# 7. Production runner stage: clean minimal production environment
+FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3002
 EXPOSE 3002
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nodejs
+# Establish secure non-root execution context
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nodejs
 
+# Copy only production dependencies and build output
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=prod-deps /app/apps/api/node_modules ./apps/api/node_modules
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 COPY --from=builder /app/apps/api/docker-entrypoint.sh ./apps/api/docker-entrypoint.sh
 
-RUN chmod +x apps/api/docker-entrypoint.sh
-RUN chown -R nodejs:nodejs /app
+RUN chmod +x apps/api/docker-entrypoint.sh && \
+    chown -R nodejs:nodejs /app
 
 USER nodejs
 
