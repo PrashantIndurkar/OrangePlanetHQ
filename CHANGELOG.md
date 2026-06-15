@@ -1,19 +1,52 @@
-# [0.13.0](https://github.com/PrashantIndurkar/stride/compare/v0.12.0...v0.13.0) (2026-06-15)
+# [0.14.0](https://github.com/PrashantIndurkar/stride/compare/v0.13.0...v0.14.0) (2026-06-15)
 
+## ⚡ Real-Time Collaboration
 
-### Bug Fixes
+### Real-Time Updates
 
-* whitespace ([c3a8d8d](https://github.com/PrashantIndurkar/stride/commit/c3a8d8dcd7d1bf7c161f7b387875dfb18ec7a1b6))
+* Added live task synchronization using Server-Sent Events (SSE).
+* Task creations, updates, and deletions now appear automatically across active sessions.
+* Improved data consistency across multiple browser tabs and users.
 
+### Optimistic User Experience
 
-### Features
+* Enhanced task creation, updates, and deletion workflows with smoother optimistic UI updates.
+* Improved perceived performance by reflecting changes instantly before server confirmation.
 
-* implement auth hooks, task schema updates, and project documentation ([741d6d1](https://github.com/PrashantIndurkar/stride/commit/741d6d1da720ff1677833bcf778640b76fc94630))
-* implement authentication system with login/signup forms and auth provider ([eb44556](https://github.com/PrashantIndurkar/stride/commit/eb445567c9964ae8af6f79ec30c542bb1988fb67))
-* implement Server-Sent Events (SSE) for real-time task updates and add authentication provider support ([6febe39](https://github.com/PrashantIndurkar/stride/commit/6febe399e91edfb83082ed9d2d6e13fccd3725c8))
-* implement task creation interface and improve backend task repository error handling and type safety ([92000f9](https://github.com/PrashantIndurkar/stride/commit/92000f9107fd009984954374b5af11527f8e64b0))
-* implement task management hooks, workspace UI views, and authentication pages ([5b17a2d](https://github.com/PrashantIndurkar/stride/commit/5b17a2d1bbd0f793f08826f0d8dca31d0cd728f8))
-* implement workspace filtering system with board/list views and modular URL-based state management ([dbbb36c](https://github.com/PrashantIndurkar/stride/commit/dbbb36c0d7041b711109ad92dccde9ad0c486567))
+## 🎨 User Experience Improvements
+
+### Notifications & Feedback
+
+* Added global toast notifications throughout the application.
+* Added step-by-step feedback during login and signup workflows.
+* Improved visibility of successful actions and error states.
+
+### Workspace Usability
+
+* Added tooltips across workspace controls for improved discoverability.
+* Improved task interaction feedback and overall workspace navigation.
+
+### Visual Enhancements
+
+* Temporary tasks are now visually distinguished with dimmed states.
+* Improved image preview experience.
+* Added better loading indicators across task workflows.
+
+## 🐛 Bug Fixes
+
+* Fixed task search to correctly match task identifiers.
+* Corrected activity history ordering to display events chronologically.
+* Fixed authentication token retrieval from browser cookies.
+* Improved local storage persistence behavior.
+* Resolved naming inconsistencies across the application.
+
+## 🚀 Improvements
+
+* Enhanced collaboration experience through real-time synchronization.
+* Improved responsiveness and perceived application performance.
+* Increased reliability of authentication and persistence workflows.
+* Continued refining the overall workspace experience.
+---
 # [0.13.0](https://github.com/PrashantIndurkar/stride/compare/v0.12.0...v0.13.0) (2026-06-14)
 
 ## 🤖 Continuous Integration
