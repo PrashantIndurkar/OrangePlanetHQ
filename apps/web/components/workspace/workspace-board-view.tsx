@@ -237,7 +237,7 @@ export function WorkspaceBoardView({
 										<TooltipContent>Column actions</TooltipContent>
 									</Tooltip>
 								</TooltipProvider>
- 
+
 								<TooltipProvider>
 									<Tooltip>
 										<TooltipTrigger
