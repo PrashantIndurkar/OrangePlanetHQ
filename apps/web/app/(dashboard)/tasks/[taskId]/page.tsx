@@ -12,6 +12,8 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
+import { toast } from "sonner";
+import { TaskEditor } from "@/components/tasks/task-editor";
 import type {
 	TaskPriority,
 	TaskStatus,
@@ -20,6 +22,7 @@ import { IssueAttachmentButton } from "@/components/workspace/issue-attachment-b
 import { IssueDueDateSelect } from "@/components/workspace/issue-due-date-select";
 import { IssuePrioritySelect } from "@/components/workspace/issue-priority-select";
 import { IssueStatusSelect } from "@/components/workspace/issue-status-select";
+import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
 import {
 	useDeleteTaskMutation,
@@ -228,21 +231,24 @@ export default function TaskDetailsPage({
 		return `${Math.floor(hours / 24)}d ago`;
 	};
 
-	const handleFileSelect = (files: File[]) => {
+	const handleFileSelect = async (files: File[]) => {
 		for (const file of files) {
 			if (file.type.startsWith("image/")) {
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					const dataUrl = e.target?.result as string;
-					const markdownLink = `\n![${file.name}](${dataUrl})`;
-					const nextDesc = `${localDescription}${markdownLink}`;
+				try {
+					const result = await uploadImage(file);
+					const imgHtml = `\n<img src="${result.url}" class="kaneo-editor-image" />`;
+					const nextDesc = `${localDescription}${imgHtml}`;
 					setLocalDescription(nextDesc);
 					updateMutation.mutate({
 						id: taskId,
 						data: { description: nextDesc },
 					});
-				};
-				reader.readAsDataURL(file);
+					toast.success("Image uploaded successfully");
+				} catch (err) {
+					toast.error(
+						err instanceof Error ? err.message : "Failed to upload image",
+					);
+				}
 			}
 		}
 	};
@@ -426,12 +432,10 @@ export default function TaskDetailsPage({
 
 					{/* Description field */}
 					<div className="group relative flex flex-col bg-transparent p-0 rounded-none mb-6">
-						<textarea
+						<TaskEditor
 							value={localDescription}
-							onChange={(e) => setLocalDescription(e.target.value)}
+							onChange={setLocalDescription}
 							onBlur={handleDescriptionBlur}
-							placeholder="Add description..."
-							className="w-full resize-none text-[14px] leading-relaxed text-foreground placeholder:text-muted-foreground/45 border-none bg-transparent outline-none p-0 focus:ring-0 min-h-[160px] focus:outline-none select-text"
 						/>
 						{/* Attachments inline triggers */}
 						<div className="flex items-center gap-1.5 mt-2 justify-start select-none">

@@ -34,6 +34,7 @@ Stride is built as a single monorepo utilizing **pnpm workspaces** and **Turbore
 | **Backend** | API Server | Express.js 5 | Lightweight, highly-extensible HTTP routing framework with modular middleware layers. |
 | **Database** | ORM Layer | Prisma 7 | Type-safe schema definition, clean model migrations, and native client generation. |
 | **Database** | Database Engine | PostgreSQL 16 | Relational reliability, compound indexes, and foreign key cascades. |
+| **Storage** | Media Storage | Cloudinary + Multer | Multipart upload ingestion and secure CDN-backed cloud image storage. |
 | **Infrastructure** | Containerization | Docker & Compose | Multi-stage image build isolation and local service container linking. |
 | **Pipeline** | Automation | GitHub Actions | automated unit/integration runs with Vitest + Supertest and semantic release logs. |
 
