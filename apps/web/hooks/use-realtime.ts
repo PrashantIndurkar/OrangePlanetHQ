@@ -3,22 +3,21 @@ import { useEffect } from "react";
 import type { Task } from "@/components/workspace/types";
 import { mapBackendTaskToFrontend } from "@/features/tasks/utils";
 import { API_BASE_URL } from "@/lib/api/client";
+import { getToken } from "@/lib/auth/session";
 import { useAuth } from "@/providers/auth-provider";
 
-import { getToken } from "@/lib/auth/session";
- 
 interface TasksQueryData {
 	tasks: Task[];
 	total: number;
 }
- 
+
 export function useRealtime() {
 	const queryClient = useQueryClient();
 	const { isAuthenticated } = useAuth();
- 
+
 	useEffect(() => {
 		if (!isAuthenticated) return;
- 
+
 		console.log("[Realtime] Connecting to Server-Sent Events...");
 		const token = getToken();
 		const url = token

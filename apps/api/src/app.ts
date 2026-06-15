@@ -20,7 +20,10 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 	? process.env.ALLOWED_ORIGINS.split(",")
 	: ["http://localhost:3000"];
 
-if (process.env.FRONTEND_URL && !allowedOrigins.includes(process.env.FRONTEND_URL)) {
+if (
+	process.env.FRONTEND_URL &&
+	!allowedOrigins.includes(process.env.FRONTEND_URL)
+) {
 	allowedOrigins.push(process.env.FRONTEND_URL);
 }
 
