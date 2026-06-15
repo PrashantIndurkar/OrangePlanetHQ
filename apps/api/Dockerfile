@@ -64,6 +64,7 @@ COPY --from=prod-deps /app/apps/api/node_modules ./apps/api/node_modules
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
+COPY --from=builder /app/apps/api/prisma.config.js ./apps/api/prisma.config.js
 COPY --from=builder /app/apps/api/docker-entrypoint.sh ./apps/api/docker-entrypoint.sh
 
 RUN chmod +x apps/api/docker-entrypoint.sh && \
