@@ -1,12 +1,12 @@
 # 🚀 CI/CD Pipelines & GitHub Actions Workflows Guide
 
-This document details the configuration, capabilities, and execution design of the automated integration pipelines and release processes in Stried.
+This document details the configuration, capabilities, and execution design of the automated integration pipelines and release processes in Stride.
 
 ---
 
 ## 🏗️ 1. Continuous Integration Pipeline (`ci.yml`)
 
-The [ci.yml](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stried/.github/workflows/ci.yml) workflow runs automatically on every pull request and push to critical branches (`main`, `master`, `dev`). It acts as the primary quality gate ensuring that code builds, lint rules pass, and all database integration tests succeed.
+The [ci.yml](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stride/.github/workflows/ci.yml) workflow runs automatically on every pull request and push to critical branches (`main`, `master`, `dev`). It acts as the primary quality gate ensuring that code builds, lint rules pass, and all database integration tests succeed.
 
 ```text
 [PR / Push Trigger]
@@ -53,11 +53,11 @@ services:
     env:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: stried_test
+      POSTGRES_DB: stride_test
     ports:
       - 5432:5432
     options: >-
-      --health-cmd "pg_isready -U postgres -d stried_test"
+      --health-cmd "pg_isready -U postgres -d stride_test"
       --health-interval 10s
       --health-timeout 5s
       --health-retries 5
@@ -88,7 +88,7 @@ The action `dorny/test-reporter` reads this XML and posts it as a detailed check
 
 ## 📦 2. Release & Versioning Automation (`release.yml`)
 
-The [release.yml](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stried/.github/workflows/release.yml) workflow is triggered manually via **workflow_dispatch**. It automates semantic versioning upgrades, changelog creation, git tagging, and GitHub Releases.
+The [release.yml](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stride/.github/workflows/release.yml) workflow is triggered manually via **workflow_dispatch**. It automates semantic versioning upgrades, changelog creation, git tagging, and GitHub Releases.
 
 ### Release Workflow Steps:
 

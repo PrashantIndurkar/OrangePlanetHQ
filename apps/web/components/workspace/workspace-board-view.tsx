@@ -216,7 +216,8 @@ export function WorkspaceBoardView({
 											render={
 												<button
 													type="button"
-													className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-none transition-colors outline-none hover:bg-accent/10 hover:text-foreground"
+													aria-label="Column actions"
+													className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-none transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring hover:bg-accent/10 hover:text-foreground"
 												/>
 											}
 										>
@@ -236,7 +237,7 @@ export function WorkspaceBoardView({
 										<TooltipContent>Column actions</TooltipContent>
 									</Tooltip>
 								</TooltipProvider>
-
+ 
 								<TooltipProvider>
 									<Tooltip>
 										<TooltipTrigger
@@ -244,7 +245,8 @@ export function WorkspaceBoardView({
 												<button
 													type="button"
 													onClick={() => handleAddTask(column.id)}
-													className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-none border border-dotted border-zinc-300 bg-transparent transition-colors outline-none hover:bg-accent/10 hover:text-foreground dark:border-zinc-800"
+													aria-label="Add task"
+													className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-none border border-dotted border-zinc-300 bg-transparent transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring hover:bg-accent/10 hover:text-foreground dark:border-zinc-800"
 												/>
 											}
 										>

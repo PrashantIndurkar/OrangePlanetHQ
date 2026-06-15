@@ -1,4 +1,4 @@
-# Stried API Testing Guide
+# Stride API Testing Guide
 
 This guide details all API routes, payload formats, query parameters, validation rules, and step-by-step testing flows. You can use this with API clients like **Bruno**, **Postman**, **Insomnia**, or **curl**.
 
@@ -9,7 +9,7 @@ This guide details all API routes, payload formats, query parameters, validation
 ### 1. Start the API Server
 Ensure the database is running, then start the Express development server:
 ```bash
-# In the stried root directory
+# In the stride root directory
 pnpm --filter api dev
 ```
 The server starts on `http://localhost:3002`.

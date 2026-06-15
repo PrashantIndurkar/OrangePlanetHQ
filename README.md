@@ -1,8 +1,8 @@
-# 📋 Stried
+# 📋 Stride
 
-Welcome to **Stried**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
+Welcome to **Stride**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
 
-Stried is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
+Stride is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
 
 ---
 
@@ -22,9 +22,9 @@ To make exploring the codebase as clean as possible, we have split our documenta
 
 ---
 
-## 🛠️ The Stried Technology Stack
+## 🛠️ The Stride Technology Stack
 
-Stried is built as a single monorepo utilizing **pnpm workspaces** and **Turborepo** to orchestrate tasks.
+Stride is built as a single monorepo utilizing **pnpm workspaces** and **Turborepo** to orchestrate tasks.
 
 | Layer | Component | Technology | Rationale |
 | :--- | :--- | :--- | :--- |

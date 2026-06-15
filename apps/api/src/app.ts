@@ -15,10 +15,27 @@ app.use(express.json());
 // Parse Cookies
 app.use(cookieParser());
 
+const allowedOrigins = ["http://localhost:3000"];
+
 // Enable CORS with support for credentials (cookies for EventSource)
 app.use(
 	cors({
-		origin: true,
+		origin: (origin, callback) => {
+			// Allow requests with no origin (like curl)
+			if (!origin) {
+				return callback(null, true);
+			}
+
+			const isAllowed =
+				allowedOrigins.includes(origin) ||
+				(process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL);
+
+			if (isAllowed) {
+				callback(null, true);
+			} else {
+				callback(null, false);
+			}
+		},
 		credentials: true,
 	}),
 );

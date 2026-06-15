@@ -1,12 +1,12 @@
 # 🏗️ Monorepo Architecture & Software Design Guide
 
-This document provides a highly technical explanation of the architectural paradigms, patterns, and design decisions underpinning the Stried codebase. It is written to serve as a guide for engineering interviewers and onboarding developers, explaining how the stack is structured, why these choices were made, and how to scale the application.
+This document provides a highly technical explanation of the architectural paradigms, patterns, and design decisions underpinning the Stride codebase. It is written to serve as a guide for engineering interviewers and onboarding developers, explaining how the stack is structured, why these choices were made, and how to scale the application.
 
 ---
 
 ## 🗺️ High-Level Architecture Overview
 
-Stried is built as a decoupled full-stack application structured inside a **Turborepo Monorepo** managed by **pnpm workspaces**. 
+Stride is built as a decoupled full-stack application structured inside a **Turborepo Monorepo** managed by **pnpm workspaces**. 
 
 ```text
        ┌──────────────────────────────────────────────────────────┐
@@ -32,7 +32,7 @@ Stried is built as a decoupled full-stack application structured inside a **Turb
 ```
 
 ### Decoupled Separation of Concerns
-Unlike monolithic setups that blend server-side rendering and database queries into a single Next.js app, Stried decouples the **Frontend (Next.js)** and **Backend (Express)**.
+Unlike monolithic setups that blend server-side rendering and database queries into a single Next.js app, Stride decouples the **Frontend (Next.js)** and **Backend (Express)**.
 - **Why?** This reflects the industry-standard architecture of premium SaaS apps like **Linear**, **Vercel**, and **Cal.com**. 
 - **Benefits:**
   - **Edge-Ready Frontend:** The frontend can be compiled statically and deployed to global Edge networks/CDNs (like Vercel or Cloudflare Pages) for immediate response times.
@@ -43,7 +43,7 @@ Unlike monolithic setups that blend server-side rendering and database queries i
 
 ## 📦 Monorepo Architecture (Turborepo & pnpm)
 
-Monorepos can become sluggish as they grow. Stried solves this by using **pnpm workspaces** for package management and **Turborepo** for build caching.
+Monorepos can become sluggish as they grow. Stride solves this by using **pnpm workspaces** for package management and **Turborepo** for build caching.
 
 ### Workspace Structure
 - `apps/web`: Next.js web client.
@@ -64,7 +64,7 @@ The backend (`apps/api`) uses a **Modular Domain Pattern** coupled with the **Co
 
 ### Why Modular over Layered?
 In traditional layered architectures, controllers, services, and models live in separate global directories. As the app grows, developers must jump between folders far apart to add a single feature.
-Stried packages all domain-specific files inside modular directories:
+Stride packages all domain-specific files inside modular directories:
 - `modules/auth/`
 - `modules/users/`
 - `modules/tasks/`
@@ -115,7 +115,7 @@ Separates styling primitives from complex compositions:
 
 ## 🔒 Security & Stealth Boundary Guarding
 
-For security, Stried uses a **Stealth Boundary Guarding** pattern.
+For security, Stride uses a **Stealth Boundary Guarding** pattern.
 
 ### The Metadata Leak Vulnerability
 In task managers, tasks are referenced by UUIDs. If User B queries User A's task (`GET /tasks/abc-123-xyz`), a standard API returns a `403 Forbidden` response.
@@ -138,10 +138,10 @@ If User B requests User A's task, the repository returns `null`. The service rec
 
 ## 🛠️ Developer Guide: How to Add a New Feature
 
-To add a new capability (e.g., **Task Attachments**) to Stried, follow this step-by-step checklist:
+To add a new capability (e.g., **Task Attachments**) to Stride, follow this step-by-step checklist:
 
 ### Step 1: Update the Database Schema
-1. Open [schema.prisma](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stried/apps/api/prisma/schema.prisma).
+1. Open [schema.prisma](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stride/apps/api/prisma/schema.prisma).
 2. Add the new model:
    ```prisma
    model Attachment {
