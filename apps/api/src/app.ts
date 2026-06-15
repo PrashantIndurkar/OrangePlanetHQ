@@ -16,25 +16,30 @@ app.use(express.json());
 // Parse Cookies
 app.use(cookieParser());
 
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+	? process.env.ALLOWED_ORIGINS.split(",")
+	: ["http://localhost:3000"];
+
+if (
+	process.env.FRONTEND_URL &&
+	!allowedOrigins.includes(process.env.FRONTEND_URL)
+) {
+	allowedOrigins.push(process.env.FRONTEND_URL);
+}
 
 // Enable CORS with support for credentials (cookies for EventSource)
 app.use(
 	cors({
 		origin: (origin, callback) => {
-			// Allow requests with no origin (like curl)
+			// Allow requests with no origin (like curl or postman)
 			if (!origin) {
 				return callback(null, true);
 			}
 
-			const isAllowed =
-				allowedOrigins.includes(origin) ||
-				(process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL);
-
-			if (isAllowed) {
+			if (allowedOrigins.includes(origin)) {
 				callback(null, true);
 			} else {
-				callback(null, false);
+				callback(new Error("Not allowed by CORS"));
 			}
 		},
 		credentials: true,

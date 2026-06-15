@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import type { Task } from "@/components/workspace/types";
 import { mapBackendTaskToFrontend } from "@/features/tasks/utils";
 import { API_BASE_URL } from "@/lib/api/client";
+import { getToken } from "@/lib/auth/session";
 import { useAuth } from "@/providers/auth-provider";
 
 interface TasksQueryData {
@@ -18,7 +19,11 @@ export function useRealtime() {
 		if (!isAuthenticated) return;
 
 		console.log("[Realtime] Connecting to Server-Sent Events...");
-		const eventSource = new EventSource(`${API_BASE_URL}/realtime/events`, {
+		const token = getToken();
+		const url = token
+			? `${API_BASE_URL}/realtime/events?token=${encodeURIComponent(token)}`
+			: `${API_BASE_URL}/realtime/events`;
+		const eventSource = new EventSource(url, {
 			withCredentials: true,
 		});
 
