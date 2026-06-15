@@ -1,3 +1,19 @@
+# [0.13.0](https://github.com/PrashantIndurkar/stride/compare/v0.12.0...v0.13.0) (2026-06-15)
+
+
+### Bug Fixes
+
+* whitespace ([c3a8d8d](https://github.com/PrashantIndurkar/stride/commit/c3a8d8dcd7d1bf7c161f7b387875dfb18ec7a1b6))
+
+
+### Features
+
+* implement auth hooks, task schema updates, and project documentation ([741d6d1](https://github.com/PrashantIndurkar/stride/commit/741d6d1da720ff1677833bcf778640b76fc94630))
+* implement authentication system with login/signup forms and auth provider ([eb44556](https://github.com/PrashantIndurkar/stride/commit/eb445567c9964ae8af6f79ec30c542bb1988fb67))
+* implement Server-Sent Events (SSE) for real-time task updates and add authentication provider support ([6febe39](https://github.com/PrashantIndurkar/stride/commit/6febe399e91edfb83082ed9d2d6e13fccd3725c8))
+* implement task creation interface and improve backend task repository error handling and type safety ([92000f9](https://github.com/PrashantIndurkar/stride/commit/92000f9107fd009984954374b5af11527f8e64b0))
+* implement task management hooks, workspace UI views, and authentication pages ([5b17a2d](https://github.com/PrashantIndurkar/stride/commit/5b17a2d1bbd0f793f08826f0d8dca31d0cd728f8))
+* implement workspace filtering system with board/list views and modular URL-based state management ([dbbb36c](https://github.com/PrashantIndurkar/stride/commit/dbbb36c0d7041b711109ad92dccde9ad0c486567))
 # [0.13.0](https://github.com/PrashantIndurkar/stride/compare/v0.12.0...v0.13.0) (2026-06-14)
 
 ## 🤖 Continuous Integration
