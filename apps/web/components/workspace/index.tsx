@@ -5,12 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
 import {
+	lastMutation,
 	useCreateTaskMutation,
 	useTasksQuery,
 } from "../../features/tasks/hooks";
-import type { Task } from "./types";
 import type { TaskPriority, TaskStatus } from "../tasks/task-context-menu";
 import { IssueCreateDialog } from "./issue-create-dialog";
+import type { Task } from "./types";
 import { getNormalizedFilters } from "./types";
 import { WorkspaceBoardView } from "./workspace-board-view";
 import { WorkspaceFilters } from "./workspace-filters";
@@ -81,7 +82,10 @@ export function WorkspaceLayout() {
 		const currentTasks = data.tasks || [];
 		const currentTotal = data.total || 0;
 
-		if (prevFiltersRef.current === currentFiltersKey) {
+		const isRecentMutation =
+			lastMutation.type !== null && Date.now() - lastMutation.timestamp < 5000;
+
+		if (isRecentMutation && prevFiltersRef.current === currentFiltersKey) {
 			const prevTasks = prevTasksRef.current;
 			const prevTotal = prevTotalRef.current;
 
@@ -98,9 +102,12 @@ export function WorkspaceLayout() {
 						const prevIndex = prevTasks.findIndex((t) => t.uuid === r.uuid);
 						if (prevIndex >= 9) {
 							setTimeout(() => {
-								toast.warning(`Task "${r.id}" shifted to page ${page + 1} due to the 10-task limit.`, {
-									duration: 5000,
-								});
+								toast.warning(
+									`Task "${r.id}" shifted to page ${page + 1} due to the 10-task limit.`,
+									{
+										duration: 5000,
+									},
+								);
 							}, 1200);
 						}
 					}
@@ -111,13 +118,18 @@ export function WorkspaceLayout() {
 					const currentIndex = currentTasks.findIndex((t) => t.uuid === a.uuid);
 					if (currentIndex > 0) {
 						setTimeout(() => {
-							toast.warning(`Task "${a.id}" shifted up from page ${page + 1} to fill the page.`, {
-								duration: 5000,
-							});
+							toast.warning(
+								`Task "${a.id}" shifted up from page ${page + 1} to fill the page.`,
+								{
+									duration: 5000,
+								},
+							);
 						}, 1200);
 					}
 				}
 			}
+			// Reset the tracker after processing the shift
+			lastMutation.type = null;
 		}
 
 		prevTasksRef.current = currentTasks;

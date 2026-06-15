@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "@tiptap/extension-image";
-import { EditorContent, useEditor } from "@tiptap/react";
+import Placeholder from "@tiptap/extension-placeholder";
+import { EditorContent, useEditor, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -11,22 +12,11 @@ interface TaskEditorProps {
 	value: string;
 	onChange: (val: string) => void;
 	onBlur: () => void;
+	onEditorCreated?: (editor: Editor) => void;
 }
 
-export function TaskEditor({ value, onChange, onBlur }: TaskEditorProps) {
+export function TaskEditor({ value, onChange, onBlur, onEditorCreated }: TaskEditorProps) {
 	const uploadMutation = useUploadImageMutation();
-
-	const handleUpload = async (file: File, insertFn: (url: string) => void) => {
-		try {
-			const result = await uploadMutation.mutateAsync(file);
-			insertFn(result.url);
-			toast.success("Image uploaded successfully");
-		} catch (err) {
-			toast.error(
-				err instanceof Error ? err.message : "Failed to upload image",
-			);
-		}
-	};
 
 	const editor = useEditor({
 		extensions: [
@@ -36,12 +26,16 @@ export function TaskEditor({ value, onChange, onBlur }: TaskEditorProps) {
 					class: "kaneo-editor-image",
 				},
 			}),
+			Placeholder.configure({
+				placeholder: "Add description or drop images here...",
+				emptyEditorClass: "is-editor-empty",
+			}),
 		],
 		content: value,
 		editorProps: {
 			attributes: {
 				class:
-					"focus:outline-none min-h-[160px] max-w-none w-full text-[14px] leading-relaxed text-foreground select-text",
+					"focus:outline-none min-h-[160px] max-w-none w-full text-[14px] leading-relaxed text-foreground select-text tiptap",
 			},
 			handlePaste: (view, event) => {
 				const items = Array.from(event.clipboardData?.items || []);
@@ -50,13 +44,7 @@ export function TaskEditor({ value, onChange, onBlur }: TaskEditorProps) {
 					const file = imageItem.getAsFile();
 					if (file) {
 						event.preventDefault();
-						handleUpload(file, (url) => {
-							view.dispatch(
-								view.state.tr.replaceSelectionWith(
-									view.state.schema.nodes.image.create({ src: url }),
-								),
-							);
-						});
+						handleUpload(file);
 						return true;
 					}
 				}
@@ -72,27 +60,83 @@ export function TaskEditor({ value, onChange, onBlur }: TaskEditorProps) {
 						top: event.clientY,
 					});
 					const pos = coordinates ? coordinates.pos : view.state.selection.from;
-					handleUpload(imageFile, (url) => {
-						view.dispatch(
-							view.state.tr.insert(
-								pos,
-								view.state.schema.nodes.image.create({ src: url }),
-							),
-						);
-					});
+					handleUpload(imageFile, pos);
 					return true;
 				}
 				return false;
 			},
 		},
 		onUpdate: ({ editor }) => {
-			// Return HTML format for saving
 			onChange(editor.getHTML());
 		},
 		onBlur: () => {
 			onBlur();
 		},
 	});
+
+	const handleUpload = async (file: File, pos?: number) => {
+		if (!editor) return;
+		const localUrl = URL.createObjectURL(file);
+
+		// Insert loading preview image
+		if (pos !== undefined) {
+			editor.commands.insertContentAt(pos, {
+				type: "image",
+				attrs: {
+					src: localUrl,
+					alt: "Uploading...",
+				},
+			});
+		} else {
+			editor.commands.insertContent({
+				type: "image",
+				attrs: {
+					src: localUrl,
+					alt: "Uploading...",
+				},
+			});
+		}
+
+		try {
+			const result = await uploadMutation.mutateAsync(file);
+			editor.commands.command(({ tr, state }) => {
+				let found = false;
+				state.doc.descendants((node, pos) => {
+					if (node.type.name === "image" && node.attrs.src === localUrl) {
+						tr.setNodeMarkup(pos, undefined, {
+							...node.attrs,
+							src: result.url,
+							alt: file.name,
+						});
+						found = true;
+						return false;
+					}
+				});
+				return found;
+			});
+			toast.success("Image uploaded successfully");
+		} catch (err) {
+			editor.commands.command(({ tr, state }) => {
+				let found = false;
+				state.doc.descendants((node, pos) => {
+					if (node.type.name === "image" && node.attrs.src === localUrl) {
+						tr.delete(pos, pos + node.nodeSize);
+						found = true;
+						return false;
+					}
+				});
+				return found;
+			});
+			toast.error(err instanceof Error ? err.message : "Failed to upload image");
+		}
+	};
+
+	// Expose the editor instance to the parent component
+	useEffect(() => {
+		if (editor && onEditorCreated) {
+			onEditorCreated(editor);
+		}
+	}, [editor, onEditorCreated]);
 
 	// Sync external changes to the editor (e.g. initial load)
 	useEffect(() => {

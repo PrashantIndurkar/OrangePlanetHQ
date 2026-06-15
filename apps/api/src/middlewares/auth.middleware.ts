@@ -37,7 +37,11 @@ export const authMiddleware = (
 		}
 
 		const decoded = verifyToken(token);
-		if (!decoded || typeof decoded !== "object" || typeof decoded.id !== "string") {
+		if (
+			!decoded ||
+			typeof decoded !== "object" ||
+			typeof decoded.id !== "string"
+		) {
 			throw new ApiError(401, "Please authenticate");
 		}
 		// Fetch the user from DB to verify latest role status (handles manual role escalations dynamically)

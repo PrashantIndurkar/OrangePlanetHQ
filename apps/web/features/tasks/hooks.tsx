@@ -47,6 +47,11 @@ export function useTaskQuery(idOrCode: string) {
 			return mapBackendTaskToFrontend(res.task);
 		},
 		enabled: !!idOrCode,
+		retry: (failureCount) => {
+			if (failureCount < 5) return true;
+			return false;
+		},
+		retryDelay: 1000,
 	});
 }
 
@@ -165,11 +170,19 @@ const TaskCreatedToast = ({
 	);
 };
 
+export const lastMutation = {
+	type: null as "create" | "delete" | null,
+	timestamp: 0,
+};
+
 export function useCreateTaskMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (data: CreateTaskInput) => createTaskApi(data),
 		onMutate: async (newTask) => {
+			lastMutation.type = "create";
+			lastMutation.timestamp = Date.now();
+
 			await queryClient.cancelQueries({ queryKey: ["tasks"] });
 
 			const previousTasksQueries = queryClient.getQueriesData<{
@@ -246,6 +259,10 @@ export function useCreateTaskMutation() {
 				},
 			);
 
+			// Write individual task optimistic cache
+			queryClient.setQueryData(["task", clientUuid], optimisticTask);
+			queryClient.setQueryData(["task", optimisticId], optimisticTask);
+
 			// Trigger optimistic toast
 			toast.custom(
 				(t) => (
@@ -291,6 +308,13 @@ export function useCreateTaskMutation() {
 					};
 				},
 			);
+
+			// Write real task to cache
+			if (context?.tempUuid) {
+				queryClient.setQueryData(["task", context.tempUuid], realTask);
+			}
+			queryClient.setQueryData(["task", realTask.uuid], realTask);
+			queryClient.setQueryData(["task", realTask.id], realTask);
 
 			// Invalidate to ensure everything is in perfect sync
 			queryClient.invalidateQueries({ queryKey: ["tasks"] });
@@ -374,6 +398,9 @@ export function useDeleteTaskMutation() {
 	return useMutation({
 		mutationFn: (idOrCode: string) => deleteTaskApi(idOrCode),
 		onMutate: async (idOrCode) => {
+			lastMutation.type = "delete";
+			lastMutation.timestamp = Date.now();
+
 			await queryClient.cancelQueries({ queryKey: ["tasks"] });
 			await queryClient.cancelQueries({ queryKey: ["task", idOrCode] });
 
@@ -394,12 +421,9 @@ export function useDeleteTaskMutation() {
 			}
 
 			// Show the toast success notification optimistically
-			toast.success(
-				`Task "${readableId}" has been successfully deleted.`,
-				{
-					position: "bottom-right",
-				},
-			);
+			toast.success(`Task "${readableId}" has been successfully deleted.`, {
+				position: "bottom-right",
+			});
 
 			queryClient.setQueriesData(
 				{ queryKey: ["tasks"] },
