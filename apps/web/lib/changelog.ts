@@ -9,8 +9,22 @@ export interface ChangelogRelease {
 	contentHtml: string;
 }
 
+export function getChangelogFilePath(): string {
+	const possiblePaths = [
+		path.join(process.cwd(), "../../CHANGELOG.md"),
+		path.join(process.cwd(), "./CHANGELOG.md"),
+		path.join(process.cwd(), "apps/web/../../CHANGELOG.md"),
+	];
+	for (const p of possiblePaths) {
+		if (fs.existsSync(p)) {
+			return p;
+		}
+	}
+	return path.join(process.cwd(), "../../CHANGELOG.md");
+}
+
 export function getChangelogData(): ChangelogRelease[] {
-	const filePath = path.join(process.cwd(), "../../CHANGELOG.md");
+	const filePath = getChangelogFilePath();
 	if (!fs.existsSync(filePath)) {
 		return [];
 	}
