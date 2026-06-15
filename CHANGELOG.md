@@ -1,3 +1,4 @@
+## [0.14.1](https://github.com/PrashantIndurkar/stride/compare/v0.14.0...v0.14.1) (2026-06-15)
 # [0.14.0](https://github.com/PrashantIndurkar/stride/compare/v0.13.0...v0.14.0) (2026-06-15)
 
 
