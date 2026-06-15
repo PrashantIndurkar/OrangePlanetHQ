@@ -39,7 +39,7 @@ COPY apps/api/package.json ./apps/api/
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/typescript-config/package.json ./packages/typescript-config/
 COPY packages/ui/package.json ./packages/ui/
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --no-frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --no-frozen-lockfile --ignore-scripts
 
 # Production runner stage (Runs compiled JavaScript)
 FROM base AS runner
