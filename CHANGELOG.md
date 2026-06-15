@@ -1,3 +1,16 @@
+# [0.15.0](https://github.com/PrashantIndurkar/stride/compare/v0.14.1...v0.15.0) (2026-06-15)
+
+
+### Bug Fixes
+
+* lint ([280fe8a](https://github.com/PrashantIndurkar/stride/commit/280fe8a5e7ceac13d8b77543f5bf91868ebcb969))
+
+
+### Features
+
+* add multi-stage Dockerfile for web application deployment ([7869d79](https://github.com/PrashantIndurkar/stride/commit/7869d79d150b78a3b944bd0a08634bbd43c98c56))
+* add multi-stage Dockerfile for web application deployment ([ae770ec](https://github.com/PrashantIndurkar/stride/commit/ae770ecefa83e4fb259e757d5d03f99352af7fa6))
+* fix login signup page logo added favicon and title to the website ([da1d214](https://github.com/PrashantIndurkar/stride/commit/da1d2140182f7b0869e9b173e2e7d779596f46bb))
 ## [0.14.1](https://github.com/PrashantIndurkar/stride/compare/v0.14.0...v0.14.1) (2026-06-15)
 # [0.14.0](https://github.com/PrashantIndurkar/stride/compare/v0.13.0...v0.14.0) (2026-06-15)
 
