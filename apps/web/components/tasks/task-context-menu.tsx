@@ -12,6 +12,7 @@ import {
 	ContextMenuSubTrigger,
 	ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { TaskDueDateList } from "./task-due-date-list";
 import {
 	priorities,
 	statuses,
@@ -20,7 +21,6 @@ import {
 } from "./task-metadata";
 import { TaskPriorityList } from "./task-priority-list";
 import { TaskStatusList } from "./task-status-list";
-import { TaskDueDateList } from "./task-due-date-list";
 
 export { priorities, statuses, type TaskPriority, type TaskStatus };
 
@@ -58,9 +58,12 @@ export function TaskContextMenu({
 		React.useState<TaskPriority>(currentPriority);
 	const [priority, setPriority] = React.useState<TaskPriority>(currentPriority);
 
-	const [prevCurrentDueDate, setPrevCurrentDueDate] =
-		React.useState<string | undefined>(currentDueDate);
-	const [dueDate, setDueDate] = React.useState<string | undefined>(currentDueDate);
+	const [prevCurrentDueDate, setPrevCurrentDueDate] = React.useState<
+		string | undefined
+	>(currentDueDate);
+	const [dueDate, setDueDate] = React.useState<string | undefined>(
+		currentDueDate,
+	);
 
 	const [isOpen, setIsOpen] = React.useState(false);
 
@@ -147,15 +150,15 @@ export function TaskContextMenu({
 				{/* Due Date Submenu */}
 				<ContextMenuSub>
 					<ContextMenuSubTrigger className="flex items-center gap-2">
-						<HugeiconsIcon icon={Calendar04Icon} className="h-4 w-4 text-muted-foreground" />
+						<HugeiconsIcon
+							icon={Calendar04Icon}
+							className="h-4 w-4 text-muted-foreground"
+						/>
 						<span className="flex-grow">Due date</span>
 						<span className="text-xs text-muted-foreground/60">D</span>
 					</ContextMenuSubTrigger>
 					<ContextMenuSubContent className="w-48 p-0">
-						<TaskDueDateList
-							value={dueDate}
-							onSelect={handleDueDateChange}
-						/>
+						<TaskDueDateList value={dueDate} onSelect={handleDueDateChange} />
 					</ContextMenuSubContent>
 				</ContextMenuSub>
 

@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
 import {
@@ -17,7 +18,6 @@ import { WorkspaceBoardView } from "./workspace-board-view";
 import { WorkspaceFilters } from "./workspace-filters";
 import { WorkspaceHeader } from "./workspace-header";
 import { WorkspaceListView } from "./workspace-list-view";
-import { useHotkeys } from "react-hotkeys-hook";
 
 export function WorkspaceLayout() {
 	const router = useRouter();

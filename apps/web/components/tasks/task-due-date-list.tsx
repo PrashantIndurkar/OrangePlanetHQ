@@ -56,7 +56,8 @@ export function TaskDueDateList({ value, onSelect }: TaskDueDateListProps) {
 				<CommandEmpty>No option found.</CommandEmpty>
 				<CommandGroup>
 					{dueDateOptions.map((opt) => {
-						const isSelected = value === opt.label || (opt.value === undefined && !value);
+						const isSelected =
+							value === opt.label || (opt.value === undefined && !value);
 						const styles = getOptionStyles(opt.label);
 						return (
 							<CommandItem
@@ -69,7 +70,12 @@ export function TaskDueDateList({ value, onSelect }: TaskDueDateListProps) {
 									icon={Calendar04Icon}
 									className={cn("h-4 w-4 shrink-0", styles.icon)}
 								/>
-								<span className={cn("flex-grow text-left text-[12px] font-medium", styles.text)}>
+								<span
+									className={cn(
+										"flex-grow text-left text-[12px] font-medium",
+										styles.text,
+									)}
+								>
 									{opt.label}
 								</span>
 								<div className="ml-auto flex shrink-0 items-center gap-2">
