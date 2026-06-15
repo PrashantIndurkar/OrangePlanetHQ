@@ -1,4 +1,5 @@
 # 📋 Stride
+<img width="1557" height="1026" alt="image" src="https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0" />
 
 Welcome to **Stride**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
 
