@@ -190,7 +190,7 @@ class IssuesStore {
 
 	private load() {
 		try {
-			const stored = localStorage.getItem("stried_tasks_v2");
+			const stored = localStorage.getItem("stride_tasks_v2");
 			if (stored) {
 				this.tasks = JSON.parse(stored);
 			} else {
@@ -206,7 +206,7 @@ class IssuesStore {
 	private save() {
 		if (typeof window !== "undefined") {
 			try {
-				localStorage.setItem("stried_tasks_v2", JSON.stringify(this.tasks));
+				localStorage.setItem("stride_tasks_v2", JSON.stringify(this.tasks));
 			} catch (e) {
 				console.error("Failed to save tasks to localStorage", e);
 			}

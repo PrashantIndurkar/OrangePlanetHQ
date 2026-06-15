@@ -1,18 +1,18 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: stried-db
+    container_name: stride-db
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: stried
+      POSTGRES_DB: stride
     ports:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d stried"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d stride"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: apps/api/Dockerfile
       target: development
-    container_name: stried-api
+    container_name: stride-api
     restart: always
     ports:
       - "3002:3002"
@@ -34,7 +34,7 @@ services:
       - /app/apps/web/node_modules
     environment:
       PORT: 3002
-      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@db:5432/stried}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@db:5432/stride}
       JWT_SECRET: ${JWT_SECRET:-supersecretjwtkeyassessmentrival123!}
       NODE_ENV: development
       CI: "true"
@@ -50,7 +50,7 @@ services:
       target: development
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3002/api/v1}
-    container_name: stried-web
+    container_name: stride-web
     restart: always
     ports:
       - "3000:3000"

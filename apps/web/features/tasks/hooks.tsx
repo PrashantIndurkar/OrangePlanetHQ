@@ -299,10 +299,10 @@ export function useUpdateTaskMutation() {
 			await queryClient.cancelQueries({ queryKey: ["task", id] });
 
 			// Snapshot the previous values
-			const previousTasks = queryClient.getQueryData<{
+			const previousTasksQueries = queryClient.getQueriesData<{
 				tasks: Task[];
 				total: number;
-			}>(["tasks"]);
+			}>({ queryKey: ["tasks"] });
 			const previousTask = queryClient.getQueryData<Task>(["task", id]);
 
 			// Optimistically update single task query cache
@@ -327,25 +327,17 @@ export function useUpdateTaskMutation() {
 				},
 			);
 
-			return { previousTasks, previousTask, id };
+			return { previousTasksQueries, previousTask, id };
 		},
-		onError: (
-			_err,
-			_variables,
-			context:
-				| {
-						previousTasks: { tasks: Task[]; total: number } | undefined;
-						previousTask: Task | undefined;
-						id: string;
-				  }
-				| undefined,
-		) => {
+		onError: (_err, _variables, context) => {
 			// Rollback
 			if (context?.previousTask) {
 				queryClient.setQueryData(["task", context.id], context.previousTask);
 			}
-			if (context?.previousTasks) {
-				queryClient.setQueryData(["tasks"], context.previousTasks);
+			if (context?.previousTasksQueries) {
+				for (const [queryKey, value] of context.previousTasksQueries) {
+					queryClient.setQueryData(queryKey, value);
+				}
 			}
 		},
 		onSuccess: (data, variables) => {
