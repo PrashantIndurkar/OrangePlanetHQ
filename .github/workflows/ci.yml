@@ -105,23 +105,8 @@ jobs:
           echo "Generating Prisma client"
           pnpm --filter api exec prisma generate --schema=prisma/schema.prisma
 
-          echo "Listing migration files (debug)"
-          ls -la apps/api/prisma/migrations || true
-
-          echo "Applying migrations (reset for CI safety)"
-          if pnpm --filter api exec prisma migrate reset --force --schema=prisma/schema.prisma; then
-            echo "✅ migrate reset succeeded"
-          else
-            echo "⚠️ migrate reset failed – trying deploy"
-            if ! pnpm --filter api exec prisma migrate deploy --schema=prisma/schema.prisma; then
-              echo "::error::Prisma migrations failed"
-              pnpm --filter api exec prisma migrate status --schema=prisma/schema.prisma || true
-              exit 1
-            fi
-          fi
-
-          echo "Prisma migration status:"
-          pnpm --filter api exec prisma migrate status --schema=prisma/schema.prisma
+          echo "Pushing database schema (CI-safe)"
+          pnpm --filter api exec prisma db push --force-reset --schema=prisma/schema.prisma
 
       - name: Compile and Build Apps
         run: pnpm run build
