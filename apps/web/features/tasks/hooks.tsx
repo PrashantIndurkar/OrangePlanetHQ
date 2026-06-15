@@ -50,16 +50,16 @@ export function useTaskQuery(idOrCode: string) {
 	});
 }
 
+import {
+	Cancel01Icon,
+	CheckmarkCircle02Icon,
+	GitBranchIcon,
+	HashIcon,
+	Link01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
 import { toast } from "sonner";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-	CheckmarkCircle02Icon,
-	Link01Icon,
-	HashIcon,
-	GitBranchIcon,
-	Cancel01Icon,
-} from "@hugeicons/core-free-icons";
 
 const TaskCreatedToast = ({
 	task,
@@ -279,10 +279,10 @@ export function useCreateTaskMutation() {
 
 			// Update the optimistic toast with real details
 			if (context?.toastId) {
-				toast.custom(
-					(t) => <TaskCreatedToast task={realTask} toastId={t} />,
-					{ id: context.toastId, duration: 6000 },
-				);
+				toast.custom((t) => <TaskCreatedToast task={realTask} toastId={t} />, {
+					id: context.toastId,
+					duration: 6000,
+				});
 			}
 		},
 	});

@@ -4,6 +4,12 @@ import { Calendar04Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
 	useDeleteTaskMutation,
@@ -28,12 +34,6 @@ import {
 } from "../tasks/task-context-menu";
 import type { Task } from "./types";
 import { filterAndSortTasks, getNormalizedFilters } from "./types";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 const getDueDateBadgeStyles = (val?: string | null) => {
 	if (!val) return { bg: "", border: "", text: "", iconColor: "" };
@@ -333,9 +333,7 @@ export function WorkspaceListView({
 										>
 											+
 										</TooltipTrigger>
-										<TooltipContent>
-											Add task to {group.title}
-										</TooltipContent>
+										<TooltipContent>Add task to {group.title}</TooltipContent>
 									</Tooltip>
 								</TooltipProvider>
 							</div>
@@ -413,7 +411,9 @@ export function WorkspaceListView({
 																		/>
 																	</svg>
 																</TooltipTrigger>
-																<TooltipContent>Mark task as completed</TooltipContent>
+																<TooltipContent>
+																	Mark task as completed
+																</TooltipContent>
 															</Tooltip>
 														</TooltipProvider>
 													</div>
@@ -500,7 +500,8 @@ export function WorkspaceListView({
 																			: "U"}
 																	</TooltipTrigger>
 																	<TooltipContent>
-																		Assignee: {task.assigneeName || "Unassigned"}
+																		Assignee:{" "}
+																		{task.assigneeName || "Unassigned"}
 																	</TooltipContent>
 																</Tooltip>
 															</TooltipProvider>

@@ -43,10 +43,12 @@ export const updateTaskSchema = z.object({
 	description: z.string().optional().nullable(),
 	status: taskStatusEnum.optional(),
 	priority: taskPriorityEnum.optional(),
-	dueDate: z.preprocess(
-		(val) => (val === "" || val === null ? null : val),
-		z.coerce.date().optional().nullable(),
-	).optional(),
+	dueDate: z
+		.preprocess(
+			(val) => (val === "" || val === null ? null : val),
+			z.coerce.date().optional().nullable(),
+		)
+		.optional(),
 });
 
 export const listTasksQuerySchema = z.object({

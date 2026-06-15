@@ -1,6 +1,12 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
 	useDeleteTaskMutation,
 	useUpdateTaskMutation,
 } from "../../features/tasks/hooks";
@@ -15,12 +21,6 @@ import { TaskCard } from "../tasks/task-card";
 import type { TaskPriority, TaskStatus } from "../tasks/task-context-menu";
 import type { Task } from "./types";
 import { filterAndSortTasks, getNormalizedFilters } from "./types";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface WorkspaceBoardViewProps {
 	tasks: Task[];
@@ -263,7 +263,9 @@ export function WorkspaceBoardView({
 												<path d="M12 5v14M5 12h14" />
 											</svg>
 										</TooltipTrigger>
-										<TooltipContent>Create task in {column.title}</TooltipContent>
+										<TooltipContent>
+											Create task in {column.title}
+										</TooltipContent>
 									</Tooltip>
 								</TooltipProvider>
 							</div>

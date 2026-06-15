@@ -24,6 +24,12 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SearchInput } from "@/components/ui/search-input";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
 	BacklogIcon,
@@ -37,14 +43,7 @@ import {
 	TodoIcon,
 	UrgentPriorityIcon,
 } from "../icons";
-
 import { getNormalizedFilters } from "./types";
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface WorkspaceFiltersProps {
 	view: "board" | "list";
