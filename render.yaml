@@ -1,0 +1,38 @@
+services:
+  # 1. API Backend Web Service (Docker)
+  - type: web
+    name: stride-api
+    runtime: docker
+    dockerfilePath: apps/api/Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: PORT
+        value: 3002
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false # User will set this to their Neon DB connection string
+      - key: JWT_SECRET
+        sync: false # User will set this to their JWT secret
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+  # 2. Next.js Frontend Web Service (Docker)
+  - type: web
+    name: stride-web
+    runtime: docker
+    dockerfilePath: apps/web/Dockerfile
+    dockerContext: .
+    plan: free
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://stride-api.onrender.com/api/v1
