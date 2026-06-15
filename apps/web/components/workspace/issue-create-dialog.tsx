@@ -11,6 +11,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
 import { toast } from "sonner";
+import { TaskEditor } from "@/components/tasks/task-editor";
 import { Switch } from "@/components/ui/switch";
 import {
 	Tooltip,
@@ -26,7 +27,6 @@ import { IssueAttachmentButton } from "./issue-attachment-button";
 import { IssueDueDateSelect } from "./issue-due-date-select";
 import { IssuePrioritySelect } from "./issue-priority-select";
 import { IssueStatusSelect } from "./issue-status-select";
-import { TaskEditor } from "@/components/tasks/task-editor";
 
 interface IssueCreateDialogProps {
 	open: boolean;
@@ -61,6 +61,7 @@ export function IssueCreateDialog({
 
 	const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 	const titleInputRef = React.useRef<HTMLInputElement>(null);
+	// biome-ignore lint/suspicious/noExplicitAny: Tiptap editor type is complex
 	const editorRef = React.useRef<any>(null);
 
 	// Update status if defaultStatus changes during render
@@ -109,7 +110,11 @@ export function IssueCreateDialog({
 
 		let finalDesc = description.trim();
 		// Clean up empty Tiptap paragraphs/placeholders
-		if (finalDesc === "<p></p>" || finalDesc === "<p></p><p></p>" || finalDesc === "<p></p><p></p><p></p>") {
+		if (
+			finalDesc === "<p></p>" ||
+			finalDesc === "<p></p><p></p>" ||
+			finalDesc === "<p></p><p></p><p></p>"
+		) {
 			finalDesc = "";
 		}
 
@@ -133,8 +138,22 @@ export function IssueCreateDialog({
 		if (!editorRef.current) return;
 		const editor = editorRef.current;
 
+		const allowedTypes = [
+			"image/png",
+			"image/jpeg",
+			"image/jpg",
+			"image/webp",
+			"image/gif",
+		];
+
 		setIsUploading(true);
 		for (const file of files) {
+			if (!allowedTypes.includes(file.type)) {
+				toast.error(
+					`File "${file.name}" format is not supported. Please upload PNG, JPG, WEBP, or GIF images.`,
+				);
+				continue;
+			}
 			if (file.type.startsWith("image/")) {
 				const localUrl = URL.createObjectURL(file);
 
@@ -149,8 +168,10 @@ export function IssueCreateDialog({
 
 				try {
 					const result = await uploadImage(file);
+					// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
 					editor.commands.command(({ tr, state }: any) => {
 						let found = false;
+						// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
 						state.doc.descendants((node: any, pos: number) => {
 							if (node.type.name === "image" && node.attrs.src === localUrl) {
 								tr.setNodeMarkup(pos, undefined, {
@@ -167,8 +188,10 @@ export function IssueCreateDialog({
 					toast.success("Image uploaded successfully");
 				} catch (err) {
 					// Remove the preview if failed
+					// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
 					editor.commands.command(({ tr, state }: any) => {
 						let found = false;
+						// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
 						state.doc.descendants((node: any, pos: number) => {
 							if (node.type.name === "image" && node.attrs.src === localUrl) {
 								tr.delete(pos, pos + node.nodeSize);
@@ -178,7 +201,9 @@ export function IssueCreateDialog({
 						});
 						return found;
 					});
-					toast.error(err instanceof Error ? err.message : "Failed to upload image");
+					toast.error(
+						err instanceof Error ? err.message : "Failed to upload image",
+					);
 				}
 			}
 		}
@@ -209,7 +234,7 @@ export function IssueCreateDialog({
 						"fixed top-1/2 left-1/2 z-50 flex flex-col -translate-x-1/2 -translate-y-1/2 bg-popover text-popover-foreground shadow-2xl border-0 rounded-none outline-none",
 						isExpanded
 							? "w-[818px] h-[90vh] max-h-[1194px]"
-							: "w-[748px] min-h-[260px] max-h-[560px] h-auto",
+							: "w-[748px] min-h-[420px] max-h-[720px] h-auto",
 						"max-sm:w-[95vw] max-sm:h-[90vh] max-sm:max-h-none",
 					)}
 				>
@@ -286,7 +311,16 @@ export function IssueCreateDialog({
 						/>
 
 						{/* Description field */}
-						<div className="min-h-[160px] w-full">
+						{/* biome-ignore lint/a11y/useKeyWithClickEvents: Container focusing */}
+						{/* biome-ignore lint/a11y/noStaticElementInteractions: Container focusing */}
+						<div
+							className="flex-1 min-h-[260px] overflow-y-auto w-full pb-10 cursor-text"
+							onClick={() => {
+								if (editorRef.current) {
+									editorRef.current.commands.focus();
+								}
+							}}
+						>
 							<TaskEditor
 								value={description}
 								onChange={setDescription}
@@ -297,10 +331,13 @@ export function IssueCreateDialog({
 							/>
 						</div>
 
-
-
 						{/* Metadata selectors row - no borders, all boxy */}
-						<div className="flex flex-wrap items-center gap-1.5 mt-auto pt-4 border-t-0 select-none">
+						{/* biome-ignore lint/a11y/useKeyWithClickEvents: Stop propagation container */}
+						{/* biome-ignore lint/a11y/noStaticElementInteractions: Stop propagation container */}
+						<div
+							className="flex flex-wrap items-center gap-1.5 mt-auto pt-4 border-t border-border/30 relative z-20 select-none bg-popover"
+							onClick={(e) => e.stopPropagation()}
+						>
 							<IssueStatusSelect value={status} onChange={setStatus} />
 							<IssuePrioritySelect value={priority} onChange={setPriority} />
 							<IssueDueDateSelect value={dueDate} onChange={setDueDate} />

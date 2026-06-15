@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import type { Editor } from "@tiptap/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { toast } from "sonner";
+import { TaskEditor } from "@/components/tasks/task-editor";
 import type {
 	TaskPriority,
 	TaskStatus,
@@ -17,8 +19,6 @@ import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import { useCreateTaskMutation } from "../../../../features/tasks/hooks";
-import { TaskEditor } from "@/components/tasks/task-editor";
-import { type Editor } from "@tiptap/react";
 
 export default function NewTaskPage() {
 	const router = useRouter();
@@ -53,8 +53,27 @@ export default function NewTaskPage() {
 		if (!editorRef.current) return;
 		const editor = editorRef.current;
 
+		const allowedTypes = [
+			"image/png",
+			"image/jpeg",
+			"image/jpg",
+			"image/webp",
+			"image/gif",
+		];
+
+		const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 		setIsUploading(true);
 		for (const file of files) {
+			if (!allowedTypes.includes(file.type)) {
+				toast.error(
+					`File "${file.name}" format is not supported. Please upload PNG, JPG, WEBP, or GIF images.`,
+				);
+				continue;
+			}
+			if (file.size > MAX_IMAGE_SIZE) {
+				toast.error(`File "${file.name}" exceeds the 5 MB size limit.`);
+				continue;
+			}
 			if (file.type.startsWith("image/")) {
 				const localUrl = URL.createObjectURL(file);
 
@@ -69,8 +88,10 @@ export default function NewTaskPage() {
 
 				try {
 					const result = await uploadImage(file);
+					// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
 					editor.commands.command(({ tr, state }: any) => {
 						let found = false;
+						// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
 						state.doc.descendants((node: any, pos: number) => {
 							if (node.type.name === "image" && node.attrs.src === localUrl) {
 								tr.setNodeMarkup(pos, undefined, {
@@ -87,8 +108,10 @@ export default function NewTaskPage() {
 					toast.success("Image uploaded successfully");
 				} catch (err) {
 					// Remove the preview if failed
+					// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
 					editor.commands.command(({ tr, state }: any) => {
 						let found = false;
+						// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
 						state.doc.descendants((node: any, pos: number) => {
 							if (node.type.name === "image" && node.attrs.src === localUrl) {
 								tr.delete(pos, pos + node.nodeSize);
@@ -98,7 +121,9 @@ export default function NewTaskPage() {
 						});
 						return found;
 					});
-					toast.error(err instanceof Error ? err.message : "Failed to upload image");
+					toast.error(
+						err instanceof Error ? err.message : "Failed to upload image",
+					);
 				}
 			}
 		}
@@ -110,7 +135,11 @@ export default function NewTaskPage() {
 
 		let finalDesc = description.trim();
 		// Clean up empty Tiptap paragraphs/placeholders
-		if (finalDesc === "<p></p>" || finalDesc === "<p></p><p></p>" || finalDesc === "<p></p><p></p><p></p>") {
+		if (
+			finalDesc === "<p></p>" ||
+			finalDesc === "<p></p><p></p>" ||
+			finalDesc === "<p></p><p></p><p></p>"
+		) {
 			finalDesc = "";
 		}
 
@@ -166,7 +195,7 @@ export default function NewTaskPage() {
 			</header>
 
 			{/* Main Scrollable Form Area */}
-			<div className="flex-1 overflow-y-auto p-6 flex justify-center">
+			<div className="flex-1 overflow-y-auto p-6 flex justify-center pb-24">
 				<div className="w-full max-w-3xl flex flex-col gap-6 bg-card border border-border p-6 shadow-sm rounded-none h-fit">
 					<div className="flex flex-col gap-4">
 						{/* Title field */}
@@ -180,7 +209,16 @@ export default function NewTaskPage() {
 						/>
 
 						{/* Description field */}
-						<div className="min-h-[160px] w-full">
+						{/* biome-ignore lint/a11y/useKeyWithClickEvents: Container focusing */}
+						{/* biome-ignore lint/a11y/noStaticElementInteractions: Container focusing */}
+						<div
+							className="flex-1 min-h-[260px] overflow-y-auto w-full pb-10 cursor-text"
+							onClick={() => {
+								if (editorRef.current) {
+									editorRef.current.commands.focus();
+								}
+							}}
+						>
 							<TaskEditor
 								value={description}
 								onChange={setDescription}
@@ -190,12 +228,15 @@ export default function NewTaskPage() {
 								}}
 							/>
 						</div>
-
-
 					</div>
 
 					{/* Metadata row selector */}
-					<div className="flex flex-wrap items-center gap-2 pt-4 border-t border-border/40">
+					{/* biome-ignore lint/a11y/useKeyWithClickEvents: Stop propagation container */}
+					{/* biome-ignore lint/a11y/noStaticElementInteractions: Stop propagation container */}
+					<div
+						className="flex flex-wrap items-center gap-2 pt-6 border-t border-border/40 mt-6 relative z-20 bg-card"
+						onClick={(e) => e.stopPropagation()}
+					>
 						<IssueStatusSelect value={status} onChange={setStatus} />
 						<IssuePrioritySelect value={priority} onChange={setPriority} />
 						<IssueDueDateSelect value={dueDate} onChange={setDueDate} />
@@ -220,7 +261,7 @@ export default function NewTaskPage() {
 					</div>
 
 					{/* Actions footer */}
-					<div className="flex items-center justify-end gap-3 pt-4 border-t border-border/40">
+					<div className="flex items-center justify-end gap-3 pt-4 border-t border-border/40 sticky bottom-0 bg-card z-10">
 						<Link
 							href="/tasks"
 							className="flex h-8 items-center px-4 rounded-none border border-border text-[12px] font-semibold text-foreground hover:bg-muted/50 transition-colors select-none"

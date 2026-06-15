@@ -2,7 +2,7 @@
 
 import Image from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
-import { EditorContent, useEditor, Editor } from "@tiptap/react";
+import { type Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -15,7 +15,12 @@ interface TaskEditorProps {
 	onEditorCreated?: (editor: Editor) => void;
 }
 
-export function TaskEditor({ value, onChange, onBlur, onEditorCreated }: TaskEditorProps) {
+export function TaskEditor({
+	value,
+	onChange,
+	onBlur,
+	onEditorCreated,
+}: TaskEditorProps) {
 	const uploadMutation = useUploadImageMutation();
 
 	const editor = useEditor({
@@ -37,7 +42,7 @@ export function TaskEditor({ value, onChange, onBlur, onEditorCreated }: TaskEdi
 				class:
 					"focus:outline-none min-h-[160px] max-w-none w-full text-[14px] leading-relaxed text-foreground select-text tiptap",
 			},
-			handlePaste: (view, event) => {
+			handlePaste: (_view, event) => {
 				const items = Array.from(event.clipboardData?.items || []);
 				const imageItem = items.find((item) => item.type.startsWith("image/"));
 				if (imageItem) {
@@ -127,7 +132,9 @@ export function TaskEditor({ value, onChange, onBlur, onEditorCreated }: TaskEdi
 				});
 				return found;
 			});
-			toast.error(err instanceof Error ? err.message : "Failed to upload image");
+			toast.error(
+				err instanceof Error ? err.message : "Failed to upload image",
+			);
 		}
 	};
 

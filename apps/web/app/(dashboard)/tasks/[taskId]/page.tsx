@@ -325,7 +325,21 @@ export default function TaskDetailsPage({
 	};
 
 	const handleFileSelect = async (files: File[]) => {
+		const allowedTypes = [
+			"image/png",
+			"image/jpeg",
+			"image/jpg",
+			"image/webp",
+			"image/gif",
+		];
+
 		for (const file of files) {
+			if (!allowedTypes.includes(file.type)) {
+				toast.error(
+					`File "${file.name}" format is not supported. Please upload PNG, JPG, WEBP, or GIF images.`,
+				);
+				continue;
+			}
 			if (file.type.startsWith("image/")) {
 				try {
 					const result = await uploadImage(file);
