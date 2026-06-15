@@ -15,7 +15,7 @@ export function useLogin() {
 		setError(null);
 
 		const toastId = toast.loading("Authenticating credentials...", {
-			position: "bottom-right",
+			position: "top-center",
 		});
 
 		const timeouts: NodeJS.Timeout[] = [];
@@ -69,7 +69,7 @@ export function useSignup() {
 		setError(null);
 
 		const toastId = toast.loading("Preparing workspace...", {
-			position: "bottom-right",
+			position: "top-center",
 		});
 
 		const timeouts: NodeJS.Timeout[] = [];

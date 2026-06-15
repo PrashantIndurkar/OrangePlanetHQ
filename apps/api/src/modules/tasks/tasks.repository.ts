@@ -61,7 +61,26 @@ export const tasksRepository = {
 				},
 			});
 
-			return task;
+			const createdTask = await tx.task.findUnique({
+				where: { id: task.id },
+				include: {
+					activities: {
+						orderBy: {
+							timestamp: "asc",
+						},
+					},
+					user: {
+						select: {
+							id: true,
+							email: true,
+							name: true,
+							role: true,
+						},
+					},
+				},
+			});
+
+			return createdTask!;
 		});
 	},
 
@@ -242,6 +261,7 @@ export const tasksRepository = {
 		if (search) {
 			const searchClause: Prisma.TaskWhereInput = {
 				OR: [
+					{ id: { contains: search, mode: "insensitive" } },
 					{ title: { contains: search, mode: "insensitive" } },
 					{ description: { contains: search, mode: "insensitive" } },
 				],
@@ -357,7 +377,26 @@ export const tasksRepository = {
 				});
 			}
 
-			return updated;
+			const updatedTask = await tx.task.findUnique({
+				where: { id },
+				include: {
+					activities: {
+						orderBy: {
+							timestamp: "asc",
+						},
+					},
+					user: {
+						select: {
+							id: true,
+							email: true,
+							name: true,
+							role: true,
+						},
+					},
+				},
+			});
+
+			return updatedTask!;
 		});
 	},
 

@@ -22,11 +22,14 @@ export const authMiddleware = (
 ): void => {
 	try {
 		const authHeader = req.headers.authorization;
-		if (!authHeader?.startsWith("Bearer ")) {
-			throw new ApiError(401, "Please authenticate");
+		let token: string | undefined;
+
+		if (authHeader?.startsWith("Bearer ")) {
+			token = authHeader.split(" ")[1];
+		} else if (req.cookies?.token) {
+			token = req.cookies.token;
 		}
 
-		const token = authHeader.split(" ")[1];
 		if (!token) {
 			throw new ApiError(401, "Please authenticate");
 		}

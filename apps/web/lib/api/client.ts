@@ -1,7 +1,7 @@
 import { getToken } from "../auth/session";
 import { ApiError } from "./errors";
 
-const API_BASE_URL =
+export const API_BASE_URL =
 	process.env.NEXT_PUBLIC_API_URL || "http://localhost:3002/api/v1";
 
 interface FetchOptions extends RequestInit {

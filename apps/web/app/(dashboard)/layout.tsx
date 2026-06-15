@@ -4,9 +4,13 @@ import type React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Sidebar } from "@/components/layout/sidebar";
 import { SidebarProvider, useSidebar } from "@/providers/sidebar-provider";
+import { useRealtime } from "@/hooks/use-realtime";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
 	const { toggle } = useSidebar();
+	
+	// Start listening to real-time events via Server-Sent Events (SSE)
+	useRealtime();
 
 	useHotkeys(
 		"[, bracketleft",
