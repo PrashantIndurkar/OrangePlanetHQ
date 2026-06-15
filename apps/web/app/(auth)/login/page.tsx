@@ -4,8 +4,8 @@ import { LoginForm } from "@/components/auth/login-form";
 import { Logo } from "@/components/auth/logo";
 
 export const metadata: Metadata = {
-	title: "Login | Stried",
-	description: "Log in to your Stried account to manage tasks.",
+	title: "Login | Stride",
+	description: "Log in to your Stride account to manage tasks.",
 };
 
 export default function LoginPage() {
