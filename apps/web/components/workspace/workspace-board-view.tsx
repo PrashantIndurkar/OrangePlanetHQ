@@ -292,7 +292,7 @@ export function WorkspaceBoardView({
 									onUpdatePriority={(newPriority) =>
 										handleUpdatePriority(task.id, newPriority)
 									}
-									onDeleteTask={() => handleDeleteTask(task.id)}
+									onDeleteTask={() => handleDeleteTask(task.uuid || task.id)}
 								/>
 							))}
 

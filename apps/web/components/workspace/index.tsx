@@ -1,12 +1,14 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
 import {
 	useCreateTaskMutation,
 	useTasksQuery,
 } from "../../features/tasks/hooks";
+import type { Task } from "./types";
 import type { TaskPriority, TaskStatus } from "../tasks/task-context-menu";
 import { IssueCreateDialog } from "./issue-create-dialog";
 import { getNormalizedFilters } from "./types";
@@ -55,6 +57,73 @@ export function WorkspaceLayout() {
 		limit,
 		allUsers: showAllUsers,
 	});
+
+	// Pagination shift notification logic
+	const prevTasksRef = useRef<Task[]>([]);
+	const prevTotalRef = useRef<number>(0);
+	const prevFiltersRef = useRef<string>("");
+
+	const currentFiltersKey = JSON.stringify({
+		status: activeStatuses,
+		priority: activePriorities,
+		dueDate: activeDueDates,
+		search: searchQuery,
+		sortBy,
+		sortOrder,
+		page,
+		limit,
+		allUsers: showAllUsers,
+	});
+
+	useEffect(() => {
+		if (isLoading || isError || !data) return;
+
+		const currentTasks = data.tasks || [];
+		const currentTotal = data.total || 0;
+
+		if (prevFiltersRef.current === currentFiltersKey) {
+			const prevTasks = prevTasksRef.current;
+			const prevTotal = prevTotalRef.current;
+
+			const currentUuids = new Set(currentTasks.map((t) => t.uuid));
+			const prevUuids = new Set(prevTasks.map((t) => t.uuid));
+
+			const added = currentTasks.filter((t) => !prevUuids.has(t.uuid));
+			const removed = prevTasks.filter((t) => !currentUuids.has(t.uuid));
+
+			if (prevTasks.length > 0) {
+				// 1. Shift Down Detection (creation/updates pushing items off the bottom of the page)
+				if (currentTotal >= prevTotal) {
+					for (const r of removed) {
+						const prevIndex = prevTasks.findIndex((t) => t.uuid === r.uuid);
+						if (prevIndex >= 9) {
+							setTimeout(() => {
+								toast.warning(`Task "${r.id}" shifted to page ${page + 1} due to the 10-task limit.`, {
+									duration: 5000,
+								});
+							}, 1200);
+						}
+					}
+				}
+
+				// 2. Shift Up Detection (deletion pulling items up to the bottom of the page)
+				for (const a of added) {
+					const currentIndex = currentTasks.findIndex((t) => t.uuid === a.uuid);
+					if (currentIndex > 0) {
+						setTimeout(() => {
+							toast.warning(`Task "${a.id}" shifted up from page ${page + 1} to fill the page.`, {
+								duration: 5000,
+							});
+						}, 1200);
+					}
+				}
+			}
+		}
+
+		prevTasksRef.current = currentTasks;
+		prevTotalRef.current = currentTotal;
+		prevFiltersRef.current = currentFiltersKey;
+	}, [data, isLoading, isError, currentFiltersKey, page]);
 
 	const createTaskMutation = useCreateTaskMutation();
 

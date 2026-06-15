@@ -128,7 +128,7 @@ export function TaskContextMenu({
 
 				{/* Delete Task */}
 				<ContextMenuItem
-					onSelect={() => {
+					onClick={() => {
 						onDeleteTask?.();
 						setIsOpen(false);
 					}}

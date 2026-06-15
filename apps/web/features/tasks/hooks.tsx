@@ -177,8 +177,19 @@ export function useCreateTaskMutation() {
 				total: number;
 			}>({ queryKey: ["tasks"] });
 
-			const tempUuid = `temp-${Date.now()}`;
-			const toastId = `create-task-${tempUuid}`;
+			// Generate a client-side UUID and assign it to the request payload
+			const clientUuid =
+				typeof crypto !== "undefined" && crypto.randomUUID
+					? crypto.randomUUID()
+					: "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+							const r = (Math.random() * 16) | 0;
+							const v = c === "x" ? r : (r & 0x3) | 0x8;
+							return v.toString(16);
+						});
+			newTask.id = clientUuid;
+
+			const optimisticId = `STR-${clientUuid.slice(0, 8).toUpperCase()}`;
+			const toastId = `create-task-${clientUuid}`;
 
 			let dueDateStr: string | undefined;
 			if (newTask.dueDate) {
@@ -205,8 +216,8 @@ export function useCreateTaskMutation() {
 			}
 
 			const optimisticTask: Task = {
-				id: "STR-TEMP",
-				uuid: tempUuid,
+				id: optimisticId,
+				uuid: clientUuid,
 				title: newTask.title,
 				status: (newTask.status as Task["status"]) || "todo",
 				priority: (newTask.priority as Task["priority"]) || "no-priority",
@@ -239,14 +250,14 @@ export function useCreateTaskMutation() {
 			toast.custom(
 				(t) => (
 					<TaskCreatedToast
-						task={{ id: "STR-TEMP", uuid: tempUuid, title: newTask.title }}
+						task={{ id: optimisticId, uuid: clientUuid, title: newTask.title }}
 						toastId={t}
 					/>
 				),
 				{ id: toastId, duration: 12000 },
 			);
 
-			return { previousTasksQueries, tempUuid, toastId };
+			return { previousTasksQueries, tempUuid: clientUuid, toastId };
 		},
 		onError: (_err, _variables, context) => {
 			if (context?.previousTasksQueries) {
@@ -265,11 +276,18 @@ export function useCreateTaskMutation() {
 				{ queryKey: ["tasks"] },
 				(old: { tasks: Task[]; total: number } | undefined) => {
 					if (!old) return old;
+					const exists = old.tasks.some(
+						(t) => t.uuid === realTask.uuid || t.id === realTask.id,
+					);
+					const updatedTasks = exists
+						? old.tasks.map((t) =>
+								t.uuid === realTask.uuid || t.id === realTask.id ? realTask : t,
+							)
+						: [realTask, ...old.tasks];
+
 					return {
 						...old,
-						tasks: old.tasks.map((t) =>
-							t.uuid === context?.tempUuid ? realTask : t,
-						),
+						tasks: updatedTasks,
 					};
 				},
 			);
@@ -355,6 +373,59 @@ export function useDeleteTaskMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: (idOrCode: string) => deleteTaskApi(idOrCode),
+		onMutate: async (idOrCode) => {
+			await queryClient.cancelQueries({ queryKey: ["tasks"] });
+			await queryClient.cancelQueries({ queryKey: ["task", idOrCode] });
+
+			const previousTasksQueries = queryClient.getQueriesData<{
+				tasks: Task[];
+				total: number;
+			}>({ queryKey: ["tasks"] });
+
+			let readableId = idOrCode;
+			for (const [, data] of previousTasksQueries) {
+				const found = data?.tasks?.find(
+					(t) => t.uuid === idOrCode || t.id === idOrCode,
+				);
+				if (found) {
+					readableId = found.id;
+					break;
+				}
+			}
+
+			// Show the toast success notification optimistically
+			toast.success(
+				`Task "${readableId}" has been successfully deleted.`,
+				{
+					position: "bottom-right",
+				},
+			);
+
+			queryClient.setQueriesData(
+				{ queryKey: ["tasks"] },
+				(old: { tasks: Task[]; total: number } | undefined) => {
+					if (!old?.tasks) return old;
+					const updatedTasks = old.tasks.filter(
+						(t) => t.id !== idOrCode && t.uuid !== idOrCode,
+					);
+					const difference = old.tasks.length - updatedTasks.length;
+					return {
+						...old,
+						tasks: updatedTasks,
+						total: Math.max(0, old.total - difference),
+					};
+				},
+			);
+
+			return { previousTasksQueries, idOrCode, readableId };
+		},
+		onError: (_err, _variables, context) => {
+			if (context?.previousTasksQueries) {
+				for (const [queryKey, value] of context.previousTasksQueries) {
+					queryClient.setQueryData(queryKey, value);
+				}
+			}
+		},
 		onSuccess: (_, idOrCode) => {
 			queryClient.invalidateQueries({ queryKey: ["tasks"] });
 			queryClient.invalidateQueries({ queryKey: ["task", idOrCode] });

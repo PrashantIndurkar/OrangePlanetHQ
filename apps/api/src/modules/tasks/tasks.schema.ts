@@ -28,6 +28,7 @@ export const taskIdParamsSchema = z.object({
 });
 
 export const createTaskSchema = z.object({
+	id: z.string().uuid().optional(),
 	title: z.string().min(1, "Title must not be empty").max(255),
 	description: z.string().optional().nullable(),
 	status: taskStatusEnum.default("todo"),

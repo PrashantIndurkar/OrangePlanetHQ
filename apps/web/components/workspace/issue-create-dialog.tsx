@@ -25,6 +25,9 @@ import { IssueDueDateSelect } from "./issue-due-date-select";
 import { IssuePrioritySelect } from "./issue-priority-select";
 import { IssueStatusSelect } from "./issue-status-select";
 
+import { uploadImage } from "@/lib/upload-image";
+import { toast } from "sonner";
+
 interface IssueCreateDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
@@ -54,6 +57,7 @@ export function IssueCreateDialog({
 	const [priority, setPriority] = React.useState<TaskPriority>("no-priority");
 	const [dueDate, setDueDate] = React.useState<string | undefined>(undefined);
 	const [createMore, setCreateMore] = React.useState(false);
+	const [isUploading, setIsUploading] = React.useState(false);
 	const [attachedImages, setAttachedImages] = React.useState<
 		{ name: string; dataUrl: string }[]
 	>([]);
@@ -104,7 +108,7 @@ export function IssueCreateDialog({
 	};
 
 	const handleSubmit = () => {
-		if (!title.trim()) return;
+		if (!title.trim() || isUploading) return;
 
 		onSubmit({
 			title: title.trim(),
@@ -122,20 +126,23 @@ export function IssueCreateDialog({
 		}
 	};
 
-	const handleFileSelect = (files: File[]) => {
+	const handleFileSelect = async (files: File[]) => {
+		setIsUploading(true);
 		for (const file of files) {
 			if (file.type.startsWith("image/")) {
-				const reader = new FileReader();
-				reader.onload = (e) => {
-					const dataUrl = e.target?.result as string;
-					setAttachedImages((prev) => [...prev, { name: file.name, dataUrl }]);
+				try {
+					const result = await uploadImage(file);
+					setAttachedImages((prev) => [...prev, { name: file.name, dataUrl: result.url }]);
 					setDescription(
-						(prev) => `${prev}${prev ? "\n" : ""}![${file.name}](${dataUrl})`,
+						(prev) => `${prev}${prev ? "\n" : ""}![${file.name}](${result.url})`,
 					);
-				};
-				reader.readAsDataURL(file);
+					toast.success("Image uploaded successfully");
+				} catch (err) {
+					toast.error(err instanceof Error ? err.message : "Failed to upload image");
+				}
 			}
 		}
+		setIsUploading(false);
 	};
 
 	const handleRemoveImage = (index: number, name: string, dataUrl: string) => {
@@ -331,14 +338,14 @@ export function IssueCreateDialog({
 
 							<button
 								type="button"
-								disabled={!title.trim()}
+								disabled={!title.trim() || isUploading}
 								onClick={handleSubmit}
 								className={cn(
 									"h-8 px-4 rounded-none text-[12px] font-semibold transition-all select-none cursor-pointer outline-none border-0",
 									"bg-[#5e6ad2] text-white hover:bg-[#5e6ad2]/90 disabled:opacity-50 disabled:pointer-events-none disabled:bg-[#5e6ad2]/60",
 								)}
 							>
-								Create issue
+								{isUploading ? "Uploading..." : "Create issue"}
 							</button>
 						</div>
 					</div>

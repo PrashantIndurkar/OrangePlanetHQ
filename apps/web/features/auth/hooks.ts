@@ -5,6 +5,36 @@ import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
 import type { LoginInput, SignupInput } from "./types";
 
+const getFriendlyErrorMessage = (err: unknown): string => {
+	if (!err) return "An unexpected error occurred. Please try again.";
+	const message = err instanceof Error ? err.message : String(err);
+	const lower = message.toLowerCase();
+	if (
+		lower.includes("failed to fetch") ||
+		lower.includes("networkerror") ||
+		lower.includes("load failed")
+	) {
+		return "Unable to connect to the Stride service. Please check your internet connection or try again in a few moments.";
+	}
+	if (
+		lower.includes("timeout") ||
+		lower.includes("etimedout") ||
+		lower.includes("time out")
+	) {
+		return "The database is taking longer than expected to respond. Our demo environment may be experiencing high load. Please try again shortly.";
+	}
+	if (
+		lower.includes("prisma") ||
+		lower.includes("database") ||
+		lower.includes("db connection") ||
+		lower.includes("relation") ||
+		lower.includes("foreign key")
+	) {
+		return "A database connection issue occurred. We are working to restore service. Please try again in a few moments.";
+	}
+	return message;
+};
+
 export function useLogin() {
 	const { login } = useAuth();
 	const [isLoading, setIsLoading] = useState(false);
@@ -41,11 +71,7 @@ export function useLogin() {
 		} catch (err: unknown) {
 			for (const t of timeouts) clearTimeout(t);
 			toast.error("Failed to log in", { id: toastId });
-			setError(
-				err instanceof Error
-					? err.message
-					: "Something went wrong during login",
-			);
+			setError(getFriendlyErrorMessage(err));
 			return false;
 		} finally {
 			setIsLoading(false);
@@ -97,11 +123,7 @@ export function useSignup() {
 		} catch (err: unknown) {
 			for (const t of timeouts) clearTimeout(t);
 			toast.error("Registration failed", { id: toastId });
-			setError(
-				err instanceof Error
-					? err.message
-					: "Something went wrong during registration",
-			);
+			setError(getFriendlyErrorMessage(err));
 			return false;
 		} finally {
 			setIsLoading(false);
