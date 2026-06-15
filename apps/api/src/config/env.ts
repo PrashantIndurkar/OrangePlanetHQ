@@ -17,6 +17,8 @@ const envSchema = z.object({
 	NODE_ENV: z
 		.enum(["development", "production", "test"])
 		.default("development"),
+	API_URL: z.string().url().optional(),
+	RENDER_EXTERNAL_URL: z.string().url().optional(),
 });
 
 const _env = envSchema.safeParse(process.env);

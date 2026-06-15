@@ -1,10 +1,14 @@
 import app from "./app.js";
 import { env } from "./config/env.js";
+import { startKeepAlive } from "./utils/keep-alive.js";
 
 const server = app.listen(env.PORT, () => {
 	console.log(
 		`🚀 API Server running on port ${env.PORT} in ${env.NODE_ENV} mode`,
 	);
+
+	// Start the self-pinging keep-alive mechanism to prevent Render sleep
+	startKeepAlive();
 });
 
 const exitHandler = () => {
