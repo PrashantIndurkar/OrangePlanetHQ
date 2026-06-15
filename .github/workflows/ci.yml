@@ -87,7 +87,7 @@ jobs:
       - name: Run Database Migrations
         run: pnpm --filter api exec prisma migrate deploy
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stride_test?schema=public
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/stride_test?schema=public
 
       - name: Compile and Build Apps
         run: pnpm run build
@@ -95,7 +95,7 @@ jobs:
       - name: Run Tests
         run: pnpm --filter api test -- --reporter=default --reporter=junit --outputFile.junit=test-results.xml
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stride_test?schema=public
+          DATABASE_URL: postgresql://postgres:postgres@postgres:5432/stride_test?schema=public
           JWT_SECRET: ci-test-secret-key-do-not-use-in-prod
 
       - name: Publish Test Report
