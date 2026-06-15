@@ -4,6 +4,7 @@ import { Calendar04Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import {
 	Command,
 	CommandEmpty,
@@ -61,6 +62,55 @@ export function WorkspaceFilters({
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
+
+	const [filterOpen, setFilterOpen] = useState(false);
+	const [sortOpen, setSortOpen] = useState(false);
+	const [isMac, setIsMac] = useState(true);
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			setIsMac(window.navigator.platform.toUpperCase().indexOf("MAC") >= 0);
+		}
+	}, []);
+
+	useHotkeys(
+		"alt+v",
+		(e) => {
+			e.preventDefault();
+			onViewChange(view === "list" ? "board" : "list");
+		},
+		{
+			enableOnFormTags: false,
+			enableOnContentEditable: false,
+		},
+		[view, onViewChange],
+	);
+
+	useHotkeys(
+		"alt+f",
+		(e) => {
+			e.preventDefault();
+			setFilterOpen((prev) => !prev);
+		},
+		{
+			enableOnFormTags: false,
+			enableOnContentEditable: false,
+		},
+		[],
+	);
+
+	useHotkeys(
+		"alt+s",
+		(e) => {
+			e.preventDefault();
+			setSortOpen((prev) => !prev);
+		},
+		{
+			enableOnFormTags: false,
+			enableOnContentEditable: false,
+		},
+		[],
+	);
 
 	const {
 		activeStatuses,
@@ -186,12 +236,15 @@ export function WorkspaceFilters({
 								/>
 							}
 						/>
-						<TooltipContent>Search issues by title or ID</TooltipContent>
+						<TooltipContent className="gap-1.5">
+							<span>Search issues by title or ID</span>
+							<kbd data-slot="kbd">/</kbd>
+						</TooltipContent>
 					</Tooltip>
 				</TooltipProvider>
 
 				{/* Filter Dropdown */}
-				<DropdownMenu>
+				<DropdownMenu open={filterOpen} onOpenChange={setFilterOpen}>
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger
@@ -216,7 +269,10 @@ export function WorkspaceFilters({
 									{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
 								</span>
 							</TooltipTrigger>
-							<TooltipContent>Filter issues</TooltipContent>
+							<TooltipContent className="gap-1.5">
+								<span>Filter issues</span>
+								<kbd data-slot="kbd">{isMac ? "⌥ F" : "Alt+F"}</kbd>
+							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
 					<DropdownMenuContent className="w-48 p-1" align="start">
@@ -327,7 +383,7 @@ export function WorkspaceFilters({
 				</DropdownMenu>
 
 				{/* Sort Dropdown */}
-				<DropdownMenu>
+				<DropdownMenu open={sortOpen} onOpenChange={setSortOpen}>
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger
@@ -349,7 +405,10 @@ export function WorkspaceFilters({
 								</svg>
 								<span>Sort</span>
 							</TooltipTrigger>
-							<TooltipContent>Sort issues</TooltipContent>
+							<TooltipContent className="gap-1.5">
+								<span>Sort issues</span>
+								<kbd data-slot="kbd">{isMac ? "⌥ S" : "Alt+S"}</kbd>
+							</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
 					<DropdownMenuContent className="w-48 p-1" align="start">
@@ -477,7 +536,10 @@ export function WorkspaceFilters({
 							</svg>
 							<span>List</span>
 						</TooltipTrigger>
-						<TooltipContent>Switch to list layout</TooltipContent>
+						<TooltipContent className="gap-1.5">
+							<span>Switch to list layout</span>
+							<kbd data-slot="kbd">{isMac ? "⌥ V" : "Alt+V"}</kbd>
+						</TooltipContent>
 					</Tooltip>
 				</TooltipProvider>
 
@@ -512,7 +574,10 @@ export function WorkspaceFilters({
 							</svg>
 							<span>Board</span>
 						</TooltipTrigger>
-						<TooltipContent>Switch to kanban board layout</TooltipContent>
+						<TooltipContent className="gap-1.5">
+							<span>Switch to kanban board layout</span>
+							<kbd data-slot="kbd">{isMac ? "⌥ V" : "Alt+V"}</kbd>
+						</TooltipContent>
 					</Tooltip>
 				</TooltipProvider>
 			</div>

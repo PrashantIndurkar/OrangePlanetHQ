@@ -8,6 +8,12 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 
@@ -38,49 +44,61 @@ export function SidebarHeader() {
 		<div className="relative flex h-14 items-center justify-between border-b border-border px-4 py-3 select-none">
 			{/* Workspace Switcher */}
 			<div className="relative" ref={dropdownRef}>
-				<button
-					type="button"
-					onClick={() => setIsOpen(!isOpen)}
-					className="flex cursor-pointer items-center gap-2 rounded-none text-foreground transition-opacity outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:opacity-90"
-				>
-					{/* Blue Brand Mark */}
-					<div
-						className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 shadow-sm shadow-blue-500/10 dark:bg-blue-500"
-						suppressHydrationWarning
-					>
-						<svg
-							className="h-4.5 w-4.5 text-white"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="3"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							role="img"
-							aria-label="Brand Logo"
-						>
-							<title>Brand Logo</title>
-							<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-						</svg>
-					</div>
-					{/* Brand Name Typography */}
-					<span className="text-[16px] font-bold tracking-tight text-blue-600 dark:text-blue-500">
-						Stride
-					</span>
-					{user?.role === "admin" && (
-						<span className="ml-1 inline-flex h-4.5 items-center justify-center rounded-[3px] bg-red-500/10 border border-red-500/20 px-1.5 text-[9px] font-bold tracking-wider text-red-600 dark:text-red-400 uppercase leading-none">
-							Admin
-						</span>
-					)}
-					<HugeiconsIcon
-						icon={ArrowDown01Icon}
-						size={12}
-						className={cn(
-							"ml-0.5 text-blue-600/70 transition-transform duration-200 dark:text-blue-500/70",
-							isOpen && "rotate-180 transform",
-						)}
-					/>
-				</button>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<button
+									type="button"
+									onClick={() => setIsOpen(!isOpen)}
+									className="flex cursor-pointer items-center gap-2 rounded-none text-foreground transition-opacity outline-none focus-visible:ring-1 focus-visible:ring-ring/50 hover:opacity-90"
+								>
+									{/* Blue Brand Mark */}
+									<div
+										className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 shadow-sm shadow-blue-500/10 dark:bg-blue-500"
+										suppressHydrationWarning
+									>
+										<svg
+											className="h-4.5 w-4.5 text-white"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											strokeWidth="3"
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											role="img"
+											aria-label="Brand Logo"
+										>
+											<title>Brand Logo</title>
+											<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+										</svg>
+									</div>
+									{/* Brand Name Typography */}
+									<span className="text-[16px] font-bold tracking-tight text-blue-600 dark:text-blue-500">
+										Stride
+									</span>
+									{user?.role === "admin" && (
+										<span className="ml-1 inline-flex h-4.5 items-center justify-center rounded-[3px] bg-red-500/10 border border-red-500/20 px-1.5 text-[9px] font-bold tracking-wider text-red-600 dark:text-red-400 uppercase leading-none">
+											Admin
+										</span>
+									)}
+									<HugeiconsIcon
+										icon={ArrowDown01Icon}
+										size={12}
+										className={cn(
+											"ml-0.5 text-blue-600/70 transition-transform duration-200 dark:text-blue-500/70",
+											isOpen && "rotate-180 transform",
+										)}
+									/>
+								</button>
+							}
+						/>
+						<TooltipContent side="right" className="gap-1.5">
+							<span>Toggle sidebar</span>
+							<kbd data-slot="kbd">[</kbd>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
 
 				{/* Boxy Dropdown */}
 				{isOpen && (

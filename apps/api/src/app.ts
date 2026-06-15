@@ -54,6 +54,12 @@ app.get("/health", (_req, res) => {
 	res.status(200).json({ status: "healthy", timestamp: new Date() });
 });
 
+app.get("/api/health", (req, res) => {
+	res.status(200).json({
+		mes: "success from api",
+	});
+});
+
 // Register routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/tasks", tasksRoutes);

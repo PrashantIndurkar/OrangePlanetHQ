@@ -63,6 +63,7 @@ export function WorkspaceLayout() {
 	const prevTasksRef = useRef<Task[]>([]);
 	const prevTotalRef = useRef<number>(0);
 	const prevFiltersRef = useRef<string>("");
+	const lastProcessedMutationTimestampRef = useRef<number>(0);
 
 	const currentFiltersKey = JSON.stringify({
 		status: activeStatuses,
@@ -79,13 +80,29 @@ export function WorkspaceLayout() {
 	useEffect(() => {
 		if (isLoading || isError || !data) return;
 
+		if (prevFiltersRef.current !== currentFiltersKey) {
+			lastMutation.type = null;
+		}
+
 		const currentTasks = data.tasks || [];
 		const currentTotal = data.total || 0;
 
 		const isRecentMutation =
-			lastMutation.type !== null && Date.now() - lastMutation.timestamp < 5000;
+			lastMutation.type !== null &&
+			Date.now() - lastMutation.timestamp < 5000 &&
+			lastMutation.timestamp !== lastProcessedMutationTimestampRef.current;
 
 		if (isRecentMutation && prevFiltersRef.current === currentFiltersKey) {
+			const expectedTasksLength = Math.min(limit, currentTotal);
+			if (lastMutation.type === "delete" && currentTasks.length < expectedTasksLength) {
+				// Wait for the server refetch to replenish the list.
+				// Still update the refs so we compare against the optimistic state.
+				prevTasksRef.current = currentTasks;
+				prevTotalRef.current = currentTotal;
+				prevFiltersRef.current = currentFiltersKey;
+				return;
+			}
+
 			const prevTasks = prevTasksRef.current;
 			const prevTotal = prevTotalRef.current;
 
@@ -97,13 +114,13 @@ export function WorkspaceLayout() {
 
 			if (prevTasks.length > 0) {
 				// 1. Shift Down Detection (creation/updates pushing items off the bottom of the page)
-				if (currentTotal >= prevTotal) {
+				if (lastMutation.type === "create" && currentTotal >= prevTotal) {
 					for (const r of removed) {
 						const prevIndex = prevTasks.findIndex((t) => t.uuid === r.uuid);
 						if (prevIndex >= 9) {
 							setTimeout(() => {
 								toast.warning(
-									`Task "${r.id}" shifted to page ${page + 1} due to the 10-task limit.`,
+									`Task "${r.id}" shifted to page ${page + 1} due to the 10-task limit for showing pagination as requested in assignment`,
 									{
 										duration: 5000,
 									},
@@ -114,21 +131,24 @@ export function WorkspaceLayout() {
 				}
 
 				// 2. Shift Up Detection (deletion pulling items up to the bottom of the page)
-				for (const a of added) {
-					const currentIndex = currentTasks.findIndex((t) => t.uuid === a.uuid);
-					if (currentIndex > 0) {
-						setTimeout(() => {
-							toast.warning(
-								`Task "${a.id}" shifted up from page ${page + 1} to fill the page.`,
-								{
-									duration: 5000,
-								},
-							);
-						}, 1200);
+				if (lastMutation.type === "delete") {
+					for (const a of added) {
+						const currentIndex = currentTasks.findIndex((t) => t.uuid === a.uuid);
+						if (currentIndex >= 9) {
+							setTimeout(() => {
+								toast.warning(
+									`Task "${a.id}" shifted up from page ${page + 1} to fill the page.`,
+									{
+										duration: 5000,
+									},
+								);
+							}, 1200);
+						}
 					}
 				}
 			}
 			// Reset the tracker after processing the shift
+			lastProcessedMutationTimestampRef.current = lastMutation.timestamp;
 			lastMutation.type = null;
 		}
 

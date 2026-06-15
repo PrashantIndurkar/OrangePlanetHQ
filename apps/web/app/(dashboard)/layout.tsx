@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import type React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Sidebar } from "@/components/layout/sidebar";
@@ -8,6 +9,7 @@ import { SidebarProvider, useSidebar } from "@/providers/sidebar-provider";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
 	const { toggle } = useSidebar();
+	const { theme, setTheme } = useTheme();
 
 	// Start listening to real-time events via Server-Sent Events (SSE)
 	useRealtime();
@@ -23,6 +25,32 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 			enableOnContentEditable: false,
 		},
 		[toggle],
+	);
+
+	useHotkeys(
+		"d",
+		(e) => {
+			e.preventDefault();
+			setTheme(theme === "dark" ? "light" : "dark");
+		},
+		{
+			enableOnFormTags: false,
+			enableOnContentEditable: false,
+		},
+		[theme, setTheme],
+	);
+
+	useHotkeys(
+		"?, shift+/",
+		(e) => {
+			e.preventDefault();
+			window.dispatchEvent(new CustomEvent("open-shortcuts"));
+		},
+		{
+			enableOnFormTags: false,
+			enableOnContentEditable: false,
+		},
+		[],
 	);
 
 	return (

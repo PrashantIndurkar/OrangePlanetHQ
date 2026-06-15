@@ -1,4 +1,7 @@
-import { staticReleases, rawMarkdown as staticRawMarkdown } from "./changelog-data";
+import {
+	rawMarkdown as staticRawMarkdown,
+	staticReleases,
+} from "./changelog-data";
 
 export interface ChangelogRelease {
 	version: string;

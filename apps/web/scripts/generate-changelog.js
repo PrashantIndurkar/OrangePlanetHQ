@@ -11,7 +11,11 @@ function generateStaticChangelog() {
 	const outputPath = path.resolve(__dirname, "../lib/changelog-data.ts");
 
 	if (!fs.existsSync(changelogPath)) {
-		console.warn("⚠️ CHANGELOG.md not found at " + changelogPath + ". Skipping static generation.");
+		console.warn(
+			"⚠️ CHANGELOG.md not found at " +
+				changelogPath +
+				". Skipping static generation.",
+		);
 		return;
 	}
 
@@ -19,7 +23,7 @@ function generateStaticChangelog() {
 	const cleanContent = fileContent.startsWith("# ")
 		? fileContent.substring(2)
 		: fileContent;
-	
+
 	const sections = cleanContent.split(/\n# /);
 	const releases = [];
 
@@ -75,7 +79,9 @@ export const rawMarkdown = ${JSON.stringify(fileContent)};
 `;
 
 	fs.writeFileSync(outputPath, tsContent, "utf-8");
-	console.log("✅ Successfully auto-generated apps/web/lib/changelog-data.ts from CHANGELOG.md");
+	console.log(
+		"✅ Successfully auto-generated apps/web/lib/changelog-data.ts from CHANGELOG.md",
+	);
 }
 
 generateStaticChangelog();

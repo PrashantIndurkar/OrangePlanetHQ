@@ -247,17 +247,23 @@ export function useCreateTaskMutation() {
 				activities: [],
 			};
 
-			queryClient.setQueriesData(
-				{ queryKey: ["tasks"] },
-				(old: { tasks: Task[]; total: number } | undefined) => {
-					if (!old) return { tasks: [optimisticTask], total: 1 };
-					return {
-						...old,
-						tasks: [optimisticTask, ...old.tasks],
-						total: old.total + 1,
-					};
-				},
-			);
+			const queries = queryClient.getQueryCache().findAll({ queryKey: ["tasks"] });
+			for (const query of queries) {
+				const queryKey = query.queryKey;
+				const filters = queryKey[1] as any;
+				const limit = filters?.limit || 10;
+				queryClient.setQueryData(
+					queryKey,
+					(old: { tasks: Task[]; total: number } | undefined) => {
+						if (!old) return { tasks: [optimisticTask], total: 1 };
+						return {
+							...old,
+							tasks: [optimisticTask, ...old.tasks].slice(0, limit),
+							total: old.total + 1,
+						};
+					},
+				);
+			}
 
 			// Write individual task optimistic cache
 			queryClient.setQueryData(["task", clientUuid], optimisticTask);
