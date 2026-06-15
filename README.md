@@ -1,161 +1,90 @@
-# Turborepo starter
+# 📋 Stried
 
-This Turborepo starter is maintained by the Turborepo core team.
+Welcome to **Stried**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
 
-## Using this example
+Stried is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
 
-Run the following command:
+---
 
-```sh
-npx create-turbo@latest
+## 📖 Complete Documentation Index
+
+To make exploring the codebase as clean as possible, we have split our documentation into focused guides:
+
+| Guide　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　| Description                                                                    | Key Focus Area                                               |
+| :---------------------------------------------------------------------| :-------------------------------------------------------------------------------| :-------------------------------------------------------------|
+| **🏗️ [Architecture & Software Design](docs/ARCHITECTURE.md)**　　　　| Explains monorepos, modular backend architecture, and frontend state patterns. | Modular Domain pattern, CSR flow, stealth boundaries.        |
+| **🗄️ [Database Design & Schemas](docs/DATABASE.md)**　　　　　　　　 | Details PostgreSQL models, constraints, and seeding operations.                | Cascade configurations, unique indexes, seed accounts.       |
+| **🧪 [Testing Architecture & Guides](docs/TESTING.md)**　　　　　　　| Covers HTTP integration test structures and assertions.                        | Vitest, Supertest, boundary testing, clean-up strategies.    |
+| **🚀 [CI/CD & GitHub Workflows](docs/CICD_WORKFLOWS.md)**　　　　　　 | Explains GitHub Actions setups for linting, testing, and releasing.            | Service containers, test reporting, conventional changelogs. |
+| **🐳 [Docker & Compose Environments](docs/DOCKER_SETUP.md)**　　　　 | Walkthrough of container configurations and build pipelines.                   | Multi-stage Next.js standalone builds, non-root users.       |
+| **🔑 [API Testing & Endpoint Reference](docs/API_TESTING_GUIDE.md)** | Detailed payload examples and testing flows for all endpoints.                 | JSON structures, error validation envelopes, URL params.     |
+| **📂 [Folder Structure Reference](docs/folder-str.md)**　　　　　　　| Layout catalog mapping every directory to its architectural role.              | Monorepo apps and packages.                                  |
+
+---
+
+## 🛠️ The Stried Technology Stack
+
+Stried is built as a single monorepo utilizing **pnpm workspaces** and **Turborepo** to orchestrate tasks.
+
+| Layer | Component | Technology | Rationale |
+| :--- | :--- | :--- | :--- |
+| **Frontend** | User Interface | Next.js 16 (App Router) | High-performance page routing, server-side performance hooks, edge-readiness. |
+| **Frontend** | Styling & UI | TailwindCSS + shadcn/ui | Atomic utility styling with highly-customizable accessible component primitives. |
+| **Frontend** | Client State | TanStack React Query 5 | Manages client caching, request synchronization, and Optimistic UI updates. |
+| **Backend** | API Server | Express.js 5 | Lightweight, highly-extensible HTTP routing framework with modular middleware layers. |
+| **Database** | ORM Layer | Prisma 7 | Type-safe schema definition, clean model migrations, and native client generation. |
+| **Database** | Database Engine | PostgreSQL 16 | Relational reliability, compound indexes, and foreign key cascades. |
+| **Infrastructure** | Containerization | Docker & Compose | Multi-stage image build isolation and local service container linking. |
+| **Pipeline** | Automation | GitHub Actions | automated unit/integration runs with Vitest + Supertest and semantic release logs. |
+
+---
+
+## 🚀 Quick Start Guide
+
+You can boot the entire application stack in under **two minutes** using either Docker or a local pnpm dev workspace.
+
+### Setup Environment Configuration
+Copy the configuration template to `.env`:
+```bash
+cp .env.example .env
 ```
 
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo build
+### Option A: The One-Command Docker Setup (Recommended)
+This boots PostgreSQL, runs database migrations, seeds test accounts, compiles Next.js in production standalone mode, and starts the API:
+```bash
+docker compose up --build
 ```
+- **Web Frontend:** [http://localhost:3000](http://localhost:3000)
+- **REST API Server:** [http://localhost:3002/api/v1](http://localhost:3002/api/v1)
+- **Prisma Studio:** [http://localhost:5555](http://localhost:5555)
 
-Without global `turbo`, use your package manager:
+### Option B: Local Development Setup
+Requires Node.js (v22+) and pnpm (v11+).
 
-```sh
-cd my-turborepo
-npx turbo build
-pnpm dlx turbo build
-pnpm exec turbo build
-```
+1. **Install Dependencies:**
+   ```bash
+   pnpm install
+   ```
+2. **Start Dev Workspace:**
+   Spins up Next.js client, Express API, and Prisma Studio concurrently using Turborepo filters:
+   ```bash
+   pnpm run dev
+   ```
+3. **Execute Test Suites:**
+   Runs the integration test suites:
+   ```bash
+   pnpm --filter api test
+   ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+---
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
+## 🔒 Default Credentials (Seeded Data)
 
-```sh
-turbo build --filter=docs
-```
+The following local accounts are seeded automatically for testing:
 
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-pnpm exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-pnpm exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-pnpm exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
-
-
+- **Standard Workspace User:**
+  - **Email:** `test@example.com`
+  - **Password:** `password123`
+- **Administrator User:**
+  - **Email:** `admin@example.com`
+  - **Password:** `password123`

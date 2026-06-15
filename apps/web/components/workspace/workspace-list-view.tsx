@@ -28,6 +28,12 @@ import {
 } from "../tasks/task-context-menu";
 import type { Task } from "./types";
 import { filterAndSortTasks, getNormalizedFilters } from "./types";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const getDueDateBadgeStyles = (val?: string | null) => {
 	if (!val) return { bg: "", border: "", text: "", iconColor: "" };
@@ -311,16 +317,27 @@ export function WorkspaceListView({
 								</div>
 
 								{/* Add Button */}
-								<button
-									type="button"
-									onClick={(e) => {
-										e.stopPropagation();
-										handleAddTask(group.id);
-									}}
-									className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-none border border-dashed border-zinc-400 dark:border-zinc-500 font-sans text-xs font-semibold text-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
-								>
-									+
-								</button>
+								<TooltipProvider>
+									<Tooltip>
+										<TooltipTrigger
+											render={
+												<button
+													type="button"
+													onClick={(e) => {
+														e.stopPropagation();
+														handleAddTask(group.id);
+													}}
+													className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-none border border-dashed border-zinc-400 dark:border-zinc-500 font-sans text-xs font-semibold text-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
+												/>
+											}
+										>
+											+
+										</TooltipTrigger>
+										<TooltipContent>
+											Add task to {group.title}
+										</TooltipContent>
+									</Tooltip>
+								</TooltipProvider>
 							</div>
 
 							{/* Task rows / Empty State (44px / h-11 each when open) */}
@@ -355,37 +372,50 @@ export function WorkspaceListView({
 													}
 												}}
 												tabIndex={0}
-												className="group flex h-9 cursor-pointer items-center justify-between rounded-none border-b border-border/40 bg-transparent px-3 text-xs text-foreground transition-colors last:border-b-0 hover:bg-muted/40 data-[context-menu-open=true]:bg-muted/50 outline-none focus-visible:ring-1 focus-visible:ring-ring/50"
+												className={cn(
+													"group flex h-9 cursor-pointer items-center justify-between rounded-none border-b border-border/40 bg-transparent px-3 text-xs text-foreground transition-colors last:border-b-0 hover:bg-muted/40 data-[context-menu-open=true]:bg-muted/50 outline-none focus-visible:ring-1 focus-visible:ring-ring/50",
+													(task.uuid || task.id).startsWith("temp-") &&
+														"opacity-50 pointer-events-none",
+												)}
 											>
 												{/* Left Section: Checkbox, Priority, ID, Status, Title */}
 												<div className="flex min-w-0 flex-1 items-center gap-2">
 													{/* Checkbox (opacity-0 by default, opacity-100 on hover of the row) */}
 													<div className="flex w-5 shrink-0 items-center justify-center">
-														<button
-															type="button"
-															onClick={(e) => {
-																e.stopPropagation();
-																handleToggleTask(task.id);
-															}}
-															className="flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-none border border-zinc-300 bg-card text-muted-foreground opacity-0 transition-all duration-150 group-hover:opacity-100 group-data-[context-menu-open=true]:opacity-100 hover:border-zinc-400 hover:text-foreground dark:border-zinc-700 dark:hover:border-zinc-500"
-														>
-															<svg
-																className="h-2.5 w-2.5 opacity-0 transition-opacity hover:opacity-100"
-																viewBox="0 0 24 24"
-																fill="none"
-																stroke="currentColor"
-																strokeWidth="3"
-																role="img"
-																aria-label="Action"
-															>
-																<title>Action</title>
-																<path
-																	d="M20 6L9 17l-5-5"
-																	strokeLinecap="round"
-																	strokeLinejoin="round"
-																/>
-															</svg>
-														</button>
+														<TooltipProvider>
+															<Tooltip>
+																<TooltipTrigger
+																	render={
+																		<button
+																			type="button"
+																			onClick={(e) => {
+																				e.stopPropagation();
+																				handleToggleTask(task.id);
+																			}}
+																			className="flex h-3.5 w-3.5 cursor-pointer items-center justify-center rounded-none border border-zinc-300 bg-card text-muted-foreground opacity-0 transition-all duration-150 group-hover:opacity-100 group-data-[context-menu-open=true]:opacity-100 hover:border-zinc-400 hover:text-foreground dark:border-zinc-700 dark:hover:border-zinc-500"
+																		/>
+																	}
+																>
+																	<svg
+																		className="h-2.5 w-2.5 opacity-0 transition-opacity hover:opacity-100"
+																		viewBox="0 0 24 24"
+																		fill="none"
+																		stroke="currentColor"
+																		strokeWidth="3"
+																		role="img"
+																		aria-label="Action"
+																	>
+																		<title>Action</title>
+																		<path
+																			d="M20 6L9 17l-5-5"
+																			strokeLinecap="round"
+																			strokeLinejoin="round"
+																		/>
+																	</svg>
+																</TooltipTrigger>
+																<TooltipContent>Mark task as completed</TooltipContent>
+															</Tooltip>
+														</TooltipProvider>
 													</div>
 
 													{/* Priority Icon Wrapper */}
@@ -441,28 +471,39 @@ export function WorkspaceListView({
 													{/* Avatar and Date Group */}
 													<div className="flex shrink-0 items-center gap-1.5 select-none">
 														<div className="relative flex items-center">
-															<button
-																type="button"
-																onClick={(e) => {
-																	e.stopPropagation();
-																	e.preventDefault();
-																	setOpenPopoverTaskId((prev) =>
-																		prev === (task.uuid || task.id)
-																			? null
-																			: task.uuid || task.id,
-																	);
-																}}
-																className="avatar flex h-[18px] w-[18px] cursor-pointer shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 hover:ring-1 hover:ring-ring transition-all outline-none"
-															>
-																{task.assigneeName
-																	? task.assigneeName
-																			.split(" ")
-																			.map((n) => n[0])
-																			.join("")
-																			.toUpperCase()
-																			.slice(0, 1)
-																	: "U"}
-															</button>
+															<TooltipProvider>
+																<Tooltip>
+																	<TooltipTrigger
+																		render={
+																			<button
+																				type="button"
+																				onClick={(e) => {
+																					e.stopPropagation();
+																					e.preventDefault();
+																					setOpenPopoverTaskId((prev) =>
+																						prev === (task.uuid || task.id)
+																							? null
+																							: task.uuid || task.id,
+																					);
+																				}}
+																				className="avatar flex h-[18px] w-[18px] cursor-pointer shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 hover:ring-1 hover:ring-ring transition-all outline-none"
+																			/>
+																		}
+																	>
+																		{task.assigneeName
+																			? task.assigneeName
+																					.split(" ")
+																					.map((n) => n[0])
+																					.join("")
+																					.toUpperCase()
+																					.slice(0, 1)
+																			: "U"}
+																	</TooltipTrigger>
+																	<TooltipContent>
+																		Assignee: {task.assigneeName || "Unassigned"}
+																	</TooltipContent>
+																</Tooltip>
+															</TooltipProvider>
 
 															{openPopoverTaskId === (task.uuid || task.id) && (
 																/* biome-ignore lint/a11y/useKeyWithClickEvents: non-interactive container */
