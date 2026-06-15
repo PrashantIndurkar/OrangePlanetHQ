@@ -177,3 +177,27 @@ router.use("/attachments", authMiddleware, attachmentRoutes);
 2. Add TanStack Query React hooks in `apps/web/features/attachments/hooks.ts`.
 3. Create composition components in `apps/web/components/attachments/` (e.g., `attachment-list.tsx`).
 4. Import and mount components inside the task detail layouts in `apps/web/app/(dashboard)/tasks/[taskId]/page.tsx`.
+
+---
+
+## 🖼️ Media & File Upload Architecture (Tiptap + Cloudinary)
+
+Stride implements a secure, headless media upload pipeline to handle inline images and assets in task descriptions.
+
+### Data Flow Pipeline
+```text
+  User Dropped/Pasted Image 
+    ────► [Tiptap Editor] 
+    ────► [Next.js Upload API Client] 
+    ────► Express API (POST /api/v1/uploads/image) 
+    ────► Multer (MemoryBuffer Validation) 
+    ────► Cloudinary (Stream Ingestion) 
+    ────► Secure CDN URL returned to Editor 
+    ────► Persisted in Task Description HTML
+```
+
+### Architectural Decisions
+1. **Headless Rich Editor (Tiptap):** Stride uses `Tiptap` with `@tiptap/extension-image` rather than heavyweight, pre-styled editor widgets. This gives the application direct control over paste events (`handlePaste`) and drag-and-drop actions (`handleDrop`) inside the layout workspace.
+2. **Buffer Stream Ingestion:** Files are parsed on the Express API server using **Multer** (`memoryStorage`), validated for maximum file size (10MB) and MIME type (`jpeg`, `png`, `webp`, `gif`), and immediately streamed to **Cloudinary** using Node.js buffers. 
+3. **No Database Binaries:** Task attachments are stored as secure, compressed Cloudinary URL strings within the description HTML rather than raw Base64 strings or binary BLObs in PostgreSQL. This keeps the database lean and leverages Cloudinary's fast CDN edge for content delivery.
+

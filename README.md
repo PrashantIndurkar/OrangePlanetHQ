@@ -1,8 +1,8 @@
-# 📋 Stried
+# 📋 Stride
 
-Welcome to **Stried**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
+Welcome to **Stride**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
 
-Stried is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
+Stride is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
 
 ---
 
@@ -22,9 +22,9 @@ To make exploring the codebase as clean as possible, we have split our documenta
 
 ---
 
-## 🛠️ The Stried Technology Stack
+## 🛠️ The Stride Technology Stack
 
-Stried is built as a single monorepo utilizing **pnpm workspaces** and **Turborepo** to orchestrate tasks.
+Stride is built as a single monorepo utilizing **pnpm workspaces** and **Turborepo** to orchestrate tasks.
 
 | Layer | Component | Technology | Rationale |
 | :--- | :--- | :--- | :--- |
@@ -34,6 +34,7 @@ Stried is built as a single monorepo utilizing **pnpm workspaces** and **Turbore
 | **Backend** | API Server | Express.js 5 | Lightweight, highly-extensible HTTP routing framework with modular middleware layers. |
 | **Database** | ORM Layer | Prisma 7 | Type-safe schema definition, clean model migrations, and native client generation. |
 | **Database** | Database Engine | PostgreSQL 16 | Relational reliability, compound indexes, and foreign key cascades. |
+| **Storage** | Media Storage | Cloudinary + Multer | Multipart upload ingestion and secure CDN-backed cloud image storage. |
 | **Infrastructure** | Containerization | Docker & Compose | Multi-stage image build isolation and local service container linking. |
 | **Pipeline** | Automation | GitHub Actions | automated unit/integration runs with Vitest + Supertest and semantic release logs. |
 
