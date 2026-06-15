@@ -6,8 +6,8 @@ import { type Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { isValidImage } from "@/lib/image-validation";
 import { useUploadImageMutation } from "@/features/tasks/use-upload-image-mutation";
+import { isValidImage } from "@/lib/image-validation";
 
 interface TaskEditorProps {
 	value: string;

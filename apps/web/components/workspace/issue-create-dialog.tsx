@@ -19,9 +19,9 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { isValidImage } from "@/lib/image-validation";
 import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
-import { isValidImage } from "@/lib/image-validation";
 import { useAuth } from "@/providers/auth-provider";
 import type { TaskPriority, TaskStatus } from "../tasks/task-metadata";
 import { IssueAttachmentButton } from "./issue-attachment-button";
