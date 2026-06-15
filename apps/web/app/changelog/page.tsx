@@ -1,19 +1,11 @@
-import fs from "node:fs";
-import path from "node:path";
 import Link from "next/link";
-import { getChangelogData, getChangelogFilePath } from "@/lib/changelog";
+import { getChangelogData, getRawMarkdown } from "@/lib/changelog";
 
 export const revalidate = 0; // Disable caching so updates to CHANGELOG.md are immediately visible
 
 export default function ChangelogPage() {
 	const releases = getChangelogData();
-
-	// Read raw markdown content for the "Raw Markdown View" feature
-	const filePath = getChangelogFilePath();
-	let rawMarkdown = "";
-	if (filePath && fs.existsSync(filePath)) {
-		rawMarkdown = fs.readFileSync(filePath, "utf-8");
-	}
+	const rawMarkdown = getRawMarkdown();
 
 	return (
 		<div className="relative flex min-h-screen flex-col bg-[#fafafa] dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 select-none">

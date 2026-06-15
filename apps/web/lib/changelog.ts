@@ -1,6 +1,4 @@
-import fs from "node:fs";
-import path from "node:path";
-import { marked } from "marked";
+import { staticReleases, rawMarkdown as staticRawMarkdown } from "./changelog-data";
 
 export interface ChangelogRelease {
 	version: string;
@@ -10,74 +8,13 @@ export interface ChangelogRelease {
 }
 
 export function getChangelogFilePath(): string {
-	const possiblePaths = [
-		path.join(process.cwd(), "../../CHANGELOG.md"),
-		path.join(process.cwd(), "./CHANGELOG.md"),
-		path.join(process.cwd(), "apps/web/../../CHANGELOG.md"),
-	];
-	for (const p of possiblePaths) {
-		if (fs.existsSync(p)) {
-			return p;
-		}
-	}
-	return path.join(process.cwd(), "../../CHANGELOG.md");
+	return "";
 }
 
 export function getChangelogData(): ChangelogRelease[] {
-	const filePath = getChangelogFilePath();
-	if (!fs.existsSync(filePath)) {
-		return [];
-	}
-	const fileContent = fs.readFileSync(filePath, "utf-8");
+	return staticReleases;
+}
 
-	// Split the file content by `# ` headers (each release begins with a main header)
-	// We handle both the absolute file start and subsequent splits
-	const cleanContent = fileContent.startsWith("# ")
-		? fileContent.substring(2)
-		: fileContent;
-	const sections = cleanContent.split(/\n# /);
-	const releases: ChangelogRelease[] = [];
-
-	for (let section of sections) {
-		section = section.trim();
-		if (!section) continue;
-
-		const lines = section.split("\n");
-		const headerLine = lines[0].trim();
-
-		let version = "Unknown";
-		let date = "";
-		let compareUrl = "";
-
-		// Regex to match markdown link e.g. [0.15.0](https://github.com/...)
-		const linkMatch = headerLine.match(/\[([^\]]+)\]\(([^)]+)\)/);
-		if (linkMatch) {
-			version = linkMatch[1];
-			compareUrl = linkMatch[2];
-		} else {
-			// Plain version string e.g. 0.4.0
-			const versionMatch = headerLine.match(/^([^\s(]+)/);
-			if (versionMatch) {
-				version = versionMatch[1];
-			}
-		}
-
-		// Extract date enclosed in brackets at the end of the line, e.g. (2026-06-15)
-		const dateMatch = headerLine.match(/\(([^)]+)\)$/);
-		if (dateMatch) {
-			date = dateMatch[1];
-		}
-
-		const bodyText = lines.slice(1).join("\n").trim();
-		const contentHtml = marked.parse(bodyText) as string;
-
-		releases.push({
-			version,
-			date,
-			compareUrl: compareUrl || undefined,
-			contentHtml,
-		});
-	}
-
-	return releases;
+export function getRawMarkdown(): string {
+	return staticRawMarkdown;
 }
