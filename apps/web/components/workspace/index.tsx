@@ -94,7 +94,10 @@ export function WorkspaceLayout() {
 
 		if (isRecentMutation && prevFiltersRef.current === currentFiltersKey) {
 			const expectedTasksLength = Math.min(limit, currentTotal);
-			if (lastMutation.type === "delete" && currentTasks.length < expectedTasksLength) {
+			if (
+				lastMutation.type === "delete" &&
+				currentTasks.length < expectedTasksLength
+			) {
 				// Wait for the server refetch to replenish the list.
 				// Still update the refs so we compare against the optimistic state.
 				prevTasksRef.current = currentTasks;
@@ -133,7 +136,9 @@ export function WorkspaceLayout() {
 				// 2. Shift Up Detection (deletion pulling items up to the bottom of the page)
 				if (lastMutation.type === "delete") {
 					for (const a of added) {
-						const currentIndex = currentTasks.findIndex((t) => t.uuid === a.uuid);
+						const currentIndex = currentTasks.findIndex(
+							(t) => t.uuid === a.uuid,
+						);
 						if (currentIndex >= 9) {
 							setTimeout(() => {
 								toast.warning(

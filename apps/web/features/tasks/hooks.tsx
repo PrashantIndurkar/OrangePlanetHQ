@@ -247,7 +247,9 @@ export function useCreateTaskMutation() {
 				activities: [],
 			};
 
-			const queries = queryClient.getQueryCache().findAll({ queryKey: ["tasks"] });
+			const queries = queryClient
+				.getQueryCache()
+				.findAll({ queryKey: ["tasks"] });
 			for (const query of queries) {
 				const queryKey = query.queryKey;
 				const filters = queryKey[1] as any;

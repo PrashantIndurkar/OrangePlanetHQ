@@ -31,7 +31,12 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
 		"d",
 		(e) => {
 			e.preventDefault();
-			setTheme(theme === "dark" ? "light" : "dark");
+			const themeCycle: Record<string, string> = {
+				system: "dark",
+				dark: "light",
+				light: "system",
+			};
+			setTheme(themeCycle[theme || "system"] || "system");
 		},
 		{
 			enableOnFormTags: false,
