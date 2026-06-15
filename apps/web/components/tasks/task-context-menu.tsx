@@ -1,4 +1,4 @@
-import { Delete01Icon } from "@hugeicons/core-free-icons";
+import { Calendar04Icon, Delete01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import * as React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -20,6 +20,7 @@ import {
 } from "./task-metadata";
 import { TaskPriorityList } from "./task-priority-list";
 import { TaskStatusList } from "./task-status-list";
+import { TaskDueDateList } from "./task-due-date-list";
 
 export { priorities, statuses, type TaskPriority, type TaskStatus };
 
@@ -31,8 +32,10 @@ interface TaskContextMenuProps {
 	children: React.ReactNode;
 	currentStatus?: TaskStatus;
 	currentPriority?: TaskPriority;
+	currentDueDate?: string;
 	onUpdateStatus?: (status: TaskStatus) => void;
 	onUpdatePriority?: (priority: TaskPriority) => void;
+	onUpdateDueDate?: (dueDate?: string) => void;
 	onDeleteTask?: () => void;
 }
 
@@ -40,8 +43,10 @@ export function TaskContextMenu({
 	children,
 	currentStatus = "todo",
 	currentPriority = "no-priority",
+	currentDueDate,
 	onUpdateStatus,
 	onUpdatePriority,
+	onUpdateDueDate,
 	onDeleteTask,
 }: TaskContextMenuProps) {
 	// Mock state for UI demonstration
@@ -52,6 +57,10 @@ export function TaskContextMenu({
 	const [prevCurrentPriority, setPrevCurrentPriority] =
 		React.useState<TaskPriority>(currentPriority);
 	const [priority, setPriority] = React.useState<TaskPriority>(currentPriority);
+
+	const [prevCurrentDueDate, setPrevCurrentDueDate] =
+		React.useState<string | undefined>(currentDueDate);
+	const [dueDate, setDueDate] = React.useState<string | undefined>(currentDueDate);
 
 	const [isOpen, setIsOpen] = React.useState(false);
 
@@ -65,6 +74,11 @@ export function TaskContextMenu({
 		setPriority(currentPriority);
 	}
 
+	if (currentDueDate !== prevCurrentDueDate) {
+		setPrevCurrentDueDate(currentDueDate);
+		setDueDate(currentDueDate);
+	}
+
 	const handleStatusChange = (newStatus: TaskStatus) => {
 		setStatus(newStatus);
 		onUpdateStatus?.(newStatus);
@@ -74,6 +88,12 @@ export function TaskContextMenu({
 	const handlePriorityChange = (newPriority: TaskPriority) => {
 		setPriority(newPriority);
 		onUpdatePriority?.(newPriority);
+		setIsOpen(false);
+	};
+
+	const handleDueDateChange = (newDueDate?: string) => {
+		setDueDate(newDueDate);
+		onUpdateDueDate?.(newDueDate);
 		setIsOpen(false);
 	};
 
@@ -120,6 +140,21 @@ export function TaskContextMenu({
 						<TaskPriorityList
 							value={priority}
 							onSelect={handlePriorityChange}
+						/>
+					</ContextMenuSubContent>
+				</ContextMenuSub>
+
+				{/* Due Date Submenu */}
+				<ContextMenuSub>
+					<ContextMenuSubTrigger className="flex items-center gap-2">
+						<HugeiconsIcon icon={Calendar04Icon} className="h-4 w-4 text-muted-foreground" />
+						<span className="flex-grow">Due date</span>
+						<span className="text-xs text-muted-foreground/60">D</span>
+					</ContextMenuSubTrigger>
+					<ContextMenuSubContent className="w-48 p-0">
+						<TaskDueDateList
+							value={dueDate}
+							onSelect={handleDueDateChange}
 						/>
 					</ContextMenuSubContent>
 				</ContextMenuSub>

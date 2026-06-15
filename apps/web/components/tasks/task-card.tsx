@@ -66,6 +66,7 @@ interface TaskCardProps {
 	assigneeAvatarUrl?: string;
 	onUpdateStatus?: (status: TaskStatus) => void;
 	onUpdatePriority?: (priority: TaskPriority) => void;
+	onUpdateDueDate?: (dueDate?: string) => void;
 	onDeleteTask?: () => void;
 }
 
@@ -79,6 +80,7 @@ export function TaskCard({
 	assigneeName = "Prashant Indurkar",
 	onUpdateStatus,
 	onUpdatePriority,
+	onUpdateDueDate,
 	onDeleteTask,
 }: TaskCardProps) {
 	const router = useRouter();
@@ -147,8 +149,10 @@ export function TaskCard({
 		<TaskContextMenu
 			currentStatus={status as TaskStatus}
 			currentPriority={priority as TaskPriority}
+			currentDueDate={dueDate}
 			onUpdateStatus={onUpdateStatus}
 			onUpdatePriority={onUpdatePriority}
+			onUpdateDueDate={onUpdateDueDate}
 			onDeleteTask={onDeleteTask}
 		>
 			<div

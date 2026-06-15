@@ -177,6 +177,30 @@ export function WorkspaceBoardView({
 		updateMutation.mutate({ id: taskId, data: { priority: newPriority } });
 	};
 
+	const handleUpdateDueDate = (taskId: string, newDueDate?: string) => {
+		let isoDueDate: string | null = null;
+		if (newDueDate) {
+			const lower = newDueDate.toLowerCase();
+			const d = new Date();
+			d.setHours(12, 0, 0, 0);
+			if (lower === "today") {
+				isoDueDate = d.toISOString();
+			} else if (lower === "tomorrow") {
+				d.setDate(d.getDate() + 1);
+				isoDueDate = d.toISOString();
+			} else if (lower === "overdue") {
+				d.setDate(d.getDate() - 1);
+				isoDueDate = d.toISOString();
+			} else {
+				isoDueDate = new Date(newDueDate).toISOString();
+			}
+		}
+		updateMutation.mutate({
+			id: taskId,
+			data: { dueDate: isoDueDate },
+		});
+	};
+
 	const handleDeleteTask = (taskId: string) => {
 		deleteMutation.mutate(taskId);
 	};
@@ -291,6 +315,9 @@ export function WorkspaceBoardView({
 									}
 									onUpdatePriority={(newPriority) =>
 										handleUpdatePriority(task.id, newPriority)
+									}
+									onUpdateDueDate={(newDueDate) =>
+										handleUpdateDueDate(task.uuid || task.id, newDueDate)
 									}
 									onDeleteTask={() => handleDeleteTask(task.uuid || task.id)}
 								/>

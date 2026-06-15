@@ -47,6 +47,10 @@ export function ShortcutsDialog({ open, onOpenChange }: ShortcutsDialogProps) {
 			category: "Views & Actions",
 			items: [
 				{
+					description: "Create Task",
+					keys: ["c"],
+				},
+				{
 					description: "Toggle View (List/Board)",
 					keys: ["⌥", "V"],
 					winKeys: ["Alt", "V"],

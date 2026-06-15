@@ -17,6 +17,7 @@ import { WorkspaceBoardView } from "./workspace-board-view";
 import { WorkspaceFilters } from "./workspace-filters";
 import { WorkspaceHeader } from "./workspace-header";
 import { WorkspaceListView } from "./workspace-list-view";
+import { useHotkeys } from "react-hotkeys-hook";
 
 export function WorkspaceLayout() {
 	const router = useRouter();
@@ -29,6 +30,20 @@ export function WorkspaceLayout() {
 	const [isCreateOpen, setIsCreateOpen] = useState(false);
 	const [createDialogDefaultStatus, setCreateDialogDefaultStatus] =
 		useState<TaskStatus>("todo");
+
+	useHotkeys(
+		"c",
+		(e) => {
+			e.preventDefault();
+			setCreateDialogDefaultStatus("backlog");
+			setIsCreateOpen(true);
+		},
+		{
+			enableOnFormTags: false,
+			enableOnContentEditable: false,
+		},
+		[],
+	);
 
 	// Pagination settings
 	const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));

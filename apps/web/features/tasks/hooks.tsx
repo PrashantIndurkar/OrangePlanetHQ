@@ -355,11 +355,39 @@ export function useUpdateTaskMutation() {
 			}>({ queryKey: ["tasks"] });
 			const previousTask = queryClient.getQueryData<Task>(["task", id]);
 
+			// Format dueDate to relative friendly string for optimistic UI updates
+			const optimisticData = { ...data };
+			if (optimisticData.dueDate === null) {
+				delete (optimisticData as any).dueDate;
+				(optimisticData as any).dueDate = undefined;
+			} else if (optimisticData.dueDate) {
+				const date = new Date(optimisticData.dueDate);
+				const today = new Date();
+				today.setHours(0, 0, 0, 0);
+				const tomorrow = new Date(today);
+				tomorrow.setDate(tomorrow.getDate() + 1);
+				const compareDate = new Date(date);
+				compareDate.setHours(0, 0, 0, 0);
+
+				if (compareDate.getTime() === today.getTime()) {
+					optimisticData.dueDate = "Today";
+				} else if (compareDate.getTime() === tomorrow.getTime()) {
+					optimisticData.dueDate = "Tomorrow";
+				} else if (compareDate.getTime() < today.getTime()) {
+					optimisticData.dueDate = "Overdue";
+				} else {
+					optimisticData.dueDate = date.toLocaleDateString("en-US", {
+						month: "short",
+						day: "numeric",
+					});
+				}
+			}
+
 			// Optimistically update single task query cache
 			if (previousTask) {
 				queryClient.setQueryData(["task", id], (old: Task | undefined) => {
 					if (!old) return old;
-					return { ...old, ...data };
+					return { ...old, ...optimisticData };
 				});
 			}
 
@@ -371,7 +399,7 @@ export function useUpdateTaskMutation() {
 					return {
 						...old,
 						tasks: old.tasks.map((t: Task) =>
-							t.id === id || t.uuid === id ? { ...t, ...data } : t,
+							t.id === id || t.uuid === id ? { ...t, ...optimisticData } : t,
 						),
 					};
 				},

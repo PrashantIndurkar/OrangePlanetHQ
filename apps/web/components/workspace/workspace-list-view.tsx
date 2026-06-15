@@ -144,6 +144,30 @@ export function WorkspaceListView({
 		updateMutation.mutate({ id: taskId, data: { priority: newPriority } });
 	};
 
+	const handleUpdateDueDate = (taskId: string, newDueDate?: string) => {
+		let isoDueDate: string | null = null;
+		if (newDueDate) {
+			const lower = newDueDate.toLowerCase();
+			const d = new Date();
+			d.setHours(12, 0, 0, 0);
+			if (lower === "today") {
+				isoDueDate = d.toISOString();
+			} else if (lower === "tomorrow") {
+				d.setDate(d.getDate() + 1);
+				isoDueDate = d.toISOString();
+			} else if (lower === "overdue") {
+				d.setDate(d.getDate() - 1);
+				isoDueDate = d.toISOString();
+			} else {
+				isoDueDate = new Date(newDueDate).toISOString();
+			}
+		}
+		updateMutation.mutate({
+			id: taskId,
+			data: { dueDate: isoDueDate },
+		});
+	};
+
 	const handleDeleteTask = (taskId: string) => {
 		deleteMutation.mutate(taskId);
 	};
@@ -327,11 +351,24 @@ export function WorkspaceListView({
 														e.stopPropagation();
 														handleAddTask(group.id);
 													}}
-													className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-none border border-dashed border-zinc-400 dark:border-zinc-500 font-sans text-xs font-semibold text-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
+													className="flex h-[22px] w-[22px] cursor-pointer items-center justify-center rounded-none border border-dashed border-zinc-400 dark:border-zinc-500 text-foreground transition-colors outline-none hover:bg-muted hover:text-foreground"
 												/>
 											}
 										>
-											+
+											<svg
+												className="h-3 w-3"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												strokeWidth="2.5"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												role="img"
+												aria-label="Add Task"
+											>
+												<title>Add Task</title>
+												<path d="M12 5v14M5 12h14" />
+											</svg>
 										</TooltipTrigger>
 										<TooltipContent>Add task to {group.title}</TooltipContent>
 									</Tooltip>
@@ -350,11 +387,15 @@ export function WorkspaceListView({
 											key={task.uuid || task.id}
 											currentStatus={task.status as TaskStatus}
 											currentPriority={task.priority as TaskPriority}
+											currentDueDate={task.dueDate}
 											onUpdateStatus={(newStatus) =>
 												handleUpdateStatus(task.uuid || task.id, newStatus)
 											}
 											onUpdatePriority={(newPriority) =>
 												handleUpdatePriority(task.uuid || task.id, newPriority)
+											}
+											onUpdateDueDate={(newDueDate) =>
+												handleUpdateDueDate(task.uuid || task.id, newDueDate)
 											}
 											onDeleteTask={() =>
 												handleDeleteTask(task.uuid || task.id)
