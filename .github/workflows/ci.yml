@@ -93,10 +93,29 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm --filter api exec prisma generate
 
-      - name: Run Database Migrations
-        run: pnpm --filter api exec prisma migrate deploy
+      - name: Run Database Migrations (CI-safe)
         env:
           DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/stride_test?schema=public
+        run: |
+          echo "Waiting for PostgreSQL..."
+          until pg_isready -h 127.0.0.1 -p 5432 -U postgres; do
+            sleep 1
+          done
+
+          echo "Generating Prisma client"
+          pnpm --filter api exec prisma generate --schema=apps/api/prisma/schema.prisma
+
+          echo "Listing migration files (debug)"
+          ls -la apps/api/prisma/migrations || true
+
+          echo "Applying migrations (reset for CI safety)"
+          pnpm --filter api exec prisma migrate reset --force --schema=apps/api/prisma/schema.prisma --skip-seed || {
+            echo "Reset failed, trying deploy"
+            pnpm --filter api exec prisma migrate deploy --schema=apps/api/prisma/schema.prisma
+          }
+
+          echo "Prisma migration status:"
+          pnpm --filter api exec prisma migrate status --schema=apps/api/prisma/schema.prisma --verbose
 
       - name: Compile and Build Apps
         run: pnpm run build
