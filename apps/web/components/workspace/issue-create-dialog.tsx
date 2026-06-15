@@ -8,6 +8,7 @@ import {
 	FocusPointIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Image from "next/image";
 import * as React from "react";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -75,9 +76,9 @@ export function IssueCreateDialog({
 		}
 	}, []);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: adjust height when description changes
 	React.useEffect(() => {
 		if (open) {
-			const _dummy = description;
 			adjustHeight();
 		}
 	}, [open, description, adjustHeight]);
@@ -263,10 +264,12 @@ export function IssueCreateDialog({
 										key={img.dataUrl}
 										className="relative group rounded-lg overflow-hidden border border-border bg-muted/40 aspect-video max-h-[160px] flex items-center justify-center"
 									>
-										{/* biome-ignore lint/performance/noImgElement: dynamic user-uploaded image preview */}
-										<img
+										<Image
 											src={img.dataUrl}
 											alt={img.name}
+											width={280}
+											height={160}
+											unoptimized
 											className="object-contain max-h-full max-w-full"
 										/>
 										<button

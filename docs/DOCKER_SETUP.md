@@ -1,122 +1,113 @@
-# Docker & Compose Setup Guide 🐳
+# 🐳 Docker & Compose Containerization Setup Guide
 
-This guide walks you through setting up, configuring, and running the containerized Stried application stack using Docker Compose.
-
----
-
-## 📋 System Requirements
-Before starting, ensure you have the following installed on your machine:
-* **Docker Desktop** (version 20.10+ or higher)
-* Free local ports: `3000` (Frontend), `3002` (Backend API), `5555` (Prisma Studio), and `5433` (PostgreSQL Host Port)
+This guide walks you through configuring, building, running, and troubleshooting the containerized Stride application stack using Docker Compose.
 
 ---
 
-## ⚙️ Step 1: Environment Setup
+## 🏗️ Docker Services Architecture
 
-1. Open your terminal at the root of the project (`stried/`).
-2. Copy the sample environment profile:
-   ```bash
-   cp .env.sample .env
-   ```
-3. Configure your database provider inside `.env`:
+The application is containerized using three main services defined in the root [docker-compose.yml](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stride/docker-compose.yml):
 
-### Option A: Local Container Database (Default - Recommended)
-Leave the default settings as-is. Docker Compose will automatically boot a local PostgreSQL instance, apply migrations, generate the client, auto-seed the database if it's empty, and hook up the backend:
-```env
-DATABASE_URL=postgresql://postgres:postgres@db:5432/stried
+```text
+                       [Browser Access: http://localhost:3000]
+                                         │
+                                         ▼
+                            ┌────────────────────────┐
+                            │     web Container      │
+                            │   (Next.js Web App)    │
+                            └────────────┬───────────┘
+                                         │
+                        HTTP requests    │ (Private Network)
+                                         ▼
+                            ┌────────────────────────┐
+                            │     api Container      │
+                            │   (Express REST API)   │
+                            └────────────┬───────────┘
+                                         │
+                      Prisma queries     │ (Private Network)
+                                         ▼
+                            ┌────────────────────────┐
+                            │      db Container      │
+                            │  (Postgres Database)   │
+                            └────────────────────────┘
 ```
 
-### Option B: Cloud Database Provider (Neon, Supabase, etc.)
-Paste your cloud provider connection URL. The application will automatically connect to it and deploy the schema:
-```env
-DATABASE_URL=postgresql://neondb_owner:password@ep-blue-flower-123456.us-east-1.aws.neon.tech/neondb?sslmode=require
-```
+1. **`db` (Postgres Database):** Ephemeral database container using the official PostgreSQL 16 image. It maps local data volumes to persist databases across container shutdowns.
+2. **`api` (Express REST API):** Containerizes the backend service. It automatically waits for the database, runs schema migrations, generates the Prisma client, and seeds initial data.
+3. **`web` (Next.js Frontend):** Containerizes the frontend client. Configured to run in production mode to test production-like runtime behavior.
 
 ---
 
-## 🚀 Step 2: Running the Stack (One Command Workflow)
+## ⚡ SaaS Production Optimizations Built-In
 
-Run the single docker command to build images, configure services, and spin up all processes concurrently:
+Stride's Dockerfiles are built following industry-best production SaaS containerization practices:
+
+### A. Next.js Standalone Multi-Stage Builds (`apps/web/Dockerfile`)
+Standard Next.js builds include large packages, development compiler files, and tooling assets, resulting in images exceeding **1.2GB**.
+Stride utilizes Next.js **Standalone Build Output**:
+1. It analyzes the dependency graph during the build stage and traces only the files required to run in production.
+2. It outputs a lightweight server file in `.next/standalone`.
+3. The runner stage only copies this standalone output, reducing the final image size to **~150MB** (an 85%+ decrease).
+
+### B. Non-Root Execution Security compliance
+To prevent host system takeover in case of container escape vulnerabilities, all service images execute under non-root users:
+- The `web` container runs under the `nextjs` system user group.
+- The `api` container runs under the `nodejs` system user group.
+
+### C. Automatic Health Verification and Seeding
+The backend container entrypoint script (`apps/api/docker-entrypoint.sh`):
+1. Polls the PostgreSQL socket until database handshakes succeed.
+2. Automatically deploys missing database schema migrations.
+3. Checks if the database is blank. If it has no users, it runs the seeder script. If it already contains records, it skips seeding to protect active development data.
+
+---
+
+## ⚙️ Quick Start Guide (One-Command Boot)
+
+### 1. Configure the Environment
+Copy the configuration template to `.env`:
+```bash
+# Run at the root of the stride/ directory
+cp .env.example .env
+```
+Leave the default settings as-is. The defaults are already optimized to bind the backend to the database and link the frontend to the backend inside the Docker network.
+
+### 2. Boot the Application Stack
+Execute the build and run command:
 ```bash
 docker compose up --build
 ```
-> **Note:** There is **no need** to install Node.js modules or run `pnpm run dev` on your host machine. Docker will manage all dependencies, run migrations, and automatically seed the database on its first startup.
+> [!TIP]
+> **No host dependencies required:** There is no need to run `pnpm install` or have Node.js installed on your computer. Docker downloads, configures, compiles, and links all dependencies inside the container network.
+
+### 3. Verify Endpoints
+Once the build concludes and containers start, access the services:
+
+- **Web Frontend:** [http://localhost:3000](http://localhost:3000)
+- **REST API Server:** [http://localhost:3002/api/v1](http://localhost:3002/api/v1)
+- **Prisma Studio (GUI):** [http://localhost:5555](http://localhost:5555)
+
+Log in using the seeded test accounts:
+- **Standard Account:** `test@example.com` / `password123`
+- **Admin Account:** `admin@example.com` / `password123`
 
 ---
 
-## 🌐 Ports & Access Endpoints
+## 🛠️ Docker Compose Command Reference
 
-Once the containers are booted successfully, you can access all components of the application stack using the following addresses:
-
-| Component | Host URL / Port | Accessible From | Description |
-| :--- | :--- | :--- | :--- |
-| 💻 **Frontend Web App** | **[http://localhost:3000](http://localhost:3000)** | Web Browser | Next.js Stried UI application |
-| ⚡ **Backend REST API** | **[http://localhost:3002](http://localhost:3002)** | API Clients / Postman | Express REST API server (`/api/v1`) |
-| 📸 **Prisma Studio (GUI)** | **[http://localhost:5555](http://localhost:5555)** | Web Browser | Interactive Database viewer/editor |
-| 🐘 **PostgreSQL Database** | **`localhost:5433`** | DB Clients (DBeaver/pgAdmin) | Mapped database port (maps `5433` -> `5432`) |
-
----
-
-## 🔒 SaaS Production Optimizations Built-In
-
-Our configuration is built with professional enterprise-grade SaaS practices:
-1. **Ultra-Lightweight Builds (Next.js Standalone):** We leverage Next.js `standalone` build output, reducing the web production image size from **1.2GB+ down to ~150MB** by copying only the dependency traces.
-2. **Non-Root Execution:** For enhanced security compliance, all runner images execute under non-root users (`nodejs` / `nextjs`) instead of root.
-3. **Smart Seeding:** The backend container automatically detects if the database contains existing users. If empty, it runs the seeder script. If data already exists, it skips seeding to protect your development data.
-4. **Prisma 7 Compatibility:** The entrypoint executes commands in filtered package contexts so Prisma 7 can successfully resolve the `prisma.config.js` file.
-
----
-
-## 🧪 Step 3: Verification Checklist
-
-Verify that the stack is 100% operational:
-1. **Access the Web App:** Open [http://localhost:3000](http://localhost:3000).
-2. **Log In:** Use one of the automatically seeded test accounts:
-   * **Standard User:**
-     * **Email:** `test@example.com`
-     * **Password:** `password123`
-   * **Admin User:**
-     * **Email:** `admin@example.com`
-     * **Password:** `password123`
-3. **Inspect the Database:** Open [http://localhost:5555](http://localhost:5555) to view Prisma Studio and inspect the `User`, `Task`, and `ActivityLog` tables.
-
----
-
-## 🛠️ Troubleshooting & Commands
-
-### How to Stop the Containers:
-Press `Ctrl+C` in the running terminal, or run:
-```bash
-docker compose down
-```
-
-### How to Wipe Data / Reset Database:
-To perform a clean reset of the local PostgreSQL container volume:
-```bash
-docker compose down -v
-```
-
-### How to Restart (Without Rebuilding):
-If you have already built the containers, you can start them up instantly (in ~1 second) without running the long build process:
-```bash
-docker compose up
-```
-*(Any local code edits you make are automatically synced inside the running containers without needing a rebuild, thanks to Docker volumes).*
-
----
-
-## 💻 Local Development (Outside Docker)
-
-If you prefer to run the application directly on your host machine:
-
-1. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-2. Start the development workspace:
-   ```bash
-   pnpm run dev
-   ```
-   *This command leverages **Turborepo** to launch the **Next.js Frontend**, the **Express API**, and **Prisma Studio** concurrently with a single command!*
-3. Open **[http://localhost:5555](http://localhost:5555)** to view Prisma Studio locally.
-
+- **Stop Services:** Stops containers without losing database data.
+  ```bash
+  docker compose down
+  ```
+- **Wipe Database & Reset:** Shuts down containers and deletes the Postgres persistent volume. Useful to test seed scripts or migrate schemas from scratch.
+  ```bash
+  docker compose down -v
+  ```
+- **Instant Restart (No Rebuilding):** If dependencies have not changed, boot in 1 second.
+  ```bash
+  docker compose up
+  ```
+- **View Container Logs:**
+  ```bash
+  docker compose logs -f
+  ```

@@ -1,6 +1,12 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
 	useDeleteTaskMutation,
 	useUpdateTaskMutation,
 } from "../../features/tasks/hooks";
@@ -204,45 +210,66 @@ export function WorkspaceBoardView({
 								</div>
 							</div>
 							<div className="flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
-								<button
-									type="button"
-									className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-none transition-colors outline-none hover:bg-accent/10 hover:text-foreground"
-									title="Actions"
-								>
-									<svg
-										className="h-3.5 w-3.5"
-										viewBox="0 0 24 24"
-										fill="currentColor"
-										role="img"
-										aria-label="Actions"
-									>
-										<title>Actions</title>
-										<circle cx="12" cy="12" r="1.5" />
-										<circle cx="6" cy="12" r="1.5" />
-										<circle cx="18" cy="12" r="1.5" />
-									</svg>
-								</button>
-								<button
-									type="button"
-									onClick={() => handleAddTask(column.id)}
-									className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-none border border-dotted border-zinc-300 bg-transparent transition-colors outline-none hover:bg-accent/10 hover:text-foreground dark:border-zinc-800"
-									title="Add Task"
-								>
-									<svg
-										className="h-3.5 w-3.5"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2.5"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										role="img"
-										aria-label="Add Task"
-									>
-										<title>Add Task</title>
-										<path d="M12 5v14M5 12h14" />
-									</svg>
-								</button>
+								<TooltipProvider>
+									<Tooltip>
+										<TooltipTrigger
+											render={
+												<button
+													type="button"
+													aria-label="Column actions"
+													className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-none transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring hover:bg-accent/10 hover:text-foreground"
+												/>
+											}
+										>
+											<svg
+												className="h-3.5 w-3.5"
+												viewBox="0 0 24 24"
+												fill="currentColor"
+												role="img"
+												aria-label="Actions"
+											>
+												<title>Actions</title>
+												<circle cx="12" cy="12" r="1.5" />
+												<circle cx="6" cy="12" r="1.5" />
+												<circle cx="18" cy="12" r="1.5" />
+											</svg>
+										</TooltipTrigger>
+										<TooltipContent>Column actions</TooltipContent>
+									</Tooltip>
+								</TooltipProvider>
+
+								<TooltipProvider>
+									<Tooltip>
+										<TooltipTrigger
+											render={
+												<button
+													type="button"
+													onClick={() => handleAddTask(column.id)}
+													aria-label="Add task"
+													className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-none border border-dotted border-zinc-300 bg-transparent transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring hover:bg-accent/10 hover:text-foreground dark:border-zinc-800"
+												/>
+											}
+										>
+											<svg
+												className="h-3.5 w-3.5"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												strokeWidth="2.5"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												role="img"
+												aria-label="Add Task"
+											>
+												<title>Add Task</title>
+												<path d="M12 5v14M5 12h14" />
+											</svg>
+										</TooltipTrigger>
+										<TooltipContent>
+											Create task in {column.title}
+										</TooltipContent>
+									</Tooltip>
+								</TooltipProvider>
 							</div>
 						</div>
 

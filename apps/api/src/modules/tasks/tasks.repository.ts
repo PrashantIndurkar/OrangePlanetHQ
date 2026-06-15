@@ -61,7 +61,30 @@ export const tasksRepository = {
 				},
 			});
 
-			return task;
+			const createdTask = await tx.task.findUnique({
+				where: { id: task.id },
+				include: {
+					activities: {
+						orderBy: {
+							timestamp: "asc",
+						},
+					},
+					user: {
+						select: {
+							id: true,
+							email: true,
+							name: true,
+							role: true,
+						},
+					},
+				},
+			});
+
+			if (!createdTask) {
+				throw new Error("Failed to retrieve created task");
+			}
+
+			return createdTask;
 		});
 	},
 
@@ -242,6 +265,7 @@ export const tasksRepository = {
 		if (search) {
 			const searchClause: Prisma.TaskWhereInput = {
 				OR: [
+					{ id: { contains: search, mode: "insensitive" } },
 					{ title: { contains: search, mode: "insensitive" } },
 					{ description: { contains: search, mode: "insensitive" } },
 				],
@@ -340,7 +364,7 @@ export const tasksRepository = {
 		}
 
 		return prisma.$transaction(async (tx) => {
-			const updated = await tx.task.update({
+			await tx.task.update({
 				where: { id },
 				data,
 			});
@@ -357,7 +381,30 @@ export const tasksRepository = {
 				});
 			}
 
-			return updated;
+			const updatedTask = await tx.task.findUnique({
+				where: { id },
+				include: {
+					activities: {
+						orderBy: {
+							timestamp: "asc",
+						},
+					},
+					user: {
+						select: {
+							id: true,
+							email: true,
+							name: true,
+							role: true,
+						},
+					},
+				},
+			});
+
+			if (!updatedTask) {
+				throw new Error("Failed to retrieve updated task");
+			}
+
+			return updatedTask;
 		});
 	},
 

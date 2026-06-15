@@ -38,7 +38,18 @@ export const createTaskSchema = z.object({
 	),
 });
 
-export const updateTaskSchema = createTaskSchema.partial();
+export const updateTaskSchema = z.object({
+	title: z.string().min(1, "Title must not be empty").max(255).optional(),
+	description: z.string().optional().nullable(),
+	status: taskStatusEnum.optional(),
+	priority: taskPriorityEnum.optional(),
+	dueDate: z
+		.preprocess(
+			(val) => (val === "" || val === null ? null : val),
+			z.coerce.date().optional().nullable(),
+		)
+		.optional(),
+});
 
 export const listTasksQuerySchema = z.object({
 	status: z

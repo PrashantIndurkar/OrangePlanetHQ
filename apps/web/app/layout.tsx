@@ -2,6 +2,7 @@ import { Geist_Mono, Plus_Jakarta_Sans } from "next/font/google";
 
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import { AuthProvider } from "@/providers/auth-provider";
 import { QueryProvider } from "@/providers/query-provider";
@@ -35,7 +36,10 @@ export default function RootLayout({
 			<body suppressHydrationWarning>
 				<QueryProvider>
 					<AuthProvider>
-						<ThemeProvider>{children}</ThemeProvider>
+						<ThemeProvider>
+							{children}
+							<Toaster />
+						</ThemeProvider>
 					</AuthProvider>
 				</QueryProvider>
 			</body>

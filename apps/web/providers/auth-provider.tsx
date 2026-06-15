@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { getMeApi, loginApi, signupApi } from "@/features/auth/api";
 import type { AuthUser, LoginInput, SignupInput } from "@/features/auth/types";
+import { ApiError } from "@/lib/api/errors";
 import { getToken, removeToken, setToken } from "@/lib/auth/session";
 
 interface AuthContextType {
@@ -39,7 +40,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 				role: userData.role,
 			});
 		} catch (error) {
-			console.error("Failed to restore session:", error);
+			if (error instanceof ApiError && error.status === 401) {
+				console.log("No active session found (unauthenticated).");
+			} else {
+				console.error("Failed to restore session:", error);
+			}
 			removeToken();
 			setUser(null);
 		} finally {

@@ -2,6 +2,7 @@
 
 import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import * as React from "react";
@@ -38,10 +39,10 @@ export default function NewTaskPage() {
 		titleInputRef.current?.focus();
 	}, []);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: auto-grow textarea when description changes
 	React.useEffect(() => {
 		const textarea = textareaRef.current;
 		if (textarea) {
-			const _dummy = description;
 			textarea.style.height = "auto";
 			textarea.style.height = `${textarea.scrollHeight}px`;
 		}
@@ -154,10 +155,12 @@ export default function NewTaskPage() {
 										key={img.dataUrl}
 										className="relative group rounded-none overflow-hidden border border-border bg-muted/40 aspect-video max-h-[160px] flex items-center justify-center"
 									>
-										{/* biome-ignore lint/performance/noImgElement: dynamic user-uploaded image preview */}
-										<img
+										<Image
 											src={img.dataUrl}
 											alt={img.name}
+											width={280}
+											height={160}
+											unoptimized
 											className="object-contain max-h-full max-w-full"
 										/>
 										<button

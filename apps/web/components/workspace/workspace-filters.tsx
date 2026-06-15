@@ -24,6 +24,12 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SearchInput } from "@/components/ui/search-input";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import {
 	BacklogIcon,
@@ -37,7 +43,6 @@ import {
 	TodoIcon,
 	UrgentPriorityIcon,
 } from "../icons";
-
 import { getNormalizedFilters } from "./types";
 
 interface WorkspaceFiltersProps {
@@ -167,35 +172,53 @@ export function WorkspaceFilters({
 		<div className="flex h-11 w-full shrink-0 items-center justify-between border-b border-border bg-background px-4 select-none">
 			{/* Left side: Search, Filter and Sort controls */}
 			<div className="flex items-center gap-2">
-				<SearchInput
-					value={localSearch}
-					onChange={(e) => setLocalSearch(e.target.value)}
-					placeholder="Search title or ID..."
-					size="sm"
-					showShortcut={true}
-					containerClassName="h-7 w-48 border-border bg-card rounded-none shadow-none focus-within:border-ring focus-within:ring-0 focus-within:ring-offset-0 focus-within:ring-transparent focus-within:ring-offset-transparent focus-within:shadow-none text-muted-foreground focus-within:text-foreground"
-				/>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<SearchInput
+									value={localSearch}
+									onChange={(e) => setLocalSearch(e.target.value)}
+									placeholder="Search title or ID..."
+									size="sm"
+									showShortcut={true}
+									containerClassName="h-7 w-48 border-border bg-card rounded-none shadow-none focus-within:border-ring focus-within:ring-0 focus-within:ring-offset-0 focus-within:ring-transparent focus-within:ring-offset-transparent focus-within:shadow-none text-muted-foreground focus-within:text-foreground"
+								/>
+							}
+						/>
+						<TooltipContent>Search issues by title or ID</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
 
 				{/* Filter Dropdown */}
 				<DropdownMenu>
-					<DropdownMenuTrigger className="flex h-7 cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground">
-						<svg
-							className="h-3.5 w-3.5"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<title>Filter</title>
-							<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-						</svg>
-						<span>
-							Filter
-							{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
-						</span>
-					</DropdownMenuTrigger>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger
+								render={
+									<DropdownMenuTrigger className="flex h-7 cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground" />
+								}
+							>
+								<svg
+									className="h-3.5 w-3.5"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<title>Filter</title>
+									<polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+								</svg>
+								<span>
+									Filter
+									{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+								</span>
+							</TooltipTrigger>
+							<TooltipContent>Filter issues</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 					<DropdownMenuContent className="w-48 p-1" align="start">
 						{/* Status Submenu */}
 						<DropdownMenuSub>
@@ -305,21 +328,30 @@ export function WorkspaceFilters({
 
 				{/* Sort Dropdown */}
 				<DropdownMenu>
-					<DropdownMenuTrigger className="flex h-7 cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground">
-						<svg
-							className="h-3.5 w-3.5"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<title>Sort</title>
-							<path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 4v16" />
-						</svg>
-						<span>Sort</span>
-					</DropdownMenuTrigger>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger
+								render={
+									<DropdownMenuTrigger className="flex h-7 cursor-pointer items-center gap-1.5 rounded-none border border-border bg-card px-2.5 py-0 text-xs font-medium text-muted-foreground transition-all duration-200 outline-none hover:bg-muted hover:text-foreground" />
+								}
+							>
+								<svg
+									className="h-3.5 w-3.5"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<title>Sort</title>
+									<path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 4v16" />
+								</svg>
+								<span>Sort</span>
+							</TooltipTrigger>
+							<TooltipContent>Sort issues</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 					<DropdownMenuContent className="w-48 p-1" align="start">
 						<DropdownMenuRadioGroup
 							value={sortBy}
@@ -367,93 +399,122 @@ export function WorkspaceFilters({
 
 				{/* All Users Toggle (Only visible for Admins when callback is available) */}
 				{onShowAllUsersChange && (
-					<button
-						type="button"
-						onClick={() => onShowAllUsersChange(!showAllUsers)}
-						className={cn(
-							"flex h-7 cursor-pointer items-center gap-1.5 rounded-none border px-2.5 py-0 text-xs font-semibold transition-all duration-200 outline-none",
-							showAllUsers
-								? "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/20"
-								: "border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground",
-						)}
-					>
-						<svg
-							className="h-3.5 w-3.5"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-						>
-							<title>All Users</title>
-							<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-							<circle cx="9" cy="7" r="4" />
-							<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-							<path d="M16 3.13a4 4 0 0 1 0 7.75" />
-						</svg>
-						<span>Show All Users&apos; Tasks</span>
-					</button>
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger
+								render={
+									<button
+										type="button"
+										onClick={() => onShowAllUsersChange(!showAllUsers)}
+										className={cn(
+											"flex h-7 cursor-pointer items-center gap-1.5 rounded-none border px-2.5 py-0 text-xs font-semibold transition-all duration-200 outline-none",
+											showAllUsers
+												? "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400 hover:bg-red-500/20"
+												: "border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground",
+										)}
+									/>
+								}
+							>
+								<svg
+									className="h-3.5 w-3.5"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								>
+									<title>All Users</title>
+									<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+									<circle cx="9" cy="7" r="4" />
+									<path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+									<path d="M16 3.13a4 4 0 0 1 0 7.75" />
+								</svg>
+								<span>Show All Users&apos; Tasks</span>
+							</TooltipTrigger>
+							<TooltipContent>
+								Toggle showing tasks from all workspace members
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
 				)}
 			</div>
 
 			{/* Right side: View Switcher (Board vs List) */}
 			<div className="flex h-7 items-center gap-0.5 rounded-none border border-border bg-muted/10 p-0.5">
-				<button
-					type="button"
-					onClick={() => onViewChange("list")}
-					className={cn(
-						"flex h-full cursor-pointer items-center gap-1.5 border-none px-2.5 text-xs transition-all duration-200 outline-none",
-						view === "list"
-							? "bg-muted font-semibold text-foreground"
-							: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
-					)}
-				>
-					<svg
-						className="h-3.5 w-3.5"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					>
-						<title>List View</title>
-						<line x1="8" y1="6" x2="21" y2="6" />
-						<line x1="8" y1="12" x2="21" y2="12" />
-						<line x1="8" y1="18" x2="21" y2="18" />
-						<line x1="3" y1="6" x2="3.01" y2="6" />
-						<line x1="3" y1="12" x2="3.01" y2="12" />
-						<line x1="3" y1="18" x2="3.01" y2="18" />
-					</svg>
-					<span>List</span>
-				</button>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<button
+									type="button"
+									onClick={() => onViewChange("list")}
+									className={cn(
+										"flex h-full cursor-pointer items-center gap-1.5 border-none px-2.5 text-xs transition-all duration-200 outline-none",
+										view === "list"
+											? "bg-muted font-semibold text-foreground"
+											: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
+									)}
+								/>
+							}
+						>
+							<svg
+								className="h-3.5 w-3.5"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<title>List View</title>
+								<line x1="8" y1="6" x2="21" y2="6" />
+								<line x1="8" y1="12" x2="21" y2="12" />
+								<line x1="8" y1="18" x2="21" y2="18" />
+								<line x1="3" y1="6" x2="3.01" y2="6" />
+								<line x1="3" y1="12" x2="3.01" y2="12" />
+								<line x1="3" y1="18" x2="3.01" y2="18" />
+							</svg>
+							<span>List</span>
+						</TooltipTrigger>
+						<TooltipContent>Switch to list layout</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
 
-				<button
-					type="button"
-					onClick={() => onViewChange("board")}
-					className={cn(
-						"flex h-full cursor-pointer items-center gap-1.5 border-none px-2.5 text-xs transition-all duration-200 outline-none",
-						view === "board"
-							? "bg-muted font-semibold text-foreground"
-							: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
-					)}
-				>
-					<svg
-						className="h-3.5 w-3.5"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						strokeWidth="2"
-						strokeLinecap="round"
-						strokeLinejoin="round"
-					>
-						<title>Board View</title>
-						<rect x="3" y="3" width="18" height="18" rx="2" />
-						<path d="M9 3v18M15 3v18" />
-					</svg>
-					<span>Board</span>
-				</button>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger
+							render={
+								<button
+									type="button"
+									onClick={() => onViewChange("board")}
+									className={cn(
+										"flex h-full cursor-pointer items-center gap-1.5 border-none px-2.5 text-xs transition-all duration-200 outline-none",
+										view === "board"
+											? "bg-muted font-semibold text-foreground"
+											: "text-muted-foreground hover:bg-muted/40 hover:text-foreground",
+									)}
+								/>
+							}
+						>
+							<svg
+								className="h-3.5 w-3.5"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<title>Board View</title>
+								<rect x="3" y="3" width="18" height="18" rx="2" />
+								<path d="M9 3v18M15 3v18" />
+							</svg>
+							<span>Board</span>
+						</TooltipTrigger>
+						<TooltipContent>Switch to kanban board layout</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
 			</div>
 		</div>
 	);
