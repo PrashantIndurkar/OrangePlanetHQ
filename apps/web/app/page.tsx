@@ -93,21 +93,32 @@ export default function LandingPage() {
 
 					{/* Center Navigation items */}
 					<div className="hidden md:flex items-center gap-8 text-[11px] font-medium text-zinc-500">
-						<span className="cursor-pointer hover:text-zinc-900 transition-colors">
+						<Link
+							href="/features"
+							className="cursor-pointer hover:text-zinc-900 transition-colors"
+						>
 							Features
-						</span>
-						<span className="cursor-pointer hover:text-zinc-900 transition-colors">
-							Workflow
-						</span>
-						<span className="cursor-pointer hover:text-zinc-900 transition-colors">
+						</Link>
+
+						<Link
+							href="/pricing"
+							className="cursor-pointer hover:text-zinc-900 transition-colors"
+						>
 							Pricing
-						</span>
-						<span className="cursor-pointer hover:text-zinc-900 transition-colors">
-							Compare
-						</span>
-						<span className="cursor-pointer hover:text-zinc-900 transition-colors">
+						</Link>
+
+						<Link
+							href="/roadmap"
+							className="cursor-pointer hover:text-zinc-900 transition-colors"
+						>
+							Roadmap
+						</Link>
+						<Link
+							href="/changelog"
+							className="cursor-pointer hover:text-zinc-900 transition-colors"
+						>
 							Changelog
-						</span>
+						</Link>
 					</div>
 
 					{/* Right CTA */}
