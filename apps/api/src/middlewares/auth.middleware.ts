@@ -64,7 +64,7 @@ export const authMiddleware = (
 				next();
 			})
 			.catch((err) => next(err));
-	} catch (_error) {
-		next(new ApiError(401, "Please authenticate"));
+	} catch (err) {
+		next(err);
 	}
 };

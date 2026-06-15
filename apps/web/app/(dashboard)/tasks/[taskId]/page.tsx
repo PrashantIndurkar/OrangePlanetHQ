@@ -29,6 +29,7 @@ import {
 	useTaskQuery,
 	useUpdateTaskMutation,
 } from "../../../../features/tasks/hooks";
+import { isValidImage } from "@/lib/image-validation";
 
 const formatDateTime = (timestamp?: number) => {
 	if (!timestamp) return "—";
@@ -325,19 +326,11 @@ export default function TaskDetailsPage({
 	};
 
 	const handleFileSelect = async (files: File[]) => {
-		const allowedTypes = [
-			"image/png",
-			"image/jpeg",
-			"image/jpg",
-			"image/webp",
-			"image/gif",
-		];
-
 		for (const file of files) {
-			if (!allowedTypes.includes(file.type)) {
-				toast.error(
-					`File "${file.name}" format is not supported. Please upload PNG, JPG, WEBP, or GIF images.`,
-				);
+			// Use centralized validation
+			const validation = isValidImage(file);
+			if (!validation.valid) {
+				toast.error(validation.error ?? "Invalid image");
 				continue;
 			}
 			if (file.type.startsWith("image/")) {
@@ -524,11 +517,11 @@ export default function TaskDetailsPage({
 							<div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[8px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
 								{task.assigneeName
 									? task.assigneeName
-											.split(" ")
-											.map((n) => n[0])
-											.join("")
-											.toUpperCase()
-											.slice(0, 1)
+										.split(" ")
+										.map((n) => n[0])
+										.join("")
+										.toUpperCase()
+										.slice(0, 1)
 									: "U"}
 							</div>
 							<span className="text-[11px] font-medium text-foreground/80">
@@ -679,11 +672,11 @@ export default function TaskDetailsPage({
 									<div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-[9px] font-bold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
 										{task.assigneeName
 											? task.assigneeName
-													.split(" ")
-													.map((n) => n[0])
-													.join("")
-													.toUpperCase()
-													.slice(0, 1)
+												.split(" ")
+												.map((n) => n[0])
+												.join("")
+												.toUpperCase()
+												.slice(0, 1)
 											: "U"}
 									</div>
 									<span className="text-[12px] font-medium text-foreground/80">

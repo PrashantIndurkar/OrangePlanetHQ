@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/tooltip";
 import { uploadImage } from "@/lib/upload-image";
 import { cn } from "@/lib/utils";
+import { isValidImage } from "@/lib/image-validation";
 import { useAuth } from "@/providers/auth-provider";
 import type { TaskPriority, TaskStatus } from "../tasks/task-metadata";
 import { IssueAttachmentButton } from "./issue-attachment-button";
@@ -138,20 +139,11 @@ export function IssueCreateDialog({
 		if (!editorRef.current) return;
 		const editor = editorRef.current;
 
-		const allowedTypes = [
-			"image/png",
-			"image/jpeg",
-			"image/jpg",
-			"image/webp",
-			"image/gif",
-		];
-
 		setIsUploading(true);
 		for (const file of files) {
-			if (!allowedTypes.includes(file.type)) {
-				toast.error(
-					`File "${file.name}" format is not supported. Please upload PNG, JPG, WEBP, or GIF images.`,
-				);
+			const validation = isValidImage(file);
+			if (!validation.valid) {
+				toast.error(validation.error ?? "Invalid image");
 				continue;
 			}
 			if (file.type.startsWith("image/")) {
@@ -186,6 +178,7 @@ export function IssueCreateDialog({
 						return found;
 					});
 					toast.success("Image uploaded successfully");
+					URL.revokeObjectURL(localUrl);
 				} catch (err) {
 					// Remove the preview if failed
 					// biome-ignore lint/suspicious/noExplicitAny: Tiptap types
@@ -204,6 +197,7 @@ export function IssueCreateDialog({
 					toast.error(
 						err instanceof Error ? err.message : "Failed to upload image",
 					);
+					URL.revokeObjectURL(localUrl);
 				}
 			}
 		}

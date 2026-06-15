@@ -6,6 +6,7 @@ import { type Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { isValidImage } from "@/lib/image-validation";
 import { useUploadImageMutation } from "@/features/tasks/use-upload-image-mutation";
 
 interface TaskEditorProps {
@@ -81,6 +82,11 @@ export function TaskEditor({
 
 	const handleUpload = async (file: File, pos?: number) => {
 		if (!editor) return;
+		const validation = isValidImage(file);
+		if (!validation.valid) {
+			toast.error(validation.error ?? "Invalid image");
+			return;
+		}
 		const localUrl = URL.createObjectURL(file);
 
 		// Insert loading preview image
@@ -120,6 +126,7 @@ export function TaskEditor({
 				return found;
 			});
 			toast.success("Image uploaded successfully");
+			URL.revokeObjectURL(localUrl);
 		} catch (err) {
 			editor.commands.command(({ tr, state }) => {
 				let found = false;
@@ -135,6 +142,7 @@ export function TaskEditor({
 			toast.error(
 				err instanceof Error ? err.message : "Failed to upload image",
 			);
+			URL.revokeObjectURL(localUrl);
 		}
 	};
 
