@@ -1,3 +1,24 @@
+# [0.16.0](https://github.com/PrashantIndurkar/stride/compare/v0.15.0...v0.16.0) (2026-06-15)
+
+
+### Bug Fixes
+
+* **ci:** remove invalid verbose flag from prisma migrate status ([c50d6d9](https://github.com/PrashantIndurkar/stride/commit/c50d6d9a394149870c51676bc553c551e7a4860a))
+* **ci:** use prisma db push instead of migrate reset since no migration files exist ([b63a0b4](https://github.com/PrashantIndurkar/stride/commit/b63a0b46268bde2deddcebacdb920ae2769c5bd5))
+* **ci:** use relative path for prisma schema in workflow ([281468b](https://github.com/PrashantIndurkar/stride/commit/281468bd0ea6d96848d813670044f81b75893d9b))
+* implement inline image upload skeletons, swap logic, and tiptap placeholder ([1553ffe](https://github.com/PrashantIndurkar/stride/commit/1553ffe917570734719c1ead8691861f5cd3e9c5))
+* linting ([a3970f1](https://github.com/PrashantIndurkar/stride/commit/a3970f19688361239b7a2eaf91c39237ad57c2b6))
+* refactor tasks, authentication flow and resolve popup-blocking bugs ([0045b99](https://github.com/PrashantIndurkar/stride/commit/0045b99b43252ba65409cf83d8b05a2aac6193af))
+
+
+### Features
+
+* add changelog page with markdown parsing and update Dockerfile to include changelog content ([5fd158b](https://github.com/PrashantIndurkar/stride/commit/5fd158b30e01b198bb2b0205608a07997bf8b4cb))
+* add product roadmap, changelog, and feature pages with data parsing support ([43c7670](https://github.com/PrashantIndurkar/stride/commit/43c7670f5fbc5537741365ad8b4011b08fad1dc8))
+* configure standalone output and image remote patterns in next.config.ts ([b412b29](https://github.com/PrashantIndurkar/stride/commit/b412b29552fd8a80c0a61cb912d0850df46e9d81))
+* implement task creation interface with Tiptap editor and image attachment support ([25c3ebb](https://github.com/PrashantIndurkar/stride/commit/25c3ebb8f6c48e40b389d45d066acacccea488eb))
+* implement task detail page with editor, status/priority management, and image validation support ([0ef11cc](https://github.com/PrashantIndurkar/stride/commit/0ef11cc428f1d4870af2cd8000665154f4a4c17b))
+* lint fix. ([bde4938](https://github.com/PrashantIndurkar/stride/commit/bde4938e846cb66b6f67b150763164abf52ef1ed))
 # [0.15.0](https://github.com/PrashantIndurkar/stride/compare/v0.14.0...v0.15.0) (2026-06-15)
 
 ## 🚀 Deployment & Infrastructure

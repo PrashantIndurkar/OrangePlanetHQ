@@ -2,7 +2,7 @@
   "name": "stride",
   "private": true,
   "type": "module",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev dev:studio",
