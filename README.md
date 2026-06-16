@@ -241,42 +241,75 @@ To make exploring the codebase as clean as possible, we have split our documenta
 
 ## 🚀 Quick Start Guide
 
-You can boot the entire application stack in under **two minutes** using either Docker or a local pnpm dev workspace.
+Follow these steps to clone, configure, and boot the entire Stride application stack in under **two minutes**.
 
-### Setup Environment Configuration
-Copy the configuration template to `.env`:
+### 1. Clone the Repository
+Open your terminal and clone the repository, then navigate into the project directory:
+```bash
+# Clone the repository
+git clone https://github.com/PrashantIndurkar/stride.git
+
+# Navigate into the project folder
+cd stride
+```
+
+### 2. Setup Environment Configuration
+Copy the template configuration to create your local `.env` file:
 ```bash
 cp .env.example .env
 ```
+> [!NOTE]
+> Our dynamic database configuration automatically translates the database host string depending on where you run the application. There is no need to manually edit `.env` for switching between Docker and local runs!
+
+---
 
 ### Option A: The One-Command Docker Setup (Recommended)
-This boots PostgreSQL, runs database migrations, seeds test accounts, compiles Next.js in production standalone mode, and starts the API:
+
+This compiles Next.js in production standalone mode, spins up the backend API, boots the PostgreSQL container, applies migrations, and runs seeding automatically.
+
+Run the following command in the root folder:
 ```bash
 docker compose up --build
 ```
-- **Web Frontend:** [http://localhost:3000](http://localhost:3000)
-- **REST API Server:** [http://localhost:3002/api/v1](http://localhost:3002/api/v1)
-- **Prisma Studio:** [http://localhost:5555](http://localhost:5555)
 
-### Option B: Local Development Setup
+#### What to Expect:
+- **Web Frontend:** Accessible at [http://localhost:3000](http://localhost:3000) (Next.js Application).
+- **REST API Server:** Running at [http://localhost:3002/api/v1](http://localhost:3002/api/v1).
+- **Prisma Studio:** Accessible at [http://localhost:5555](http://localhost:5555) (a visual database GUI).
+- **Seeded Accounts:** Default credentials (see below) are automatically seeded.
+
+---
+
+### Option B: Local Development Setup (Fast Hot-Reloads)
+
 Requires Node.js (v22+) and pnpm (v11+).
 
-1. **Install Dependencies:**
+1. **Install Monorepo Dependencies:**
+   Install dependencies across all packages in the Turborepo workspace:
    ```bash
    pnpm install
    ```
+
 2. **Start the Database Container:**
-   Spins up the PostgreSQL database container in the background (exposed at `localhost:5433` for your host machine):
+   Spin up the PostgreSQL database container in the background. It will be exposed on port `5433` for your local host machine:
    ```bash
    docker compose up -d db
    ```
-3. **Start Dev Workspace:**
-   Spins up Next.js client, Express API, and Prisma Studio concurrently using Turborepo filters:
+
+3. **Start the Development Workspace:**
+   Spins up Next.js client, Express API, and Prisma Studio concurrently:
    ```bash
    pnpm run dev
    ```
-4. **Execute Test Suites:**
-   Runs the integration test suites:
+   *Note: Our configuration will automatically detect that you are running locally outside Docker and direct connections to the database container via `localhost:5433`.*
+
+4. **What to Expect:**
+   - The backend API will boot up on port `3002` (watching for hot reloads).
+   - The frontend dev server will start on port `3000`.
+   - Prisma Studio will open in the background on port `5555`.
+
+5. **Execute Test Suites (Optional):**
+   Run the full HTTP integration test suite to verify the setup:
    ```bash
    pnpm --filter api test
    ```
