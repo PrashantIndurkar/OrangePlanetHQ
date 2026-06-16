@@ -14,15 +14,13 @@ Welcome to **Stride**, a production-grade, highly responsive task manager monore
 
 Stride is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
 
----
 
----
 
 ## 📖 Project Overview
 
 Stride is a fast, keyboard-shortcut-driven issue and task tracker modeled after modern workflows. Designed with visual excellence and responsiveness in mind, it provides a seamless user experience for managing software tasks, tracking audit histories, and organizing collaboration boundaries. The project highlights core engineering values: strict type safety, modular backend design, tenant data isolation, and low latency through local caching and optimistic frontend states.
 
----
+
 
 ## 🏗️ Architecture Overview
 
@@ -55,7 +53,7 @@ Stride decouples client-side presentation from backend business logic within a T
 2. **Express API Server (`apps/api`):** Built with Node.js and Express. It follows a Modular Domain Pattern using Controller-Service-Repository (CSR) layers, ensuring strict business and data-access boundaries.
 3. **Database Layer:** A PostgreSQL instance queried via Prisma ORM for type-safe database queries.
 
----
+
 
 ## Tech Stack
 
@@ -100,22 +98,6 @@ Stride decouples client-side presentation from backend business logic within a T
 * Optimistic UI updates to improve perceived application performance.
 * Monorepo structure using Turborepo for scalability and code organization.
 
-## Beyond Assessment Requirements
-
-In addition to the required features, the project includes:
-
-* Real-time task updates (SSE)
-* Activity log tracking
-* File attachments
-* Dockerized setup
-* GitHub Actions CI pipeline
-* Dark mode with persisted preference
-* Optimistic UI updates
-* Monorepo architecture with Turborepo
-* Type-safe API contracts
-* Responsive mobile-first design
-
----
 
 ## ✨ Features
 
@@ -194,7 +176,7 @@ In addition to the required features, the project includes:
 
 </details>
 
----
+
 
 ## 🚀 Beyond Assignment Requirements
 
@@ -215,7 +197,6 @@ This project goes significantly beyond those requirements by introducing:
 * Human-readable issue identifiers (`STR-*`)
 * Live cache synchronization between detail and list views
 
----
 
 ## 🎯 Engineering Highlights
 
@@ -230,7 +211,6 @@ Key architectural decisions made for scalability and maintainability:
 * Automated CI pipeline for quality assurance
 * Separation of concerns through modular architecture
 
----
 
 ## 🌟 What Makes This Stand Out
 
@@ -248,7 +228,7 @@ Compared to a typical assessment submission, this project includes:
 
 The goal was not only to satisfy the assignment requirements, but to demonstrate how the application could evolve into a production-ready task management platform inspired by modern tools such as Linear.
 
----
+
 
 ## 🚀 X-Factor / Extra Mile
 
@@ -271,7 +251,7 @@ Beyond the core assignment requirements, this project was built with a strong fo
 
 Rather than treating this as a simple take-home assignment, the goal was to build a codebase that reflects real-world SaaS and production engineering practices—focusing not only on features, but also on maintainability, scalability, automation, and developer experience.
 
----
+
 
 ## 📖 Complete Documentation Index
 
@@ -287,7 +267,7 @@ To make exploring the codebase as clean as possible, we have split our documenta
 | **🔑 [API Testing & Endpoint Reference](docs/API_TESTING_GUIDE.md)** | Detailed payload examples and testing flows for all endpoints.                 | JSON structures, error validation envelopes, URL params.     |
 | **📂 [Folder Structure Reference](docs/folder-str.md)**　　　　　　　| Layout catalog mapping every directory to its architectural role.              | Monorepo apps and packages.                                  |
 
----
+
 
 ## 🚀 Quick Start Guide
 
@@ -364,7 +344,7 @@ Requires Node.js (v22+) and pnpm (v11+).
    pnpm --filter api test
    ```
 
----
+
 
 ## 🔒 Default Credentials (Seeded Data)
 
@@ -383,18 +363,18 @@ The following local accounts are seeded automatically for testing:
 
 The application is configured using environment variables defined in `.env` (copied from `.env.example`). Below are the primary variables used:
 
-| Variable Name | Description | Default Value | Scope |
-| :--- | :--- | :--- | :--- |
-| `NODE_ENV` | Mode of operation (`development`, `production`, `test`) | `development` | Shared |
-| `PORT` | Network port for the Express API backend server | `3002` | Backend |
-| `JWT_SECRET` | Secret key used to sign and verify JWT sessions | `supersecretjwtkeyassessmentrival123!` | Backend |
-| `DATABASE_URL` | Connection URL string for the PostgreSQL database instance | `postgresql://postgres:postgres@db:5432/stride` | Backend |
-| `NEXT_PUBLIC_API_URL` | Client-accessible URL endpoint targeting the API server | `http://localhost:3002/api/v1` | Frontend |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary account cloud name for attachment streaming | *(Optional)* | Backend |
-| `CLOUDINARY_API_KEY` | Cloudinary API key for verifying file upload streams | *(Optional)* | Backend |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret for authenticating upload requests | *(Optional)* | Backend |
+| Variable Name           | Description                                                | Default Value                                   | Scope    |
+| :------------------------| :-----------------------------------------------------------| :------------------------------------------------| :---------|
+| `NODE_ENV`              | Mode of operation (`development`, `production`, `test`)    | `development`                                   | Shared   |
+| `PORT`                  | Network port for the Express API backend server            | `3002`                                          | Backend  |
+| `JWT_SECRET`            | Secret key used to sign and verify JWT sessions            | `[any-random-string]` (Change in production)     | Backend  |
+| `DATABASE_URL`          | Connection URL string for the PostgreSQL database instance | `postgresql://postgres:postgres@db:5432/stride` | Backend  |
+| `NEXT_PUBLIC_API_URL`   | Client-accessible URL endpoint targeting the API server    | `http://localhost:3002/api/v1`                  | Frontend |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary account cloud name for attachment streaming     | *(Optional)*                                    | Backend  |
+| `CLOUDINARY_API_KEY`    | Cloudinary API key for verifying file upload streams       | *(Optional)*                                    | Backend  |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret for authenticating upload requests   | *(Optional)*                                    | Backend  |
 
----
+
 
 ## 🧪 Testing Instructions
 
@@ -419,7 +399,7 @@ Stride features a comprehensive HTTP API integration testing suite using **Vites
    pnpm --filter api exec vitest --ui
    ```
 
----
+
 
 ## ⚖️ Assumptions & Trade-offs
 
@@ -445,11 +425,11 @@ During the architectural design of Stride, several key engineering trade-offs we
 - **Decision:** Query PostgreSQL using Prisma ORM.
 - **Trade-off:** Prisma significantly improves developer experience, database-agnostic modeling, and schema migrations. However, it carries a larger memory footprint and minor query-building latency overhead compared to raw SQL or lightweight builders like Kysely.
 
----
+
 
 ## 🌐 Deployment Links
 
 The project is structured to deploy smoothly on **Render** using the configuration in `render.yaml`. 
 
 - **Web Frontend Application:** `https://stride-web.onrender.com`
-- **REST API Backend Service:** `https://stride-api.onrender.com/api/v1`
+- **REST API Backend Service:** `https://stride-api-sfie.onrender.com/api/v1`
