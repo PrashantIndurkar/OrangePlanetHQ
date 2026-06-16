@@ -1,5 +1,14 @@
 # 📋 Stride
-<img width="1557" height="1026" alt="image" src="https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0" />
+
+A modern full-stack task management platform inspired by Linear, designed for side projects and productivity-focused workflows. Built with Next.js, Express, PostgreSQL, and Prisma, it delivers real-time task updates, JWT authentication, advanced search and filtering, activity logs, file attachments, dark mode, and a responsive user experience. Optimized for speed, simplicity, and developer-friendly workflows.
+
+![Stride](https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0)
+
+🎥 **Demo Video:**  
+[Google drive link 🔗](https://drive.google.com/file/d/12-k0vCzGlvKSxsatS2DjUzYobf3vNlk3/view?usp=sharing)
+
+🌐 **Live Demo:**  
+[Live URL 🌐](https://stride-web-kldi.onrender.com)
 
 Welcome to **Stride**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
 
