@@ -361,7 +361,8 @@ export function useUpdateTaskMutation() {
 			} = {};
 
 			if (data.title !== undefined) optimisticData.title = data.title;
-			if (data.description !== undefined) optimisticData.description = data.description;
+			if (data.description !== undefined)
+				optimisticData.description = data.description;
 			if (data.status !== undefined) optimisticData.status = data.status;
 			if (data.priority !== undefined) optimisticData.priority = data.priority;
 
