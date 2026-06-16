@@ -76,6 +76,10 @@ Stride is a fast, keyboard-shortcut-driven issue and task tracker modeled after 
 * Optimistic UI updates to improve perceived application performance.
 * Monorepo structure using Turborepo for scalability and code organization.
 
+<img width="1672" height="941" alt="download-1" src="https://github.com/user-attachments/assets/304fb0ed-b7d3-4739-b0c7-6692afada8c4" />
+
+
+
 
 ## ✨ Features
 
