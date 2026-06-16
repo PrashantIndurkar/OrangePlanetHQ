@@ -367,7 +367,7 @@ The application is configured using environment variables defined in `.env` (cop
 | :------------------------| :-----------------------------------------------------------| :------------------------------------------------| :---------|
 | `NODE_ENV`              | Mode of operation (`development`, `production`, `test`)    | `development`                                   | Shared   |
 | `PORT`                  | Network port for the Express API backend server            | `3002`                                          | Backend  |
-| `JWT_SECRET`            | Secret key used to sign and verify JWT sessions            | `[any-random-string]` (Change in production)     | Backend  |
+| `JWT_SECRET`            | Secret key used to sign and verify JWT sessions            | `[any-random-string]` (Change in production)    | Backend  |
 | `DATABASE_URL`          | Connection URL string for the PostgreSQL database instance | `postgresql://postgres:postgres@db:5432/stride` | Backend  |
 | `NEXT_PUBLIC_API_URL`   | Client-accessible URL endpoint targeting the API server    | `http://localhost:3002/api/v1`                  | Frontend |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary account cloud name for attachment streaming     | *(Optional)*                                    | Backend  |
