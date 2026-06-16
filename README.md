@@ -1,9 +1,59 @@
-# 📋 Stride
-<img width="1557" height="1026" alt="image" src="https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0" />
+# ⚡ Stride
+
+A modern full-stack task management platform inspired by Linear, designed for side projects and productivity-focused workflows. Built with Next.js, Express, PostgreSQL, and Prisma, it delivers real-time task updates, JWT authentication, advanced search and filtering, activity logs, file attachments, dark mode, and a responsive user experience. Optimized for speed, simplicity, and developer-friendly workflows.
+
+![Stride](https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0)
+
+🎥 **Demo Video:**  
+[Google drive link 🔗](https://drive.google.com/file/d/12-k0vCzGlvKSxsatS2DjUzYobf3vNlk3/view?usp=sharing)
+
+🌐 **Live Demo:**  
+[Live URL 🌐](https://stride-web-kldi.onrender.com)
 
 Welcome to **Stride**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
 
 Stride is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
+
+---
+
+---
+
+## 📖 Project Overview
+
+Stride is a fast, keyboard-shortcut-driven issue and task tracker modeled after modern workflows. Designed with visual excellence and responsiveness in mind, it provides a seamless user experience for managing software tasks, tracking audit histories, and organizing collaboration boundaries. The project highlights core engineering values: strict type safety, modular backend design, tenant data isolation, and low latency through local caching and optimistic frontend states.
+
+---
+
+## 🏗️ Architecture Overview
+
+Stride decouples client-side presentation from backend business logic within a Turborepo monorepo:
+
+```text
+       ┌──────────────────────────────────────────────────────────┐
+       │                   Next.js Frontend                       │
+       │                     (apps/web)                           │
+       └──────────────────────────┬───────────────────────────────┘
+                                  │
+                       HTTP REST  │  (JWT Session & SSE)
+                       Requests   │
+                                  ▼
+       ┌──────────────────────────────────────────────────────────┐
+       │                   Express API Backend                    │
+       │                     (apps/api)                           │
+       └──────────────────────────┬───────────────────────────────┘
+                                  │
+                         Prisma   │  (Postgres Client)
+                         Client   │
+                                  ▼
+       ┌──────────────────────────────────────────────────────────┐
+       │                   PostgreSQL Database                    │
+       │                      (Prisma ORM)                        │
+       └──────────────────────────────────────────────────────────┘
+```
+
+1. **Next.js Web Client (`apps/web`):** Built using the Next.js App Router. Integrates TanStack Query for data caching/synchronization, shadcn/ui for consistent design primitives, and local optimistic hooks for instantaneous UI feedback.
+2. **Express API Server (`apps/api`):** Built with Node.js and Express. It follows a Modular Domain Pattern using Controller-Service-Repository (CSR) layers, ensuring strict business and data-access boundaries.
+3. **Database Layer:** A PostgreSQL instance queried via Prisma ORM for type-safe database queries.
 
 ---
 
@@ -326,3 +376,80 @@ The following local accounts are seeded automatically for testing:
 - **Administrator User:**
   - **Email:** `admin@example.com`
   - **Password:** `password123`
+
+---
+
+## 🔑 Environment Variables
+
+The application is configured using environment variables defined in `.env` (copied from `.env.example`). Below are the primary variables used:
+
+| Variable Name | Description | Default Value | Scope |
+| :--- | :--- | :--- | :--- |
+| `NODE_ENV` | Mode of operation (`development`, `production`, `test`) | `development` | Shared |
+| `PORT` | Network port for the Express API backend server | `3002` | Backend |
+| `JWT_SECRET` | Secret key used to sign and verify JWT sessions | `supersecretjwtkeyassessmentrival123!` | Backend |
+| `DATABASE_URL` | Connection URL string for the PostgreSQL database instance | `postgresql://postgres:postgres@db:5432/stride` | Backend |
+| `NEXT_PUBLIC_API_URL` | Client-accessible URL endpoint targeting the API server | `http://localhost:3002/api/v1` | Frontend |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary account cloud name for attachment streaming | *(Optional)* | Backend |
+| `CLOUDINARY_API_KEY` | Cloudinary API key for verifying file upload streams | *(Optional)* | Backend |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret for authenticating upload requests | *(Optional)* | Backend |
+
+---
+
+## 🧪 Testing Instructions
+
+Stride features a comprehensive HTTP API integration testing suite using **Vitest** and **Supertest** to test routes, validation logic, controllers, services, and repositories end-to-end against a test database.
+
+### Running Backend Integration Tests
+
+1. Ensure the PostgreSQL container is running:
+   ```bash
+   docker compose up -d db
+   ```
+2. Run the full test suite in the root directory:
+   ```bash
+   pnpm --filter api test
+   ```
+3. Run Vitest in interactive watch mode for hot-reloaded feedback:
+   ```bash
+   pnpm --filter api exec vitest
+   ```
+4. Open the interactive Vitest UI dashboard in your browser:
+   ```bash
+   pnpm --filter api exec vitest --ui
+   ```
+
+---
+
+## ⚖️ Assumptions & Trade-offs
+
+During the architectural design of Stride, several key engineering trade-offs were made:
+
+### 1. Decoupled Client-Server vs. Next.js Monolith
+- **Decision:** Split the project into a separate Next.js web app and an Express.js backend API rather than utilizing Next.js Server Actions or inline Route Handlers.
+- **Trade-off:** This introduces higher deployment overhead (managing two separate web services and environment configuration) and requires maintaining CORS rules. However, it ensures the frontend can be fully static and CDN-deployed at the Edge, while the backend API can scale independently on standard compute instances without being constrained by Edge runtime limitations.
+
+### 2. Stateless JWT Authentication vs. Database Sessions
+- **Decision:** Authenticate requests stateless-ly via JSON Web Tokens (JWT) sent in HTTP Authorization headers.
+- **Trade-off:** While stateless JWTs eliminate database lookup latency on every API request (perfect for scalability), they make immediate token invalidation challenging. Without a dedicated blocklist store (e.g., Redis), a compromised token remains valid until it expires.
+
+### 3. Client-Side Optimistic UI vs. Server-State Consistency
+- **Decision:** Perform optimistic updates for task operations (creation, updates, deletes) on the client before receiving backend confirmation.
+- **Trade-off:** Optimistic updates require duplicating some backend logic on the client (e.g., generating client-side UUIDs, formatting due dates, and manual cache mutations in TanStack Query). If the backend operation fails, the client must safely roll back state, adding complexity to the frontend hooks layer.
+
+### 4. SSE (Server-Sent Events) vs. Full WebSockets
+- **Decision:** Use Server-Sent Events (SSE) for unidirectional real-time data sync from the server to the client.
+- **Trade-off:** SSE is lightweight, uses standard HTTP, and has built-in browser reconnection support. However, it is strictly server-to-client. Bidirectional operations (e.g., client sending task updates) must still use standard REST API endpoints over HTTP, incurring slightly more packet overhead than persistent duplex WebSockets.
+
+### 5. Prisma ORM vs. Raw SQL / Lightweight Query Builders
+- **Decision:** Query PostgreSQL using Prisma ORM.
+- **Trade-off:** Prisma significantly improves developer experience, database-agnostic modeling, and schema migrations. However, it carries a larger memory footprint and minor query-building latency overhead compared to raw SQL or lightweight builders like Kysely.
+
+---
+
+## 🌐 Deployment Links
+
+The project is structured to deploy smoothly on **Render** using the configuration in `render.yaml`. 
+
+- **Web Frontend Application:** `https://stride-web.onrender.com`
+- **REST API Backend Service:** `https://stride-api.onrender.com/api/v1`
