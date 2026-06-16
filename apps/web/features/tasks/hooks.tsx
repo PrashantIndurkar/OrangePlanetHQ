@@ -252,7 +252,7 @@ export function useCreateTaskMutation() {
 				.findAll({ queryKey: ["tasks"] });
 			for (const query of queries) {
 				const queryKey = query.queryKey;
-				const filters = queryKey[1] as any;
+				const filters = queryKey[1] as { limit?: number } | undefined;
 				const limit = filters?.limit || 10;
 				queryClient.setQueryData(
 					queryKey,
@@ -356,12 +356,19 @@ export function useUpdateTaskMutation() {
 			const previousTask = queryClient.getQueryData<Task>(["task", id]);
 
 			// Format dueDate to relative friendly string for optimistic UI updates
-			const optimisticData = { ...data };
-			if (optimisticData.dueDate === null) {
-				delete (optimisticData as any).dueDate;
-				(optimisticData as any).dueDate = undefined;
-			} else if (optimisticData.dueDate) {
-				const date = new Date(optimisticData.dueDate);
+			const optimisticData: Omit<UpdateTaskInput, "dueDate"> & {
+				dueDate?: string;
+			} = {};
+
+			if (data.title !== undefined) optimisticData.title = data.title;
+			if (data.description !== undefined) optimisticData.description = data.description;
+			if (data.status !== undefined) optimisticData.status = data.status;
+			if (data.priority !== undefined) optimisticData.priority = data.priority;
+
+			if (data.dueDate === null) {
+				optimisticData.dueDate = undefined;
+			} else if (data.dueDate) {
+				const date = new Date(data.dueDate);
 				const today = new Date();
 				today.setHours(0, 0, 0, 0);
 				const tomorrow = new Date(today);

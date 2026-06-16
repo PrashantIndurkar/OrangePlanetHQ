@@ -78,13 +78,12 @@ export function ShortcutsDialog({ open, onOpenChange }: ShortcutsDialogProps) {
 		},
 	];
 
-	const [isMac, setIsMac] = React.useState(true);
-
-	React.useEffect(() => {
+	const [isMac] = React.useState(() => {
 		if (typeof window !== "undefined") {
-			setIsMac(window.navigator.platform.toUpperCase().indexOf("MAC") >= 0);
+			return window.navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 		}
-	}, []);
+		return true;
+	});
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>

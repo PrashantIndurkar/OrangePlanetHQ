@@ -65,13 +65,12 @@ export function WorkspaceFilters({
 
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [sortOpen, setSortOpen] = useState(false);
-	const [isMac, setIsMac] = useState(true);
-
-	useEffect(() => {
+	const [isMac] = useState(() => {
 		if (typeof window !== "undefined") {
-			setIsMac(window.navigator.platform.toUpperCase().indexOf("MAC") >= 0);
+			return window.navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 		}
-	}, []);
+		return true;
+	});
 
 	useHotkeys(
 		"alt+v",
