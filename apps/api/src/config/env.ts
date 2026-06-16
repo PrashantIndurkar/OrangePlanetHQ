@@ -1,6 +1,7 @@
 import path from "node:path";
 import dotenv from "dotenv";
 import { z } from "zod";
+import fs from "node:fs";
 
 // Load env files
 if (process.env.NODE_ENV === "test") {
@@ -8,6 +9,35 @@ if (process.env.NODE_ENV === "test") {
 }
 dotenv.config({ path: path.resolve(process.cwd(), "../../.env") });
 dotenv.config();
+
+// Helper to check if running inside a Docker container
+const isRunningInDocker = (): boolean => {
+	if (process.env.RUNNING_IN_DOCKER === "true" || process.env.DOCKER === "true") {
+		return true;
+	}
+	try {
+		return fs.existsSync("/.dockerenv") || fs.readFileSync("/proc/self/cgroup", "utf8").includes("docker");
+	} catch {
+		return false;
+	}
+};
+
+let databaseUrl = process.env.DATABASE_URL;
+
+if (!databaseUrl) {
+	if (isRunningInDocker()) {
+		databaseUrl = "postgresql://postgres:postgres@db:5432/stride";
+	} else {
+		databaseUrl = process.env.NODE_ENV === "test"
+			? "postgresql://postgres:postgres@localhost:5433/stride_test"
+			: "postgresql://postgres:postgres@localhost:5433/stride";
+	}
+} else if (!isRunningInDocker() && databaseUrl.includes("@db:5432")) {
+	databaseUrl = databaseUrl.replace("@db:5432", "@localhost:5433");
+}
+
+process.env.DATABASE_URL = databaseUrl;
+
 
 const envSchema = z.object({
 	PORT: z.coerce.number().default(3001),
