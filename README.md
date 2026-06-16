@@ -24,30 +24,8 @@ Stride is a fast, keyboard-shortcut-driven issue and task tracker modeled after 
 
 ## 🏗️ Architecture Overview
 
-Stride decouples client-side presentation from backend business logic within a Turborepo monorepo:
+<img width="1536" height="1024" alt="download" src="https://github.com/user-attachments/assets/bebe5aab-24e6-4a6a-a59c-00d0dbdfad9e" />
 
-```text
-       ┌──────────────────────────────────────────────────────────┐
-       │                   Next.js Frontend                       │
-       │                     (apps/web)                           │
-       └──────────────────────────┬───────────────────────────────┘
-                                  │
-                       HTTP REST  │  (JWT Session & SSE)
-                       Requests   │
-                                  ▼
-       ┌──────────────────────────────────────────────────────────┐
-       │                   Express API Backend                    │
-       │                     (apps/api)                           │
-       └──────────────────────────┬───────────────────────────────┘
-                                  │
-                         Prisma   │  (Postgres Client)
-                         Client   │
-                                  ▼
-       ┌──────────────────────────────────────────────────────────┐
-       │                   PostgreSQL Database                    │
-       │                      (Prisma ORM)                        │
-       └──────────────────────────────────────────────────────────┘
-```
 
 1. **Next.js Web Client (`apps/web`):** Built using the Next.js App Router. Integrates TanStack Query for data caching/synchronization, shadcn/ui for consistent design primitives, and local optimistic hooks for instantaneous UI feedback.
 2. **Express API Server (`apps/api`):** Built with Node.js and Express. It follows a Modular Domain Pattern using Controller-Service-Repository (CSR) layers, ensuring strict business and data-access boundaries.
