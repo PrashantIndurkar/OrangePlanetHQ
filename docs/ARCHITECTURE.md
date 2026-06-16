@@ -7,7 +7,7 @@ This document provides a highly technical explanation of the architectural parad
 ## 🗺️ High-Level Architecture Overview
 
 Stride is built as a decoupled full-stack application structured inside a **Turborepo Monorepo** managed by **pnpm workspaces**. 
-
+<img width="1536" height="1024" alt="download" src="https://github.com/user-attachments/assets/bebe5aab-24e6-4a6a-a59c-00d0dbdfad9e" />
 ```text
        ┌──────────────────────────────────────────────────────────┐
        │                   Next.js Frontend                       │
