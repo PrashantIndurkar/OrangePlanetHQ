@@ -1,4 +1,4 @@
-# 📋 Stride
+# ⚡ Stride
 
 A modern full-stack task management platform inspired by Linear, designed for side projects and productivity-focused workflows. Built with Next.js, Express, PostgreSQL, and Prisma, it delivers real-time task updates, JWT authentication, advanced search and filtering, activity logs, file attachments, dark mode, and a responsive user experience. Optimized for speed, simplicity, and developer-friendly workflows.
 
