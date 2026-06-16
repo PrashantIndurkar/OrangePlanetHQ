@@ -27,17 +27,17 @@ To make exploring the codebase as clean as possible, we have split our documenta
 
 Stride is built as a single monorepo utilizing **pnpm workspaces** and **Turborepo** to orchestrate tasks.
 
-| Layer | Component | Technology | Rationale |
-| :--- | :--- | :--- | :--- |
-| **Frontend** | User Interface | Next.js 16 (App Router) | High-performance page routing, server-side performance hooks, edge-readiness. |
-| **Frontend** | Styling & UI | TailwindCSS + shadcn/ui | Atomic utility styling with highly-customizable accessible component primitives. |
-| **Frontend** | Client State | TanStack React Query 5 | Manages client caching, request synchronization, and Optimistic UI updates. |
-| **Backend** | API Server | Express.js 5 | Lightweight, highly-extensible HTTP routing framework with modular middleware layers. |
-| **Database** | ORM Layer | Prisma 7 | Type-safe schema definition, clean model migrations, and native client generation. |
-| **Database** | Database Engine | PostgreSQL 16 | Relational reliability, compound indexes, and foreign key cascades. |
-| **Storage** | Media Storage | Cloudinary + Multer | Multipart upload ingestion and secure CDN-backed cloud image storage. |
-| **Infrastructure** | Containerization | Docker & Compose | Multi-stage image build isolation and local service container linking. |
-| **Pipeline** | Automation | GitHub Actions | automated unit/integration runs with Vitest + Supertest and semantic release logs. |
+| Layer              | Component        | Technology              | Rationale                                                                             |
+| :-------------------| :-----------------| :------------------------| :--------------------------------------------------------------------------------------|
+| **Frontend**       | User Interface   | Next.js 16 (App Router) | High-performance page routing, server-side performance hooks, edge-readiness.         |
+| **Frontend**       | Styling & UI     | TailwindCSS + shadcn/ui | Atomic utility styling with highly-customizable accessible component primitives.      |
+| **Frontend**       | Client State     | TanStack React Query 5  | Manages client caching, request synchronization, and Optimistic UI updates.           |
+| **Backend**        | API Server       | Express.js 5            | Lightweight, highly-extensible HTTP routing framework with modular middleware layers. |
+| **Database**       | ORM Layer        | Prisma 7                | Type-safe schema definition, clean model migrations, and native client generation.    |
+| **Database**       | Database Engine  | PostgreSQL 16           | Relational reliability, compound indexes, and foreign key cascades.                   |
+| **Storage**        | Media Storage    | Cloudinary + Multer     | Multipart upload ingestion and secure CDN-backed cloud image storage.                 |
+| **Infrastructure** | Containerization | Docker & Compose        | Multi-stage image build isolation and local service container linking.                |
+| **Pipeline**       | Automation       | GitHub Actions          | automated unit/integration runs with Vitest + Supertest and semantic release logs.    |
 
 ---
 
