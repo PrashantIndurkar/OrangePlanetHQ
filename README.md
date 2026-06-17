@@ -1,8 +1,9 @@
-# ⚡ Stride
+
+<img width="1870" height="841" alt="download-2" src="https://github.com/user-attachments/assets/7104fdd2-932e-4a9d-ae66-9173b323d7c7" />
 
 A modern full-stack task management platform inspired by Linear, designed for side projects and productivity-focused workflows. Built with Next.js, Express, PostgreSQL, and Prisma, it delivers real-time task updates, JWT authentication, advanced search and filtering, activity logs, file attachments, dark mode, and a responsive user experience. Optimized for speed, simplicity, and developer-friendly workflows.
 
-![Stride](https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0)
+
 
 🎥 **Demo Video:**  
 [Google drive link 🔗](https://drive.google.com/file/d/12-k0vCzGlvKSxsatS2DjUzYobf3vNlk3/view?usp=sharing)
@@ -14,7 +15,7 @@ Welcome to **Stride**, a production-grade, highly responsive task manager monore
 
 Stride is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
 
-
+![Stride](https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0)
 
 ## 📖 Project Overview
 
