@@ -87,7 +87,7 @@ export default function LandingPage() {
 							</svg>
 						</div>
 						<span className="font-semibold text-xs tracking-tight text-zinc-900">
-							Stride
+							OrangePlanet
 						</span>
 					</div>
 
@@ -164,8 +164,8 @@ export default function LandingPage() {
 						className="mt-6 text-center text-sm md:text-base font-light leading-relaxed text-zinc-500"
 					>
 						Plan, track, and ship projects without the overhead of enterprise
-						software. Stride gives solo engineers and small teams a focused
-						workspace designed for momentum, not management.
+						software. OrangePlanet gives solo engineers and small teams a
+						focused workspace designed for momentum, not management.
 					</p>
 
 					{/* Hero CTA Buttons */}
@@ -221,7 +221,7 @@ export default function LandingPage() {
 							W: 960px H: auto
 						</div>
 						<div className="absolute -bottom-5 right-4 text-[9px] font-mono text-zinc-400">
-							STRIDE_V0.8
+							ORANGEPLANET_V0.8
 						</div>
 
 						{/* Blueprint aspect-video placeholder containing HTML styled mock */}
@@ -235,7 +235,7 @@ export default function LandingPage() {
 										<div className="h-1.5 w-1.5 rounded-full bg-zinc-200" />
 									</div>
 									<div className="h-3 w-[1px] bg-zinc-200" />
-									<span>STR-12 / Complete Authentication Setup</span>
+									<span>OPH-12 / Complete Authentication Setup</span>
 								</div>
 								<div className="flex items-center gap-3">
 									<span>v0.8.0</span>

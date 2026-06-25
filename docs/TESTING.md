@@ -1,12 +1,12 @@
-# 🧪 Stride Test Suite & Automation Guide
+# 🧪 OrangePlanet Test Suite & Automation Guide
 
-This document details the testing architecture, tools, setup/cleanup strategies, and test coverage configurations for the Stride task manager codebase.
+This document details the testing architecture, tools, setup/cleanup strategies, and test coverage configurations for the OrangePlanet task manager codebase.
 
 ---
 
 ## 🎯 Testing Architecture & Strategy
 
-Stride focuses on **HTTP API Integration Testing** as its primary quality gate. 
+OrangePlanet focuses on **HTTP API Integration Testing** as its primary quality gate. 
 - **Framework:** **Vitest** (modern, ESM-native test runner).
 - **HTTP Assertion:** **Supertest** (allows running real HTTP request/response lifecycles against the Express application instance without listening on a TCP port).
 
@@ -27,7 +27,7 @@ To ensure tests are deterministic and do not pollute production/development data
 1. **Environment Separation:** The test script runs using `.env.test` as its environment.
 2. **Dedicated Test Schema:** The database URL points to a separate test database:
    ```env
-   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/stride_test?schema=public
+   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/orangeplanet_test?schema=public
    ```
 3. **Cascading Cleanups (`apps/api/test/setup.ts`):** 
    - Before running the test suites, Prisma migrations are deployed to the test database.
@@ -44,7 +44,7 @@ To ensure tests are deterministic and do not pollute production/development data
 
 ## 🔍 Detailed Breakdown of Test Suites
 
-The test files reside inside [apps/api/test/](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stride/apps/api/test) and are organized into four core integration boundaries:
+The test files reside inside [apps/api/test/](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/orangeplanet/apps/api/test) and are organized into four core integration boundaries:
 
 ### 1. Authentication Suite (`test/auth/auth.test.ts`)
 - **What it tests:**
@@ -83,7 +83,7 @@ The test files reside inside [apps/api/test/](file:///Users/prashantindurkar/Cod
 
 Run all tests once:
 ```bash
-# In the stride root directory
+# In the orangeplanet root directory
 pnpm --filter api test
 ```
 

@@ -18,7 +18,7 @@ export function Logo() {
 				</svg>
 			</div>
 			<span className="font-sans text-3xl font-bold tracking-tight text-blue-600 dark:text-blue-500">
-				Stride
+				OrangePlanet
 			</span>
 		</div>
 	);

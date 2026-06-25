@@ -95,7 +95,7 @@ export const tasksRepository = {
 		userRole?: string,
 	) {
 		const isadmin = userRole === "admin";
-		if (idOrCode.toUpperCase().startsWith("STR-")) {
+		if (idOrCode.toUpperCase().startsWith("OPH-")) {
 			const suffix = idOrCode.slice(4);
 			const isHexPrefix = /^[0-9a-f]{8}$/i.test(suffix);
 

@@ -16,7 +16,7 @@ const INITIAL_MOCK_TASKS = [
 		if (i % 5 === 3) dueDate = "Overdue";
 
 		return {
-			id: `STR-${25 - i}`,
+			id: `OPH-${25 - i}`,
 			title: `Backlog issue placeholder ${i + 1}`,
 			status: "backlog" as const,
 			priority,
@@ -24,7 +24,7 @@ const INITIAL_MOCK_TASKS = [
 			createdDate: `Created Jun ${12 - (i % 10)}`,
 			createdAt: new Date(`2026-06-${12 - (i % 10)}`).getTime(),
 			updatedAt: new Date(`2026-06-${12 - (i % 10)}`).getTime(),
-			description: `This is the default description for task STR-${25 - i}.`,
+			description: `This is the default description for task OPH-${25 - i}.`,
 			activities: [
 				{
 					id: `act-init-${25 - i}`,
@@ -37,7 +37,7 @@ const INITIAL_MOCK_TASKS = [
 		};
 	}),
 	{
-		id: "STR-41",
+		id: "OPH-41",
 		title: "Issue title Urgent",
 		status: "in-progress" as const,
 		priority: "urgent" as const,
@@ -56,7 +56,7 @@ const INITIAL_MOCK_TASKS = [
 		],
 	},
 	{
-		id: "STR-35",
+		id: "OPH-35",
 		title: "Issue title High",
 		status: "in-progress" as const,
 		priority: "high" as const,
@@ -75,7 +75,7 @@ const INITIAL_MOCK_TASKS = [
 		],
 	},
 	{
-		id: "STR-33",
+		id: "OPH-33",
 		title: "Issue title medium",
 		status: "in-progress" as const,
 		priority: "medium" as const,
@@ -94,7 +94,7 @@ const INITIAL_MOCK_TASKS = [
 		],
 	},
 	{
-		id: "STR-36",
+		id: "OPH-36",
 		title: "Issue title Low",
 		status: "in-progress" as const,
 		priority: "low" as const,
@@ -114,7 +114,7 @@ const INITIAL_MOCK_TASKS = [
 		],
 	},
 	{
-		id: "STR-40",
+		id: "OPH-40",
 		title: "test",
 		status: "todo" as const,
 		priority: "no-priority" as const,
@@ -136,7 +136,7 @@ const INITIAL_MOCK_TASKS = [
 		],
 	},
 	{
-		id: "STR-38",
+		id: "OPH-38",
 		title: "test",
 		status: "done" as const,
 		priority: "no-priority" as const,
@@ -155,7 +155,7 @@ const INITIAL_MOCK_TASKS = [
 		],
 	},
 	{
-		id: "STR-39",
+		id: "OPH-39",
 		title: "test",
 		status: "canceled" as const,
 		priority: "no-priority" as const,
@@ -190,7 +190,7 @@ class IssuesStore {
 
 	private load() {
 		try {
-			const stored = localStorage.getItem("stride_tasks_v2");
+			const stored = localStorage.getItem("orangeplanet_tasks_v2");
 			if (stored) {
 				this.tasks = JSON.parse(stored);
 			} else {
@@ -206,7 +206,10 @@ class IssuesStore {
 	private save() {
 		if (typeof window !== "undefined") {
 			try {
-				localStorage.setItem("stride_tasks_v2", JSON.stringify(this.tasks));
+				localStorage.setItem(
+					"orangeplanet_tasks_v2",
+					JSON.stringify(this.tasks),
+				);
 			} catch (e) {
 				console.error("Failed to save tasks to localStorage", e);
 			}

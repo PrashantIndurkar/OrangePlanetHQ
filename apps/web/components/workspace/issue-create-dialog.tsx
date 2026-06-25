@@ -242,7 +242,7 @@ export function IssueCreateDialog({
 									className="size-3.5 text-[#5e6ad2] dark:text-[#8b9bf5]"
 									strokeWidth={2.5}
 								/>
-								<span>STR</span>
+								<span>OPH</span>
 							</div>
 							<span className="text-zinc-400 text-xs font-normal">›</span>
 							<span className="text-[13px] font-medium text-foreground select-none">

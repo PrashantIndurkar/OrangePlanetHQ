@@ -1,6 +1,6 @@
-# Stride Product Roadmap
+# OrangePlanet Product Roadmap
 
-Welcome to the Stride product roadmap! Here you can track what we're working on, what's planned for the future, and what we've already shipped.
+Welcome to the OrangePlanet product roadmap! Here you can track what we're working on, what's planned for the future, and what we've already shipped.
 
 ---
 
@@ -17,12 +17,12 @@ Welcome to the Stride product roadmap! Here you can track what we're working on,
 
 ### 🔄 External Keep-Alive Automation
 - **Status:** Planned
-- **Description:** Integration instructions and pre-built webhook endpoints for UptimeRobot or Better Stack to ping the Stride API/Web instances every 10 minutes, preventing cold-starts on Render's free tier.
+- **Description:** Integration instructions and pre-built webhook endpoints for UptimeRobot or Better Stack to ping the OrangePlanet API/Web instances every 10 minutes, preventing cold-starts on Render's free tier.
 - **Priority:** Medium
 
 ### ✍️ Markdown Support in Task Descriptions
 - **Status:** Planned
-- **Description:** Add rich markdown rendering (headings, code blocks, lists, check-lists) to task descriptions, making it easy to detail specs and steps directly inside Stride tasks.
+- **Description:** Add rich markdown rendering (headings, code blocks, lists, check-lists) to task descriptions, making it easy to detail specs and steps directly inside OrangePlanet tasks.
 - **Priority:** High
 
 ---

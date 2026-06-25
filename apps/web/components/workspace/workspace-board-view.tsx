@@ -152,7 +152,7 @@ export function WorkspaceBoardView({
 		if (onAddTaskClick) {
 			onAddTaskClick(status);
 		} else {
-			const newId = `STR-${tasks.length + 50}`;
+			const newId = `OPH-${tasks.length + 50}`;
 			const newTask: Task = {
 				id: newId,
 				title: `New task ${newId}`,

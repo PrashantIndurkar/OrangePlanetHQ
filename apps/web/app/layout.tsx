@@ -8,9 +8,9 @@ import { AuthProvider } from "@/providers/auth-provider";
 import { QueryProvider } from "@/providers/query-provider";
 
 export const metadata: Metadata = {
-	title: "Stride | The workspace for fast moving side projects",
+	title: "OrangePlanet | The workspace for fast moving side projects",
 	description:
-		"Plan, track, and ship projects without the overhead of enterprise software. Stride gives solo engineers and small teams a focused workspace.",
+		"Plan, track, and ship projects without the overhead of enterprise software. OrangePlanet gives solo engineers and small teams a focused workspace.",
 	icons: {
 		icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
 	},

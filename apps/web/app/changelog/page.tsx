@@ -48,7 +48,7 @@ export default function ChangelogPage() {
 							</svg>
 						</div>
 						<span className="font-semibold text-xs tracking-tight text-zinc-900 dark:text-zinc-100">
-							Stride
+							OrangePlanet
 						</span>
 					</Link>
 					<span className="text-zinc-300 dark:text-zinc-700">/</span>
@@ -76,7 +76,7 @@ export default function ChangelogPage() {
 					</h1>
 					<p className="mt-4 text-sm font-light leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-xl">
 						Keep up to date with the latest features, bug fixes, and
-						improvements shipped to Stride.
+						improvements shipped to OrangePlanet.
 					</p>
 				</div>
 

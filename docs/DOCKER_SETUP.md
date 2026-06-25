@@ -1,12 +1,12 @@
 # 🐳 Docker & Compose Containerization Setup Guide
 
-This guide walks you through configuring, building, running, and troubleshooting the containerized Stride application stack using Docker Compose.
+This guide walks you through configuring, building, running, and troubleshooting the containerized OrangePlanet application stack using Docker Compose.
 
 ---
 
 ## 🏗️ Docker Services Architecture
 
-The application is containerized using three main services defined in the root [docker-compose.yml](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stride/docker-compose.yml):
+The application is containerized using three main services defined in the root [docker-compose.yml](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/orangeplanet/docker-compose.yml):
 
 ```text
                        [Browser Access: http://localhost:3000]
@@ -40,11 +40,11 @@ The application is containerized using three main services defined in the root [
 
 ## ⚡ SaaS Production Optimizations Built-In
 
-Stride's Dockerfiles are built following industry-best production SaaS containerization practices:
+OrangePlanet's Dockerfiles are built following industry-best production SaaS containerization practices:
 
 ### A. Next.js Standalone Multi-Stage Builds (`apps/web/Dockerfile`)
 Standard Next.js builds include large packages, development compiler files, and tooling assets, resulting in images exceeding **1.2GB**.
-Stride utilizes Next.js **Standalone Build Output**:
+OrangePlanet utilizes Next.js **Standalone Build Output**:
 1. It analyzes the dependency graph during the build stage and traces only the files required to run in production.
 2. It outputs a lightweight server file in `.next/standalone`.
 3. The runner stage only copies this standalone output, reducing the final image size to **~150MB** (an 85%+ decrease).
@@ -67,7 +67,7 @@ The backend container entrypoint script (`apps/api/docker-entrypoint.sh`):
 ### 1. Configure the Environment
 Copy the configuration template to `.env`:
 ```bash
-# Run at the root of the stride/ directory
+# Run at the root of the orangeplanet/ directory
 cp .env.example .env
 ```
 Leave the default settings as-is. The defaults are already optimized to bind the backend to the database and link the frontend to the backend inside the Docker network.

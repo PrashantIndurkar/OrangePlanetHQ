@@ -48,7 +48,7 @@ describe("Admin Access Overrides", () => {
 		const taskId = createTaskRes.body.task.id;
 
 		// 4. Admin attempts to fetch User A's task using unique identifier -> should succeed (200)
-		const strUuidCode = `STR-${taskId.slice(0, 8).toUpperCase()}`;
+		const strUuidCode = `OPH-${taskId.slice(0, 8).toUpperCase()}`;
 		const getAdminRes = await request(app)
 			.get(`/api/v1/tasks/${strUuidCode}`)
 			.set("Authorization", `Bearer ${tokenB}`);

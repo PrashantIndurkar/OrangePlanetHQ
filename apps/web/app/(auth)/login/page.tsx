@@ -4,8 +4,8 @@ import { LoginForm } from "@/components/auth/login-form";
 import { Logo } from "@/components/auth/logo";
 
 export const metadata: Metadata = {
-	title: "Login | Stride",
-	description: "Log in to your Stride account to manage tasks.",
+	title: "Login | OrangePlanet",
+	description: "Log in to your OrangePlanet account to manage tasks.",
 };
 
 export default function LoginPage() {

@@ -83,7 +83,7 @@ export default function RoadmapPage() {
 							</svg>
 						</div>
 						<span className="font-semibold text-xs tracking-tight text-zinc-900 dark:text-zinc-100">
-							Stride
+							OrangePlanet
 						</span>
 					</Link>
 					<span className="text-zinc-300 dark:text-zinc-700">/</span>
