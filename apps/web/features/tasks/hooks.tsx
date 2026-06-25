@@ -201,7 +201,7 @@ export function useCreateTaskMutation() {
 						});
 			newTask.id = clientUuid;
 
-			const optimisticId = `STR-${clientUuid.slice(0, 8).toUpperCase()}`;
+			const optimisticId = `OPH-${clientUuid.slice(0, 8).toUpperCase()}`;
 			const toastId = `create-task-${clientUuid}`;
 
 			let dueDateStr: string | undefined;
@@ -430,7 +430,7 @@ export function useUpdateTaskMutation() {
 			queryClient.invalidateQueries({ queryKey: ["tasks"] });
 			queryClient.invalidateQueries({ queryKey: ["task", variables.id] });
 			if (data.task?.issueNumber) {
-				const strId = `STR-${data.task.issueNumber}`;
+				const strId = `OPH-${data.task.issueNumber}`;
 				queryClient.invalidateQueries({ queryKey: ["task", strId] });
 			}
 		},

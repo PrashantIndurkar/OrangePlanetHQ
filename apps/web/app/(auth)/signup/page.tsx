@@ -4,8 +4,8 @@ import { Logo } from "@/components/auth/logo";
 import { SignupForm } from "@/components/auth/signup-form";
 
 export const metadata: Metadata = {
-	title: "Register | Stride",
-	description: "Create your Stride account to manage tasks.",
+	title: "Register | OrangePlanet",
+	description: "Create your OrangePlanet account to manage tasks.",
 };
 
 export default function SignupPage() {

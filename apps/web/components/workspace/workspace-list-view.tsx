@@ -178,7 +178,7 @@ export function WorkspaceListView({
 		if (onAddTaskClick) {
 			onAddTaskClick(status);
 		} else {
-			const newId = `STR-${tasks.length + 50}`;
+			const newId = `OPH-${tasks.length + 50}`;
 			const newTask: Task = {
 				id: newId,
 				title: `New task ${newId}`,
@@ -464,7 +464,7 @@ export function WorkspaceListView({
 														<PriorityComp className="h-[22px] w-[22px] shrink-0" />
 													</div>
 
-													{/* Task Identifier (e.g. STR-40) */}
+													{/* Task Identifier (e.g. OPH-40) */}
 													<span className="shrink-0 font-mono text-[13px] font-[450] text-zinc-500 select-text dark:text-zinc-400">
 														{task.id}
 													</span>

@@ -11,7 +11,7 @@ export const uploadToCloudinary = (
 ): Promise<{ url: string; publicId: string }> => {
 	return new Promise((resolve, reject) => {
 		const uploadStream = cloudinary.uploader.upload_stream(
-			{ folder: "stride/tasks" },
+			{ folder: "orangeplanet/tasks" },
 			(error, result) => {
 				if (error || !result) {
 					return reject(error || new Error("Cloudinary upload failed"));

@@ -1,8 +1,8 @@
-# [0.16.0](https://github.com/PrashantIndurkar/stride/compare/v0.15.0...v0.16.0) (2026-06-15)
+# [0.16.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.15.0...v0.16.0) (2026-06-15)
 
-## 🎉 Stride Feature Complete
+## 🎉 OrangePlanet Feature Complete
 
-This release completes the core Stride experience with rich task editing, image attachments, product documentation, and deployment refinements.
+This release completes the core OrangePlanet experience with rich task editing, image attachments, product documentation, and deployment refinements.
 
 ## ✨ New Features
 
@@ -62,7 +62,7 @@ This release completes the core Stride experience with rich task editing, image 
 
 ## 🚀 Project Milestone
 
-Stride now includes:
+OrangePlanet now includes:
 
 * JWT Authentication
 * Task CRUD APIs
@@ -80,16 +80,16 @@ Stride now includes:
 * Product Roadmap & Changelog Pages
 * Production Deployment
 
-This release marks the completion of the planned Stride assessment scope and establishes a production-ready foundation for future enhancements.
+This release marks the completion of the planned OrangePlanet assessment scope and establishes a production-ready foundation for future enhancements.
 
 ---
-# [0.15.0](https://github.com/PrashantIndurkar/stride/compare/v0.14.0...v0.15.0) (2026-06-15)
+# [0.15.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.14.0...v0.15.0) (2026-06-15)
 
 ## 🚀 Deployment & Infrastructure
 
 ### Production Deployment
 
-* Successfully deployed Stride to a production environment using Render.
+* Successfully deployed OrangePlanet to a production environment using Render.
 * Configured frontend, backend, and database services for cloud deployment.
 * Improved deployment reliability and environment consistency.
 
@@ -120,7 +120,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Continued strengthening deployment and operational readiness.
 ---
 
-# [0.14.0](https://github.com/PrashantIndurkar/stride/compare/v0.13.0...v0.14.0) (2026-06-15)
+# [0.14.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.13.0...v0.14.0) (2026-06-15)
 
 ## ⚡ Real-Time Collaboration
 
@@ -169,7 +169,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Increased reliability of authentication and persistence workflows.
 * Continued refining the overall workspace experience.
 ---
-# [0.13.0](https://github.com/PrashantIndurkar/stride/compare/v0.12.0...v0.13.0) (2026-06-14)
+# [0.13.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.12.0...v0.13.0) (2026-06-14)
 
 ## 🤖 Continuous Integration
 
@@ -210,7 +210,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Reduced the risk of regressions through automated verification.
 * Improved collaboration and review workflows with automated feedback.
 
-# [0.12.0](https://github.com/PrashantIndurkar/stride/compare/v0.11.0...v0.12.0) (2026-06-14)
+# [0.12.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.11.0...v0.12.0) (2026-06-14)
 
 ## 🐳 Docker & Deployment
 
@@ -256,7 +256,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Established a production-ready foundation for cloud deployment and scaling.
 
 
-# [0.11.0](https://github.com/PrashantIndurkar/stride/compare/v0.10.0...v0.11.0) (2026-06-14)
+# [0.11.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.10.0...v0.11.0) (2026-06-14)
 
 ## ✨ Advanced Workspace Features
 
@@ -286,7 +286,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Continued preparing the platform for team collaboration and enterprise-scale workflows.
 
 ---
-# [0.10.0](https://github.com/PrashantIndurkar/stride/compare/v0.9.0...v0.10.0) (2026-06-14)
+# [0.10.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.9.0...v0.10.0) (2026-06-14)
 
 ## 🧪 Automated Testing
 
@@ -321,7 +321,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Strengthened security guarantees around authentication and task ownership.
 * Established a foundation for continuous integration and future test coverage expansion.
 
-# [0.9.0](https://github.com/PrashantIndurkar/stride/compare/v0.8.0...v0.9.0) (2026-06-14)
+# [0.9.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.8.0...v0.9.0) (2026-06-14)
 
 ## 🔄 Backend Integration
 
@@ -362,7 +362,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Enhanced overall application performance and data consistency.
 * Established the foundation for advanced filtering, sorting, and real-time task management features.
 
-# [0.8.0](https://github.com/PrashantIndurkar/stride/compare/v0.7.0...v0.8.0) (2026-06-13)
+# [0.8.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.7.0...v0.8.0) (2026-06-13)
 
 ## 📋 Task Management API
 
@@ -400,7 +400,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Established the foundation for task filtering, search, sorting, and advanced workspace features.
 * Continued building a production-ready task management platform.
 ---
-# [0.7.0](https://github.com/PrashantIndurkar/stride/compare/v0.6.0...v0.7.0) (2026-06-14)
+# [0.7.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.6.0...v0.7.0) (2026-06-14)
 
 ## 🔐 Authentication System
 
@@ -445,7 +445,7 @@ This release marks the completion of the planned Stride assessment scope and est
 
 ---
 
-# [0.6.0](https://github.com/PrashantIndurkar/stride/compare/v0.5.0...v0.6.0) (2026-06-13)
+# [0.6.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.5.0...v0.6.0) (2026-06-13)
 
 ## 🚀 Backend Foundation
 
@@ -484,7 +484,7 @@ This release marks the completion of the planned Stride assessment scope and est
 * Prepared the foundation for production-ready database workflows.
 
 ---
-# [0.5.0](https://github.com/PrashantIndurkar/stride/compare/v0.4.0...v0.5.0) (2026-06-13)
+# [0.5.0](https://github.com/PrashantIndurkar/orangeplanet/compare/v0.4.0...v0.5.0) (2026-06-13)
 
 ## ✨ New Features (2026-06-13)
 

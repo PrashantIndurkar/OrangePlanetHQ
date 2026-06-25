@@ -1,6 +1,6 @@
-# 📋 Stried: Implementation Review & Verification Checklist
+# 📋 OrangePlanet: Implementation Review & Verification Checklist
 
-This document provides a comprehensive audit of the **Stried** codebase against the requirements listed in the assignment (`Assesment Rival.txt`). It details what has been implemented, what is missing/needs improvement, and a step-by-step guide for manual verification.
+This document provides a comprehensive audit of the **OrangePlanet** codebase against the requirements listed in the assignment (`Assesment Rival.txt`). It details what has been implemented, what is missing/needs improvement, and a step-by-step guide for manual verification.
 
 ---
 
@@ -9,7 +9,7 @@ This document provides a comprehensive audit of the **Stried** codebase against 
 ### 1. Task 1: Backend API
 *   **POST /tasks** (Create Task): **Implemented** (Creates task with issue number, title, description, status, priority, and due date).
 *   **GET /tasks** (List Tasks with filtering/pagination): **Implemented** (Supports multi-select status and priority filtering, search, pagination limit/page, and date query parameters).
-*   **GET /tasks/:id** (Fetch Single Task): **Implemented** (Supports resolving task by UUID, custom ID like `STR-123`, or shortened UUID prefix).
+*   **GET /tasks/:id** (Fetch Single Task): **Implemented** (Supports resolving task by UUID, custom ID like `OPH-123`, or shortened UUID prefix).
 *   **PATCH /tasks/:id** (Update Task): **Implemented** (Validates and updates properties, automatically appending to the activity log).
 *   **DELETE /tasks/:id** (Delete Task): **Implemented** (Soft/Hard delete handling with cascading activity logs).
 *   **PostgreSQL Persistence**: **Implemented** (Using Prisma ORM v7 with schema in `apps/api/prisma/schema.prisma`).
@@ -66,7 +66,7 @@ Follow these steps to manually test the application and verify each feature:
 ### 2. Task Management CRUD
 *   **Step 1:** Click **New Issue** (or press `C`).
 *   **Step 2:** Fill out the title, add a description, set a status, priority, and due date. Click **Create**.
-*   **Expectation:** The task is created, a unique ID is assigned (e.g. `STR-1`), and it immediately displays on the list/board.
+*   **Expectation:** The task is created, a unique ID is assigned (e.g. `OPH-1`), and it immediately displays on the list/board.
 *   **Step 3:** Click on the task in the list/board to open the Details panel.
 *   **Step 4:** Modify the title or description and click outside (blur). Change the status/priority/due date.
 *   **Expectation:** Updates auto-save immediately. An entry is created in the **Activity** log timeline at the bottom showing exactly what changed (e.g., *"changed status from todo to in-progress"*).

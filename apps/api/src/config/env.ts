@@ -38,12 +38,12 @@ if (!databaseUrl) {
 		);
 	}
 	if (isRunningInDocker()) {
-		databaseUrl = "postgresql://postgres:postgres@db:5432/stride";
+		databaseUrl = "postgresql://postgres:postgres@db:5432/orangeplanet";
 	} else {
 		databaseUrl =
 			nodeEnv === "test"
-				? "postgresql://postgres:postgres@localhost:5433/stride_test"
-				: "postgresql://postgres:postgres@localhost:5433/stride";
+				? "postgresql://postgres:postgres@localhost:5433/orangeplanet_test"
+				: "postgresql://postgres:postgres@localhost:5433/orangeplanet";
 	}
 } else if (!isRunningInDocker() && databaseUrl.includes("@db:5432")) {
 	databaseUrl = databaseUrl.replace("@db:5432", "@localhost:5433");

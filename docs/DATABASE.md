@@ -1,12 +1,12 @@
 # 🗄️ Database Design & Schema Specifications
 
-This document outlines the schema design, tables, relationships, integrity rules, and database seeding strategy of Stride.
+This document outlines the schema design, tables, relationships, integrity rules, and database seeding strategy of OrangePlanet.
 
 ---
 
 ## 🗺️ Schema Design (Entity-Relationship Model)
 
-Stride uses **PostgreSQL** configured via the **Prisma ORM**. The database is structured into three primary tables: `User`, `Task`, and `ActivityLog`.
+OrangePlanet uses **PostgreSQL** configured via the **Prisma ORM**. The database is structured into three primary tables: `User`, `Task`, and `ActivityLog`.
 
 ```text
   ┌─────────────────┐             ┌─────────────────┐             ┌─────────────────┐
@@ -38,7 +38,7 @@ Represents the accounts registered on the platform.
 ### 2. The `Task` Model
 Represents the individual tasks or issues created by users.
 - **`id`**: String, UUID. Primary Key.
-- **`issueNumber`**: Integer. Used to render task identifiers like `STR-1`, `STR-2` in the UI.
+- **`issueNumber`**: Integer. Used to render task identifiers like `OPH-1`, `OPH-2` in the UI.
 - **`title`**: String. Form validated (minimum 1 character).
 - **`status`**: String, defaults to `"todo"`. Enum constraint: `backlog` | `todo` | `in-progress` | `in-review` | `done` | `canceled`.
 - **`priority`**: String, defaults to `"no-priority"`. Enum constraint: `urgent` | `high` | `medium` | `low` | `no-priority`.
@@ -66,10 +66,10 @@ Represents audit logs tracking property changes made to a task (e.g., status cha
 
 ## 🌱 Database Seeding & Development Accounts
 
-The database seed script is located at [seed.ts](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/stride/apps/api/prisma/seed.ts).
+The database seed script is located at [seed.ts](file:///Users/prashantindurkar/Code/Interviews/Assesment%20Rival/orangeplanet/apps/api/prisma/seed.ts).
 
 ### Idempotent Seeding Guard (Protection Strategy)
-Running seeders in Docker environments can cause duplicate entries or primary key crashes if the container restarts. To prevent this, Stride implements an **idempotent check** at the entry of the seeder script:
+Running seeders in Docker environments can cause duplicate entries or primary key crashes if the container restarts. To prevent this, OrangePlanet implements an **idempotent check** at the entry of the seeder script:
 ```ts
 // apps/api/prisma/seed.ts
 const userCount = await prisma.user.count();

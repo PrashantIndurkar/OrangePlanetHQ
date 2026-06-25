@@ -21,8 +21,8 @@ export const taskIdParamsSchema = z.object({
 			/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
 				val,
 			);
-		const isStrId = /^STR-\d+$/i.test(val);
-		const isStrUuidPrefix = /^STR-[0-9a-f]{8}$/i.test(val);
+		const isStrId = /^OPH-\d+$/i.test(val);
+		const isStrUuidPrefix = /^OPH-[0-9a-f]{8}$/i.test(val);
 		return isUuid || isStrId || isStrUuidPrefix;
 	}, "Invalid task ID or code format"),
 });

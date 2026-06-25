@@ -9,17 +9,17 @@ A modern full-stack task management platform inspired by Linear, designed for si
 [Google drive link 🔗](https://drive.google.com/file/d/12-k0vCzGlvKSxsatS2DjUzYobf3vNlk3/view?usp=sharing)
 
 🌐 **Live Demo:**  
-[Live URL 🌐](https://stride-web-kldi.onrender.com)
+[Live URL 🌐](https://orangeplanet-web-kldi.onrender.com)
 
-Welcome to **Stride**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
+Welcome to **OrangePlanet**, a production-grade, highly responsive task manager monorepo built using **Next.js (App Router)**, **Express (Node.js)**, **Prisma ORM**, and **PostgreSQL**.
 
-Stride is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
+OrangePlanet is structured to represent professional software engineering patterns used by scaling SaaS teams (such as **Linear** and **Vercel**), featuring decoupled client-server architecture, database-level tenant isolation, automated CI/CD pipelines, and optimized containerized environments.
 
-![Stride](https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0)
+![OrangePlanet](https://github.com/user-attachments/assets/aa55b3aa-74f0-4cd3-9700-4075e1fb3ab0)
 
 ## 📖 Project Overview
 
-Stride is a fast, keyboard-shortcut-driven issue and task tracker modeled after modern workflows. Designed with visual excellence and responsiveness in mind, it provides a seamless user experience for managing software tasks, tracking audit histories, and organizing collaboration boundaries. The project highlights core engineering values: strict type safety, modular backend design, tenant data isolation, and low latency through local caching and optimistic frontend states.
+OrangePlanet is a fast, keyboard-shortcut-driven issue and task tracker modeled after modern workflows. Designed with visual excellence and responsiveness in mind, it provides a seamless user experience for managing software tasks, tracking audit histories, and organizing collaboration boundaries. The project highlights core engineering values: strict type safety, modular backend design, tenant data isolation, and low latency through local caching and optimistic frontend states.
 
 
 
@@ -108,7 +108,7 @@ Stride is a fast, keyboard-shortcut-driven issue and task tracker modeled after 
 * Status management
 * Priority levels
 * Due dates
-* Issue-style task identifiers (`STR-1`, `STR-2`, ...)
+* Issue-style task identifiers (`OPH-1`, `OPH-2`, ...)
 * Dedicated task detail page
 
 ### Search & Organization
@@ -177,7 +177,7 @@ This project goes significantly beyond those requirements by introducing:
 * GitHub Actions CI/CD automation
 * Turborepo monorepo architecture
 * End-to-end type safety using TypeScript, Prisma, and Zod
-* Human-readable issue identifiers (`STR-*`)
+* Human-readable issue identifiers (`OPH-*`)
 * Live cache synchronization between detail and list views
 
 
@@ -254,16 +254,16 @@ To make exploring the codebase as clean as possible, we have split our documenta
 
 ## 🚀 Quick Start Guide
 
-Follow these steps to clone, configure, and boot the entire Stride application stack in under **two minutes**.
+Follow these steps to clone, configure, and boot the entire OrangePlanet application stack in under **two minutes**.
 
 ### 1. Clone the Repository
 Open your terminal and clone the repository, then navigate into the project directory:
 ```bash
 # Clone the repository
-git clone https://github.com/PrashantIndurkar/stride.git
+git clone https://github.com/PrashantIndurkar/orangeplanet.git
 
 # Navigate into the project folder
-cd stride
+cd orangeplanet
 ```
 
 ### 2. Setup Environment Configuration
@@ -351,7 +351,7 @@ The application is configured using environment variables defined in `.env` (cop
 | `NODE_ENV`              | Mode of operation (`development`, `production`, `test`)    | `development`                                   | Shared   |
 | `PORT`                  | Network port for the Express API backend server            | `3002`                                          | Backend  |
 | `JWT_SECRET`            | Secret key used to sign and verify JWT sessions            | `[any-random-string]` (Change in production)    | Backend  |
-| `DATABASE_URL`          | Connection URL string for the PostgreSQL database instance | `postgresql://postgres:postgres@db:5432/stride` | Backend  |
+| `DATABASE_URL`          | Connection URL string for the PostgreSQL database instance | `postgresql://postgres:postgres@db:5432/orangeplanet` | Backend  |
 | `NEXT_PUBLIC_API_URL`   | Client-accessible URL endpoint targeting the API server    | `http://localhost:3002/api/v1`                  | Frontend |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary account cloud name for attachment streaming     | *(Optional)*                                    | Backend  |
 | `CLOUDINARY_API_KEY`    | Cloudinary API key for verifying file upload streams       | *(Optional)*                                    | Backend  |
@@ -361,7 +361,7 @@ The application is configured using environment variables defined in `.env` (cop
 
 ## 🧪 Testing Instructions
 
-Stride features a comprehensive HTTP API integration testing suite using **Vitest** and **Supertest** to test routes, validation logic, controllers, services, and repositories end-to-end against a test database.
+OrangePlanet features a comprehensive HTTP API integration testing suite using **Vitest** and **Supertest** to test routes, validation logic, controllers, services, and repositories end-to-end against a test database.
 
 ### Running Backend Integration Tests
 
@@ -386,7 +386,7 @@ Stride features a comprehensive HTTP API integration testing suite using **Vites
 
 ## ⚖️ Assumptions & Trade-offs
 
-During the architectural design of Stride, several key engineering trade-offs were made:
+During the architectural design of OrangePlanet, several key engineering trade-offs were made:
 
 ### 1. Decoupled Client-Server vs. Next.js Monolith
 - **Decision:** Split the project into a separate Next.js web app and an Express.js backend API rather than utilizing Next.js Server Actions or inline Route Handlers.
@@ -414,5 +414,5 @@ During the architectural design of Stride, several key engineering trade-offs we
 
 The project is structured to deploy smoothly on **Render** using the configuration in `render.yaml`. 
 
-- **Web Frontend Application:** `https://stride-web.onrender.com`
-- **REST API Backend Service:** `https://stride-api-sfie.onrender.com/api/v1`
+- **Web Frontend Application:** `https://orangeplanet-web.onrender.com`
+- **REST API Backend Service:** `https://orangeplanet-api-sfie.onrender.com/api/v1`

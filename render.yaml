@@ -1,7 +1,7 @@
 services:
   # 1. API Backend Web Service (Docker)
   - type: web
-    name: stride-api
+    name: orangeplanet-api
     runtime: docker
     dockerfilePath: apps/api/Dockerfile
     dockerContext: .
@@ -26,7 +26,7 @@ services:
 
   # 2. Next.js Frontend Web Service (Docker)
   - type: web
-    name: stride-web
+    name: orangeplanet-web
     runtime: docker
     dockerfilePath: apps/web/Dockerfile
     dockerContext: .
@@ -37,4 +37,4 @@ services:
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_API_URL
-        value: https://stride-api-sfie.onrender.com/api/v1
+        value: https://orangeplanet-api-sfie.onrender.com/api/v1

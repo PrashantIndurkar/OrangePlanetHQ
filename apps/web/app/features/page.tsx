@@ -105,7 +105,7 @@ export default function FeaturesPage() {
 				{
 					title: "GitHub Auto-Sync",
 					description:
-						"Link branches, commits, and PR events automatically by including the task ID (e.g. STR-12) in branch names or commit messages.",
+						"Link branches, commits, and PR events automatically by including the task ID (e.g. OPH-12) in branch names or commit messages.",
 					icon: (
 						<svg
 							className="h-5 w-5 text-[#5e6ad2]"
@@ -189,7 +189,7 @@ export default function FeaturesPage() {
 							</svg>
 						</div>
 						<span className="font-semibold text-xs tracking-tight text-zinc-900 dark:text-zinc-100">
-							Stride
+							OrangePlanet
 						</span>
 					</Link>
 					<span className="text-zinc-300 dark:text-zinc-700">/</span>
@@ -216,7 +216,7 @@ export default function FeaturesPage() {
 						Features designed for momentum
 					</h1>
 					<p className="mt-4 text-sm font-light leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto">
-						Plan, track, and ship projects without the overhead. Stride gives
+						Plan, track, and ship projects without the overhead. OrangePlanet gives
 						solo developers and agile teams a clean space to capture features
 						and issues.
 					</p>

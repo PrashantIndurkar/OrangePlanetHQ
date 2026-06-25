@@ -59,16 +59,16 @@ export default function DemoPage() {
 			<div className="relative z-10 w-full max-w-[420px] px-6">
 				{/* Corner Alignment Markers for Blueprint Feel */}
 				<div className="absolute -top-3 -left-3 text-[#5e6ad2]/30 font-mono text-[10px] pointer-events-none select-none">
-					+ STR-L1
+					+ OPH-L1
 				</div>
 				<div className="absolute -top-3 -right-3 text-[#5e6ad2]/30 font-mono text-[10px] pointer-events-none select-none">
-					+ STR-R1
+					+ OPH-R1
 				</div>
 				<div className="absolute -bottom-3 -left-3 text-[#5e6ad2]/30 font-mono text-[10px] pointer-events-none select-none">
-					+ STR-L2
+					+ OPH-L2
 				</div>
 				<div className="absolute -bottom-3 -right-3 text-[#5e6ad2]/30 font-mono text-[10px] pointer-events-none select-none">
-					+ STR-R2
+					+ OPH-R2
 				</div>
 
 				<div className="bg-white border border-zinc-200/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] relative">
@@ -93,7 +93,7 @@ export default function DemoPage() {
 							</svg>
 						</div>
 						<h1 className="text-xl font-medium tracking-tight text-zinc-900">
-							Stride Demo Access
+							OrangePlanet Demo Access
 						</h1>
 						<p className="text-xs text-zinc-500 mt-1.5 max-w-[280px]">
 							Copy these credentials to explore the interactive task manager

@@ -38,7 +38,7 @@ describe("Tasks Integration - Ownership and Tenant Boundary Isolation", () => {
 			});
 		expect(createTaskRes.status).toBe(201);
 		const taskId = createTaskRes.body.task.id;
-		const strUuidCode = `STR-${taskId.slice(0, 8).toUpperCase()}`;
+		const strUuidCode = `OPH-${taskId.slice(0, 8).toUpperCase()}`;
 
 		// 4. User B attempts to GET User A's task -> should return 404 (or 403, but our app returns 404 for security obfustication)
 		const getBRes = await request(app)

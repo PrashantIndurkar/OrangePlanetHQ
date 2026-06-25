@@ -171,7 +171,7 @@ export default function NewTaskPage() {
 			},
 			{
 				onSuccess: (data) => {
-					const nextId = `STR-${data.task.issueNumber}`;
+					const nextId = `OPH-${data.task.issueNumber}`;
 					router.push(`/tasks/${nextId}`);
 				},
 			},

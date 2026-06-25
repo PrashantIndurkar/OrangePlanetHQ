@@ -14,7 +14,7 @@ const getFriendlyErrorMessage = (err: unknown): string => {
 		lower.includes("networkerror") ||
 		lower.includes("load failed")
 	) {
-		return "Unable to connect to the Stride service. Please check your internet connection or try again in a few moments.";
+		return "Unable to connect to the OrangePlanet service. Please check your internet connection or try again in a few moments.";
 	}
 	if (
 		lower.includes("timeout") ||

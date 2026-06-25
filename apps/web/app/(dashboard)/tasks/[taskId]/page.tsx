@@ -64,7 +64,7 @@ export default function TaskDetailsPage({
 		}
 	}, [task]);
 
-	// Silent URL update to STR-XXXX format if UUID was passed
+	// Silent URL update to OPH-XXXX format if UUID was passed
 	React.useEffect(() => {
 		if (task && taskId !== task.id) {
 			window.history.replaceState(null, "", `/tasks/${task.id}`);

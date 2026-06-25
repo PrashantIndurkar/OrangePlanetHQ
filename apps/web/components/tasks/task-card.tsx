@@ -71,7 +71,7 @@ interface TaskCardProps {
 }
 
 export function TaskCard({
-	id = "STR-36",
+	id = "OPH-36",
 	title = "Building card ui with fields",
 	status = "todo",
 	priority = "high",
@@ -167,7 +167,7 @@ export function TaskCard({
 				tabIndex={0}
 				className={cn(
 					"group flex w-full flex-col rounded-none border border-zinc-200 bg-[#ffffff] p-[9px] pb-[11px] text-card-foreground shadow-none select-none data-[context-menu-open=true]:border-zinc-300 data-[context-menu-open=true]:bg-zinc-50 dark:border-zinc-800 dark:bg-[#25272b] dark:data-[context-menu-open=true]:border-zinc-700 dark:data-[context-menu-open=true]:bg-zinc-800/80 outline-none focus-visible:ring-1 focus-visible:ring-ring/50",
-					(id === "STR-TEMP" || id.startsWith("temp-")) &&
+					(id === "OPH-TEMP" || id.startsWith("temp-")) &&
 						"opacity-50 pointer-events-none",
 				)}
 			>

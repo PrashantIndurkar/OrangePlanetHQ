@@ -37,7 +37,7 @@ export function mapBackendTaskToFrontend(bt: BackendTask): Task {
 	const assigneeName = bt.user?.name || bt.user?.email || "Unknown User";
 
 	return {
-		id: `STR-${bt.id.slice(0, 8).toUpperCase()}`,
+		id: `OPH-${bt.id.slice(0, 8).toUpperCase()}`,
 		uuid: bt.id,
 		title: bt.title,
 		status: bt.status as Task["status"],
