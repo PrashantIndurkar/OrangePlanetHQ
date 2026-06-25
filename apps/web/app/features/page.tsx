@@ -216,9 +216,9 @@ export default function FeaturesPage() {
 						Features designed for momentum
 					</h1>
 					<p className="mt-4 text-sm font-light leading-relaxed text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto">
-						Plan, track, and ship projects without the overhead. OrangePlanet gives
-						solo developers and agile teams a clean space to capture features
-						and issues.
+						Plan, track, and ship projects without the overhead. OrangePlanet
+						gives solo developers and agile teams a clean space to capture
+						features and issues.
 					</p>
 				</div>
 

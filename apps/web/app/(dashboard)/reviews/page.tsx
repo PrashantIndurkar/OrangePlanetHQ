@@ -44,9 +44,9 @@ export default function ReviewsPage() {
 						Code reviews & pull requests are coming soon
 					</h2>
 					<p className="mt-2 max-w-md text-center text-xs text-muted-foreground">
-						We are building a native code review experience inside OrangePlanet to
-						connect your pull requests directly to your issue boards, enabling
-						seamless tracking and automatic task updates.
+						We are building a native code review experience inside OrangePlanet
+						to connect your pull requests directly to your issue boards,
+						enabling seamless tracking and automatic task updates.
 					</p>
 
 					{/* Feature list preview cards */}
@@ -56,8 +56,8 @@ export default function ReviewsPage() {
 								1. Direct PR Linking
 							</span>
 							<span className="text-[10px] leading-relaxed text-muted-foreground">
-								Automatically match GitHub pull requests with OrangePlanet issues
-								using branch names or commit messages.
+								Automatically match GitHub pull requests with OrangePlanet
+								issues using branch names or commit messages.
 							</span>
 						</div>
 						<div className="flex flex-col gap-1.5 rounded-md border border-border/60 bg-card p-3.5">

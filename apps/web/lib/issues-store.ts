@@ -206,7 +206,10 @@ class IssuesStore {
 	private save() {
 		if (typeof window !== "undefined") {
 			try {
-				localStorage.setItem("orangeplanet_tasks_v2", JSON.stringify(this.tasks));
+				localStorage.setItem(
+					"orangeplanet_tasks_v2",
+					JSON.stringify(this.tasks),
+				);
 			} catch (e) {
 				console.error("Failed to save tasks to localStorage", e);
 			}

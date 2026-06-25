@@ -164,8 +164,8 @@ export default function LandingPage() {
 						className="mt-6 text-center text-sm md:text-base font-light leading-relaxed text-zinc-500"
 					>
 						Plan, track, and ship projects without the overhead of enterprise
-						software. OrangePlanet gives solo engineers and small teams a focused
-						workspace designed for momentum, not management.
+						software. OrangePlanet gives solo engineers and small teams a
+						focused workspace designed for momentum, not management.
 					</p>
 
 					{/* Hero CTA Buttons */}
