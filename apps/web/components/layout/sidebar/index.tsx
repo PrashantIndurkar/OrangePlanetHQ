@@ -9,7 +9,7 @@ import { SidebarNav } from "./sidebar-nav";
 
 export function Sidebar() {
 	const { isOpen, toggle } = useSidebar();
-	const [width, setWidth] = React.useState(260); // default width, resizable between 220px and 330px
+	const [width, setWidth] = React.useState(280); // default width, resizable between 240px and 360px
 	const [isDragging, setIsDragging] = React.useState(false);
 	const dragStartRef = React.useRef<{ x: number; width: number } | null>(null);
 
@@ -20,7 +20,7 @@ export function Sidebar() {
 			dragStartRef.current = {
 				x: e.clientX,
 				width: width,
-			};
+				};
 		},
 		[width],
 	);
@@ -32,8 +32,8 @@ export function Sidebar() {
 			if (!dragStartRef.current) return;
 			const deltaX = e.clientX - dragStartRef.current.x;
 			const newWidth = Math.max(
-				220,
-				Math.min(330, dragStartRef.current.width + deltaX),
+				240,
+				Math.min(360, dragStartRef.current.width + deltaX),
 			);
 			setWidth(newWidth);
 		};
@@ -73,7 +73,7 @@ export function Sidebar() {
 			>
 				<div className="flex flex-1 flex-col">
 					{/* Sidebar Header */}
-					<SidebarHeader />
+					<SidebarHeader sidebarWidth={width} />
 
 					{/* Navigation List */}
 					<SidebarNav />

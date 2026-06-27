@@ -12,13 +12,8 @@ export const metadata: Metadata = {
 	description:
 		"Plan, track, and ship projects without the overhead of enterprise software. OrangePlanet gives solo engineers and small teams a focused workspace.",
 	icons: {
-		icon: [
-			{ url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-			{ url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-		],
-		apple: "/apple-touch-icon.png",
+		icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🪐</text></svg>',
 	},
-	manifest: "/site.webmanifest",
 };
 
 const plusJakartaSans = Plus_Jakarta_Sans({
