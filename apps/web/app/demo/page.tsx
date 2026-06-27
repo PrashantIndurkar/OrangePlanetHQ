@@ -26,8 +26,8 @@ export default function DemoPage() {
 					className="absolute inset-0 opacity-[0.04]"
 					style={{
 						backgroundImage: `
-							linear-gradient(to right, #5e6ad2 1px, transparent 1px),
-							linear-gradient(to bottom, #5e6ad2 1px, transparent 1px)
+							linear-gradient(to right, #FF591E 1px, transparent 1px),
+							linear-gradient(to bottom, #FF591E 1px, transparent 1px)
 						`,
 						backgroundSize: "40px 40px",
 					}}
@@ -36,8 +36,8 @@ export default function DemoPage() {
 					className="absolute inset-0 opacity-[0.08]"
 					style={{
 						backgroundImage: `
-							linear-gradient(to right, #5e6ad2 1px, transparent 1px),
-							linear-gradient(to bottom, #5e6ad2 1px, transparent 1px)
+							linear-gradient(to right, #FF591E 1px, transparent 1px),
+							linear-gradient(to bottom, #FF591E 1px, transparent 1px)
 						`,
 						backgroundSize: "200px 200px",
 					}}
@@ -51,30 +51,30 @@ export default function DemoPage() {
 					}}
 				/>
 				{/* Structural border coordinate lines */}
-				<div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#5e6ad2]/10" />
-				<div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#5e6ad2]/10" />
+				<div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#FF591E]/10" />
+				<div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#FF591E]/10" />
 			</div>
 
 			{/* Center Card */}
 			<div className="relative z-10 w-full max-w-[420px] px-6">
 				{/* Corner Alignment Markers for Blueprint Feel */}
-				<div className="absolute -top-3 -left-3 text-[#5e6ad2]/30 font-mono text-[10px] pointer-events-none select-none">
+				<div className="absolute -top-3 -left-3 text-[#FF591E]/30 font-mono text-[10px] pointer-events-none select-none">
 					+ OPH-L1
 				</div>
-				<div className="absolute -top-3 -right-3 text-[#5e6ad2]/30 font-mono text-[10px] pointer-events-none select-none">
+				<div className="absolute -top-3 -right-3 text-[#FF591E]/30 font-mono text-[10px] pointer-events-none select-none">
 					+ OPH-R1
 				</div>
-				<div className="absolute -bottom-3 -left-3 text-[#5e6ad2]/30 font-mono text-[10px] pointer-events-none select-none">
+				<div className="absolute -bottom-3 -left-3 text-[#FF591E]/30 font-mono text-[10px] pointer-events-none select-none">
 					+ OPH-L2
 				</div>
-				<div className="absolute -bottom-3 -right-3 text-[#5e6ad2]/30 font-mono text-[10px] pointer-events-none select-none">
+				<div className="absolute -bottom-3 -right-3 text-[#FF591E]/30 font-mono text-[10px] pointer-events-none select-none">
 					+ OPH-R2
 				</div>
 
 				<div className="bg-white border border-zinc-200/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.02)] relative">
 					{/* Logo header */}
 					<div className="flex flex-col items-center text-center mb-8">
-						<div className="flex h-10 w-10 items-center justify-center border-2 border-[#5e6ad2] bg-[#5e6ad2]/5 mb-3">
+						<div className="flex h-10 w-10 items-center justify-center border-2 border-[#FF591E] bg-[#FF591E]/5 mb-3">
 							<svg
 								width="20"
 								height="20"
@@ -85,7 +85,7 @@ export default function DemoPage() {
 							>
 								<path
 									d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
-									stroke="#5e6ad2"
+									stroke="#FF591E"
 									strokeWidth="2.2"
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -113,7 +113,7 @@ export default function DemoPage() {
 								<button
 									type="button"
 									onClick={() => handleCopy("email", credentials.email)}
-									className="text-[#5e6ad2] hover:text-[#5e6ad2]/80 transition-colors p-1 cursor-pointer"
+									className="text-[#FF591E] hover:text-[#FF591E]/80 transition-colors p-1 cursor-pointer"
 									title="Copy email address"
 								>
 									{copiedField === "email" ? (
@@ -163,7 +163,7 @@ export default function DemoPage() {
 								<button
 									type="button"
 									onClick={() => handleCopy("password", credentials.password)}
-									className="text-[#5e6ad2] hover:text-[#5e6ad2]/80 transition-colors p-1 cursor-pointer"
+									className="text-[#FF591E] hover:text-[#FF591E]/80 transition-colors p-1 cursor-pointer"
 									title="Copy password"
 								>
 									{copiedField === "password" ? (
@@ -208,7 +208,7 @@ export default function DemoPage() {
 					<div className="flex flex-col gap-2">
 						<Link
 							href="/login"
-							className="flex h-10 w-full items-center justify-center bg-[#5e6ad2] text-white text-xs font-semibold hover:bg-[#5e6ad2]/95 transition-all text-center select-none"
+							className="flex h-10 w-full items-center justify-center bg-[#FF591E] text-white text-xs font-semibold hover:bg-[#FF591E]/95 transition-all text-center select-none"
 						>
 							Go to Login Page
 						</Link>

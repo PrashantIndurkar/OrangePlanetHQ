@@ -15,8 +15,8 @@ export default function ChangelogPage() {
 					className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]"
 					style={{
 						backgroundImage: `
-							linear-gradient(to right, #5e6ad2 1px, transparent 1px),
-							linear-gradient(to bottom, #5e6ad2 1px, transparent 1px)
+							linear-gradient(to right, #FF591E 1px, transparent 1px),
+							linear-gradient(to bottom, #FF591E 1px, transparent 1px)
 						`,
 						backgroundSize: "40px 40px",
 					}}
@@ -28,7 +28,7 @@ export default function ChangelogPage() {
 			<nav className="relative z-20 flex h-[54px] w-full items-center justify-between px-6 lg:px-[8%] border-b border-zinc-200/40 dark:border-zinc-800/40 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md">
 				<div className="flex items-center gap-2">
 					<Link href="/" className="flex items-center gap-2 outline-none">
-						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#5e6ad2] bg-[#5e6ad2]/5">
+						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#FF591E] bg-[#FF591E]/5">
 							<svg
 								width="12"
 								height="12"
@@ -40,7 +40,7 @@ export default function ChangelogPage() {
 								<title>Logo Icon</title>
 								<path
 									d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
-									stroke="#5e6ad2"
+									stroke="#FF591E"
 									strokeWidth="2.5"
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -90,8 +90,8 @@ export default function ChangelogPage() {
 							{/* Left Column (Timeline marker, Version & Date) */}
 							<div className="md:col-span-1 md:text-right relative pb-4 md:pb-0 md:pr-6">
 								{/* Visual bullet indicator */}
-								<div className="absolute top-1 -left-[31px] md:left-auto md:-right-[9px] h-4 w-4 rounded-full border-2 border-[#5e6ad2] bg-white dark:bg-zinc-950 z-10 flex items-center justify-center">
-									<div className="h-1.5 w-1.5 rounded-full bg-[#5e6ad2]" />
+								<div className="absolute top-1 -left-[31px] md:left-auto md:-right-[9px] h-4 w-4 rounded-full border-2 border-[#FF591E] bg-white dark:bg-zinc-950 z-10 flex items-center justify-center">
+									<div className="h-1.5 w-1.5 rounded-full bg-[#FF591E]" />
 								</div>
 
 								{/* Version details */}
@@ -110,7 +110,7 @@ export default function ChangelogPage() {
 										href={release.compareUrl}
 										target="_blank"
 										rel="noopener noreferrer"
-										className="inline-block mt-2 text-[9px] font-mono text-zinc-400 hover:text-[#5e6ad2] transition-colors"
+										className="inline-block mt-2 text-[9px] font-mono text-zinc-400 hover:text-[#FF591E] transition-colors"
 									>
 										view diff ↗
 									</a>

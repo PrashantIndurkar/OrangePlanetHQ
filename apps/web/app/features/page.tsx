@@ -12,7 +12,7 @@ export default function FeaturesPage() {
 						"Access everything instantly. Use Cmd+K (or Ctrl+K) to search tasks, toggle themes, switch workspaces, and execute quick commands.",
 					icon: (
 						<svg
-							className="h-5 w-5 text-[#5e6ad2]"
+							className="h-5 w-5 text-[#FF591E]"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -33,7 +33,7 @@ export default function FeaturesPage() {
 						"Create and log tasks or ideas in seconds. No complex configuration or unnecessary form fields required to keep moving.",
 					icon: (
 						<svg
-							className="h-5 w-5 text-[#5e6ad2]"
+							className="h-5 w-5 text-[#FF591E]"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -60,7 +60,7 @@ export default function FeaturesPage() {
 						"Simple, highly focused board view showing Todo, In Progress, and Completed statuses. Keep tabs on what needs to be shipped next.",
 					icon: (
 						<svg
-							className="h-5 w-5 text-[#5e6ad2]"
+							className="h-5 w-5 text-[#FF591E]"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -81,7 +81,7 @@ export default function FeaturesPage() {
 						"Keep separate contexts for work client projects, open-source ventures, and weekend side projects. Switch workspace instantly.",
 					icon: (
 						<svg
-							className="h-5 w-5 text-[#5e6ad2]"
+							className="h-5 w-5 text-[#FF591E]"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -108,7 +108,7 @@ export default function FeaturesPage() {
 						"Link branches, commits, and PR events automatically by including the task ID (e.g. OPH-12) in branch names or commit messages.",
 					icon: (
 						<svg
-							className="h-5 w-5 text-[#5e6ad2]"
+							className="h-5 w-5 text-[#FF591E]"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -129,7 +129,7 @@ export default function FeaturesPage() {
 						"Engage users and stakeholders by showing features currently Planned, In Progress, or Completed in a public board.",
 					icon: (
 						<svg
-							className="h-5 w-5 text-[#5e6ad2]"
+							className="h-5 w-5 text-[#FF591E]"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -156,8 +156,8 @@ export default function FeaturesPage() {
 					className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]"
 					style={{
 						backgroundImage: `
-							linear-gradient(to right, #5e6ad2 1px, transparent 1px),
-							linear-gradient(to bottom, #5e6ad2 1px, transparent 1px)
+							linear-gradient(to right, #FF591E 1px, transparent 1px),
+							linear-gradient(to bottom, #FF591E 1px, transparent 1px)
 						`,
 						backgroundSize: "40px 40px",
 					}}
@@ -169,7 +169,7 @@ export default function FeaturesPage() {
 			<nav className="relative z-20 flex h-[54px] w-full items-center justify-between px-6 lg:px-[8%] border-b border-zinc-200/40 dark:border-zinc-800/40 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md">
 				<div className="flex items-center gap-2">
 					<Link href="/" className="flex items-center gap-2 outline-none">
-						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#5e6ad2] bg-[#5e6ad2]/5">
+						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#FF591E] bg-[#FF591E]/5">
 							<svg
 								width="12"
 								height="12"
@@ -181,7 +181,7 @@ export default function FeaturesPage() {
 								<title>Logo Icon</title>
 								<path
 									d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
-									stroke="#5e6ad2"
+									stroke="#FF591E"
 									strokeWidth="2.5"
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -231,7 +231,7 @@ export default function FeaturesPage() {
 								<h3 className="text-[11px] font-mono font-bold tracking-wider uppercase text-zinc-400 dark:text-zinc-500">
 									{category.title}
 								</h3>
-								<span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#5e6ad2]/10 text-[#5e6ad2] font-semibold">
+								<span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#FF591E]/10 text-[#FF591E] font-semibold">
 									{category.badge}
 								</span>
 							</div>
@@ -244,12 +244,12 @@ export default function FeaturesPage() {
 										className="group relative border border-zinc-200/80 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/50 p-5 shadow-[0_1px_3px_rgba(0,0,0,0.01)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.02)] transition-all duration-200 rounded-none"
 									>
 										{/* Accent indicator */}
-										<div className="absolute top-0 left-0 bottom-0 w-[3px] bg-[#5e6ad2]" />
+										<div className="absolute top-0 left-0 bottom-0 w-[3px] bg-[#FF591E]" />
 
 										<div className="flex items-start gap-3.5">
 											<div className="shrink-0 mt-0.5">{feature.icon}</div>
 											<div className="flex-1 min-w-0">
-												<h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-[#5e6ad2] transition-colors leading-tight">
+												<h4 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-[#FF591E] transition-colors leading-tight">
 													{feature.title}
 												</h4>
 												<p className="mt-2 text-[11px] font-light leading-relaxed text-zinc-500 dark:text-zinc-400">
@@ -265,7 +265,7 @@ export default function FeaturesPage() {
 				</div>
 
 				{/* Roadmap Banner Card */}
-				<div className="w-full max-w-6xl mt-16 p-6 border border-[#5e6ad2]/20 bg-[#5e6ad2]/5 dark:bg-[#5e6ad2]/5 flex flex-col md:flex-row items-center justify-between gap-6">
+				<div className="w-full max-w-6xl mt-16 p-6 border border-[#FF591E]/20 bg-[#FF591E]/5 dark:bg-[#FF591E]/5 flex flex-col md:flex-row items-center justify-between gap-6">
 					<div className="text-center md:text-left">
 						<h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
 							Looking for what we are building next?
@@ -277,7 +277,7 @@ export default function FeaturesPage() {
 					</div>
 					<Link
 						href="/roadmap"
-						className="flex h-9 px-6 items-center justify-center bg-[#5e6ad2] text-white text-xs font-semibold hover:bg-[#5e6ad2]/90 transition-all shrink-0"
+						className="flex h-9 px-6 items-center justify-center bg-[#FF591E] text-white text-xs font-semibold hover:bg-[#FF591E]/90 transition-all shrink-0"
 					>
 						Check out our Roadmap ↗
 					</Link>

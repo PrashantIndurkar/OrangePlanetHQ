@@ -119,7 +119,7 @@ const TaskCreatedToast = ({
 			<div className="mt-3 flex items-center justify-between border-t border-border/50 pt-2.5 pl-6 text-[11px]">
 				<a
 					href={`/tasks/${task.uuid || ""}`}
-					className="font-semibold text-[#5e6ad2] dark:text-[#8b9bf5] hover:underline"
+					className="font-semibold text-[#FF591E] dark:text-[#FF7043] hover:underline"
 				>
 					View issue
 				</a>

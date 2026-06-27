@@ -50,8 +50,8 @@ export default function RoadmapPage() {
 					className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]"
 					style={{
 						backgroundImage: `
-							linear-gradient(to right, #5e6ad2 1px, transparent 1px),
-							linear-gradient(to bottom, #5e6ad2 1px, transparent 1px)
+							linear-gradient(to right, #FF591E 1px, transparent 1px),
+							linear-gradient(to bottom, #FF591E 1px, transparent 1px)
 						`,
 						backgroundSize: "40px 40px",
 					}}
@@ -63,7 +63,7 @@ export default function RoadmapPage() {
 			<nav className="relative z-20 flex h-[54px] w-full items-center justify-between px-6 lg:px-[8%] border-b border-zinc-200/40 dark:border-zinc-800/40 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md">
 				<div className="flex items-center gap-2">
 					<Link href="/" className="flex items-center gap-2 outline-none">
-						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#5e6ad2] bg-[#5e6ad2]/5">
+						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#FF591E] bg-[#FF591E]/5">
 							<svg
 								width="12"
 								height="12"
@@ -75,7 +75,7 @@ export default function RoadmapPage() {
 								<title>Logo Icon</title>
 								<path
 									d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
-									stroke="#5e6ad2"
+									stroke="#FF591E"
 									strokeWidth="2.5"
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -160,7 +160,7 @@ export default function RoadmapPage() {
 														{item.icon}
 													</span>
 													<div className="flex-1 min-w-0">
-														<h3 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-[#5e6ad2] transition-colors leading-tight">
+														<h3 className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-[#FF591E] transition-colors leading-tight">
 															{item.title}
 														</h3>
 														<p className="mt-2 text-[11px] font-light leading-relaxed text-zinc-500 dark:text-zinc-400 whitespace-pre-line">

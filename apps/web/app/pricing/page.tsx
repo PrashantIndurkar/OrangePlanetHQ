@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const CheckIcon = () => (
 	<svg
-		className="h-3.5 w-3.5 shrink-0 text-[#5e6ad2]"
+		className="h-3.5 w-3.5 shrink-0 text-[#FF591E]"
 		fill="none"
 		viewBox="0 0 24 24"
 		stroke="currentColor"
@@ -72,8 +72,8 @@ export default function PricingPage() {
 					className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]"
 					style={{
 						backgroundImage: `
-							linear-gradient(to right, #5e6ad2 1px, transparent 1px),
-							linear-gradient(to bottom, #5e6ad2 1px, transparent 1px)
+							linear-gradient(to right, #FF591E 1px, transparent 1px),
+							linear-gradient(to bottom, #FF591E 1px, transparent 1px)
 						`,
 						backgroundSize: "40px 40px",
 					}}
@@ -85,7 +85,7 @@ export default function PricingPage() {
 			<nav className="relative z-20 flex h-[54px] w-full items-center justify-between px-6 lg:px-[8%] border-b border-zinc-200/40 dark:border-zinc-800/40 bg-white/70 dark:bg-zinc-900/70 backdrop-blur-md">
 				<div className="flex items-center gap-2">
 					<Link href="/" className="flex items-center gap-2 outline-none">
-						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#5e6ad2] bg-[#5e6ad2]/5">
+						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#FF591E] bg-[#FF591E]/5">
 							<svg
 								width="12"
 								height="12"
@@ -97,7 +97,7 @@ export default function PricingPage() {
 								<title>Logo Icon</title>
 								<path
 									d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
-									stroke="#5e6ad2"
+									stroke="#FF591E"
 									strokeWidth="2.5"
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -192,14 +192,14 @@ export default function PricingPage() {
 					</div>
 
 					{/* Pro Plan */}
-					<div className="group relative border-2 border-[#5e6ad2] bg-white dark:bg-zinc-900/50 p-6 flex flex-col justify-between shadow-[0_4px_20px_rgba(94,106,210,0.06)] transition-all duration-200 rounded-none">
-						<div className="absolute top-0 left-0 bottom-0 w-[3px] bg-[#5e6ad2]" />
+					<div className="group relative border-2 border-[#FF591E] bg-white dark:bg-zinc-900/50 p-6 flex flex-col justify-between shadow-[0_4px_20px_rgba(94,106,210,0.06)] transition-all duration-200 rounded-none">
+						<div className="absolute top-0 left-0 bottom-0 w-[3px] bg-[#FF591E]" />
 						<div>
 							<div className="flex items-center justify-between mb-4">
 								<h3 className="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
 									Pro
 								</h3>
-								<span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 bg-[#5e6ad2] text-white">
+								<span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 bg-[#FF591E] text-white">
 									Popular
 								</span>
 							</div>
@@ -220,7 +220,7 @@ export default function PricingPage() {
 
 							<Link
 								href="/signup"
-								className="flex h-9 w-full items-center justify-center bg-[#5e6ad2] text-white text-xs font-semibold hover:bg-[#5e6ad2]/90 transition-all text-center mb-8"
+								className="flex h-9 w-full items-center justify-center bg-[#FF591E] text-white text-xs font-semibold hover:bg-[#FF591E]/90 transition-all text-center mb-8"
 							>
 								Get Started For Free
 							</Link>
@@ -300,7 +300,7 @@ export default function PricingPage() {
 						<div className="flex flex-col gap-2.5 p-4 border border-zinc-200/60 dark:border-zinc-800/40 bg-white dark:bg-zinc-900/20">
 							<div className="flex items-center gap-2">
 								<svg
-									className="h-4 w-4 text-[#5e6ad2]"
+									className="h-4 w-4 text-[#FF591E]"
 									fill="none"
 									viewBox="0 0 24 24"
 									stroke="currentColor"
@@ -328,7 +328,7 @@ export default function PricingPage() {
 						<div className="flex flex-col gap-2.5 p-4 border border-zinc-200/60 dark:border-zinc-800/40 bg-white dark:bg-zinc-900/20">
 							<div className="flex items-center gap-2">
 								<svg
-									className="h-4 w-4 text-[#5e6ad2]"
+									className="h-4 w-4 text-[#FF591E]"
 									fill="none"
 									viewBox="0 0 24 24"
 									stroke="currentColor"
@@ -356,7 +356,7 @@ export default function PricingPage() {
 						<div className="flex flex-col gap-2.5 p-4 border border-zinc-200/60 dark:border-zinc-800/40 bg-white dark:bg-zinc-900/20">
 							<div className="flex items-center gap-2">
 								<svg
-									className="h-4 w-4 text-[#5e6ad2]"
+									className="h-4 w-4 text-[#FF591E]"
 									fill="none"
 									viewBox="0 0 24 24"
 									stroke="currentColor"

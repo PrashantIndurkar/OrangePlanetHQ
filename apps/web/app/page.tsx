@@ -33,8 +33,8 @@ export default function LandingPage() {
 						className="absolute inset-0 opacity-[0.03]"
 						style={{
 							backgroundImage: `
-							linear-gradient(to right, #5e6ad2 1px, transparent 1px),
-							linear-gradient(to bottom, #5e6ad2 1px, transparent 1px)
+							linear-gradient(to right, #FF591E 1px, transparent 1px),
+							linear-gradient(to bottom, #FF591E 1px, transparent 1px)
 						`,
 							backgroundSize: "40px 40px",
 						}}
@@ -43,8 +43,8 @@ export default function LandingPage() {
 						className="absolute inset-0 opacity-[0.06]"
 						style={{
 							backgroundImage: `
-							linear-gradient(to right, #5e6ad2 1px, transparent 1px),
-							linear-gradient(to bottom, #5e6ad2 1px, transparent 1px)
+							linear-gradient(to right, #FF591E 1px, transparent 1px),
+							linear-gradient(to bottom, #FF591E 1px, transparent 1px)
 						`,
 							backgroundSize: "200px 200px",
 						}}
@@ -67,7 +67,7 @@ export default function LandingPage() {
 				<nav className="relative z-20 flex h-[54px] w-full items-center justify-between px-6 lg:px-[8%] border-b border-zinc-200/40 bg-white/70 backdrop-blur-md">
 					{/* Left Logo */}
 					<div className="flex items-center gap-2">
-						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#5e6ad2] bg-[#5e6ad2]/5">
+						<div className="flex h-6 w-6 items-center justify-center border-2 border-[#FF591E] bg-[#FF591E]/5">
 							<svg
 								width="12"
 								height="12"
@@ -79,7 +79,7 @@ export default function LandingPage() {
 								<title>Logo Icon</title>
 								<path
 									d="M13 2L3 14H12L11 22L21 10H12L13 2Z"
-									stroke="#5e6ad2"
+									stroke="#FF591E"
 									strokeWidth="2.5"
 									strokeLinecap="round"
 									strokeLinejoin="round"
@@ -135,12 +135,12 @@ export default function LandingPage() {
 				{/* Main Content Area */}
 				<main className="relative z-10 flex flex-1 flex-col items-center px-6 pt-16 lg:px-[8%]">
 					{/* Hero Badge - Boxy style with double-border and checkbox */}
-					<div className="p-[2px] border border-[#5e6ad2] bg-[#5e6ad2]/5 mb-6 select-none rounded-none animate-in fade-in zoom-in-95 duration-500">
-						<div className="border border-[#5e6ad2]/20 bg-[#5e6ad2]/10 px-3 py-1 flex items-center gap-2.5 rounded-none">
-							<div className="flex h-4 w-4 shrink-0 items-center justify-center bg-white border border-[#5e6ad2] text-[#5e6ad2] text-[10px] font-bold rounded-none">
+					<div className="p-[2px] border border-[#FF591E] bg-[#FF591E]/5 mb-6 select-none rounded-none animate-in fade-in zoom-in-95 duration-500">
+						<div className="border border-[#FF591E]/20 bg-[#FF591E]/10 px-3 py-1 flex items-center gap-2.5 rounded-none">
+							<div className="flex h-4 w-4 shrink-0 items-center justify-center bg-white border border-[#FF591E] text-[#FF591E] text-[10px] font-bold rounded-none">
 								✓
 							</div>
-							<span className="text-xs font-semibold text-[#5e6ad2] tracking-tight">
+							<span className="text-xs font-semibold text-[#FF591E] tracking-tight">
 								No bloat. On purpose.
 							</span>
 						</div>
@@ -172,7 +172,7 @@ export default function LandingPage() {
 					<div className="mt-8 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
 						<Link
 							href="/signup"
-							className="flex h-10 w-full sm:w-48 items-center justify-center gap-2 bg-[#5e6ad2] text-white text-xs font-semibold hover:bg-[#5e6ad2]/95 transition-all text-center"
+							className="flex h-10 w-full sm:w-48 items-center justify-center gap-2 bg-[#FF591E] text-white text-xs font-semibold hover:bg-[#FF591E]/95 transition-all text-center"
 						>
 							<span>Get Started for Free</span>
 							<HugeiconsIcon
@@ -205,11 +205,11 @@ export default function LandingPage() {
 
 					{/* Geometric marker lines for Hero section */}
 					<div className="w-full max-w-[960px] flex items-center justify-between mt-16 px-4">
-						<span className="text-[#5e6ad2]/20 font-mono text-[9px]">
+						<span className="text-[#FF591E]/20 font-mono text-[9px]">
 							+ GRID-INTERSECT-01
 						</span>
 						<div className="h-[1px] flex-1 bg-zinc-200/50 mx-4" />
-						<span className="text-[#5e6ad2]/20 font-mono text-[9px]">
+						<span className="text-[#FF591E]/20 font-mono text-[9px]">
 							+ PREVIEW-ANCHOR
 						</span>
 					</div>
@@ -264,7 +264,7 @@ export default function LandingPage() {
 										<div className="h-4 w-24 bg-zinc-200/50 rounded" />
 										<div className="flex gap-1.5">
 											<div className="h-4 w-12 border border-zinc-200 rounded bg-white" />
-											<div className="h-4 w-16 bg-[#5e6ad2]/10 border border-[#5e6ad2]/20 rounded text-[9px] text-[#5e6ad2] flex items-center justify-center font-semibold">
+											<div className="h-4 w-16 bg-[#FF591E]/10 border border-[#FF591E]/20 rounded text-[9px] text-[#FF591E] flex items-center justify-center font-semibold">
 												+ Add Task
 											</div>
 										</div>
@@ -285,7 +285,7 @@ export default function LandingPage() {
 												<div className="h-1.5 w-full bg-zinc-100 rounded" />
 												<div className="flex justify-between items-center mt-1">
 													<div className="h-3 w-8 bg-zinc-100 rounded" />
-													<div className="h-3 w-3 bg-[#5e6ad2]/10 rounded" />
+													<div className="h-3 w-3 bg-[#FF591E]/10 rounded" />
 												</div>
 											</div>
 											<div className="border border-zinc-200/80 bg-white p-2.5 flex flex-col gap-2 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
@@ -302,12 +302,12 @@ export default function LandingPage() {
 													1
 												</span>
 											</div>
-											<div className="border border-[#5e6ad2]/20 bg-white p-2.5 flex flex-col gap-2 shadow-[0_2px_8px_rgba(94,106,210,0.03)] relative">
-												<div className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-[#5e6ad2]" />
-												<div className="h-2 w-5/6 bg-[#5e6ad2]/20 rounded" />
+											<div className="border border-[#FF591E]/20 bg-white p-2.5 flex flex-col gap-2 shadow-[0_2px_8px_rgba(94,106,210,0.03)] relative">
+												<div className="absolute top-2 right-2 h-1.5 w-1.5 rounded-full bg-[#FF591E]" />
+												<div className="h-2 w-5/6 bg-[#FF591E]/20 rounded" />
 												<div className="h-1.5 w-full bg-zinc-100 rounded" />
 												<div className="flex justify-between items-center mt-1">
-													<div className="h-3.5 w-12 border border-[#5e6ad2]/10 bg-[#5e6ad2]/5 text-[8px] text-[#5e6ad2] flex items-center justify-center font-bold">
+													<div className="h-3.5 w-12 border border-[#FF591E]/10 bg-[#FF591E]/5 text-[8px] text-[#FF591E] flex items-center justify-center font-bold">
 														Active
 													</div>
 													<div className="h-3 w-3 bg-zinc-200 rounded-full" />

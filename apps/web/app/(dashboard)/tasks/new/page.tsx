@@ -274,7 +274,7 @@ export default function NewTaskPage() {
 							onClick={handleCreate}
 							className={cn(
 								"h-8 px-4 rounded-none text-[12px] font-semibold transition-all select-none cursor-pointer outline-none border-0",
-								"bg-[#5e6ad2] text-white hover:bg-[#5e6ad2]/90 disabled:opacity-50 disabled:pointer-events-none disabled:bg-[#5e6ad2]/60",
+								"bg-[#FF591E] text-white hover:bg-[#FF591E]/90 disabled:opacity-50 disabled:pointer-events-none disabled:bg-[#FF591E]/60",
 							)}
 						>
 							{isUploading ? "Uploading..." : "Create Task"}
