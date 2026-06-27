@@ -22,7 +22,11 @@ function getInitials(name: string | null | undefined): string {
 	return name.trim().charAt(0).toUpperCase();
 }
 
-export function SidebarHeader({ sidebarWidth = 280 }: { sidebarWidth?: number }) {
+export function SidebarHeader({
+	sidebarWidth = 280,
+}: {
+	sidebarWidth?: number;
+}) {
 	const [isOpen, setIsOpen] = React.useState(false);
 	const dropdownRef = React.useRef<HTMLDivElement>(null);
 	const { user, logout } = useAuth();

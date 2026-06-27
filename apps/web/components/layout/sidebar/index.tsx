@@ -20,7 +20,7 @@ export function Sidebar() {
 			dragStartRef.current = {
 				x: e.clientX,
 				width: width,
-				};
+			};
 		},
 		[width],
 	);
