@@ -4,15 +4,11 @@ import { useTheme } from "next-themes";
 import type React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { Sidebar } from "@/components/layout/sidebar";
-import { useRealtime } from "@/hooks/use-realtime";
 import { SidebarProvider, useSidebar } from "@/providers/sidebar-provider";
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
 	const { toggle } = useSidebar();
 	const { theme, setTheme } = useTheme();
-
-	// Start listening to real-time events via Server-Sent Events (SSE)
-	useRealtime();
 
 	useHotkeys(
 		"[, bracketleft",

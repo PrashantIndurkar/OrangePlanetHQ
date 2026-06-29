@@ -4,7 +4,6 @@ import express from "express";
 import morgan from "morgan";
 import { errorHandler } from "./middlewares/error.middleware.js";
 import authRoutes from "./modules/auth/auth.routes.js";
-import realtimeRoutes from "./modules/realtime/realtime.routes.js";
 import tasksRoutes from "./modules/tasks/tasks.routes.js";
 import uploadRoutes from "./modules/upload/upload.routes.js";
 
@@ -63,7 +62,6 @@ app.get("/api/health", (req, res) => {
 // Register routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/tasks", tasksRoutes);
-app.use("/api/v1/realtime", realtimeRoutes);
 app.use("/api/v1/uploads", uploadRoutes);
 
 // Error handling middleware (must be registered last)

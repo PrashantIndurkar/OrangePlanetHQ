@@ -1,7 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import type { z } from "zod";
 import { ApiError } from "../../utils/api-error.js";
-import { realtimeService } from "../realtime/realtime.service.js";
 import { tasksRepository } from "./tasks.repository.js";
 import type { listTasksQuerySchema } from "./tasks.schema.js";
 
@@ -15,7 +14,6 @@ export const createTask = async (
 			throw new ApiError(401, "Unauthorized");
 		}
 		const task = await tasksRepository.create(req.user.id, req.body);
-		realtimeService.broadcast("task.created", task);
 		res.status(201).json({ task });
 	} catch (error) {
 		next(error);
@@ -102,7 +100,6 @@ export const updateTask = async (
 			req.body,
 			req.user.role,
 		);
-		realtimeService.broadcast("task.updated", updatedTask);
 		res.status(200).json({ task: updatedTask });
 	} catch (error) {
 		next(error);
@@ -128,7 +125,6 @@ export const deleteTask = async (
 		}
 
 		await tasksRepository.delete(check.id);
-		realtimeService.broadcast("task.deleted", check);
 		res.status(204).send();
 	} catch (error) {
 		next(error);

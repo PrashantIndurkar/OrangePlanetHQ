@@ -29,11 +29,6 @@ Welcome to the OrangePlanet product roadmap! Here you can track what we're worki
 
 ## [Completed]
 
-### 🌐 Real-time Synchronization
-- **Status:** Completed
-- **Description:** Enabled real-time updates across multiple active clients using Server-Sent Events (SSE), keeping columns, assignments, and due dates perfectly synced.
-- **Priority:** High
-
 ### 🔐 Core Task & Auth System
 - **Status:** Completed
 - **Description:** Complete user signup, login, session cookies, and CRUD endpoints for tasks with strict owner/collaborator authorization.
