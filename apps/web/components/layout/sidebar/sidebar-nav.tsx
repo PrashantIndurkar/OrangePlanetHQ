@@ -1,10 +1,6 @@
 "use client";
 
-import {
-	CenterFocusIcon,
-	GitPullRequestIcon,
-	InboxIcon,
-} from "@hugeicons/core-free-icons";
+import { CenterFocusIcon, InboxIcon } from "@hugeicons/core-free-icons";
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
@@ -34,12 +30,6 @@ export function SidebarNav() {
 			name: "My issues",
 			href: "/tasks",
 			icon: CenterFocusIcon,
-		},
-		{
-			id: "reviews",
-			name: "Reviews",
-			href: "/reviews",
-			icon: GitPullRequestIcon,
 		},
 	];
 

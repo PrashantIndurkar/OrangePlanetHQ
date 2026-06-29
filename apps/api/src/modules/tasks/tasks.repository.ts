@@ -9,8 +9,6 @@ export interface ListTasksFilters {
 	search?: string;
 	sortBy: "createdAt" | "dueDate" | "priority";
 	sortOrder: "asc" | "desc";
-	page: number;
-	limit: number;
 	allUsers?: boolean;
 	userRole?: string;
 }
@@ -191,12 +189,9 @@ export const tasksRepository = {
 			search,
 			sortBy,
 			sortOrder,
-			page,
-			limit,
 			allUsers,
 			userRole,
 		} = filters;
-		const skip = (page - 1) * limit;
 
 		const whereClause: Prisma.TaskWhereInput = {};
 
@@ -296,8 +291,6 @@ export const tasksRepository = {
 				orderBy: {
 					[sortBy]: sortOrder,
 				},
-				skip,
-				take: limit,
 			}),
 			prisma.task.count({ where: whereClause }),
 		]);

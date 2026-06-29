@@ -1,18 +1,15 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { toast } from "sonner";
 import { useAuth } from "@/providers/auth-provider";
 import {
-	lastMutation,
 	useCreateTaskMutation,
 	useTasksQuery,
 } from "../../features/tasks/hooks";
 import type { TaskPriority, TaskStatus } from "../tasks/task-context-menu";
 import { IssueCreateDialog } from "./issue-create-dialog";
-import type { Task } from "./types";
 import { getNormalizedFilters } from "./types";
 import { WorkspaceBoardView } from "./workspace-board-view";
 import { WorkspaceFilters } from "./workspace-filters";
@@ -45,10 +42,6 @@ export function WorkspaceLayout() {
 		[],
 	);
 
-	// Pagination settings
-	const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
-	const limit = 10; // 10 tasks per page for clean pagination
-
 	const {
 		activeStatuses,
 		activePriorities,
@@ -69,125 +62,12 @@ export function WorkspaceLayout() {
 		search: searchQuery,
 		sortBy,
 		sortOrder,
-		page,
-		limit,
 		allUsers: showAllUsers,
 	});
-
-	// Pagination shift notification logic
-	const prevTasksRef = useRef<Task[]>([]);
-	const prevTotalRef = useRef<number>(0);
-	const prevFiltersRef = useRef<string>("");
-	const lastProcessedMutationTimestampRef = useRef<number>(0);
-
-	const currentFiltersKey = JSON.stringify({
-		status: activeStatuses,
-		priority: activePriorities,
-		dueDate: activeDueDates,
-		search: searchQuery,
-		sortBy,
-		sortOrder,
-		page,
-		limit,
-		allUsers: showAllUsers,
-	});
-
-	useEffect(() => {
-		if (isLoading || isError || !data) return;
-
-		if (prevFiltersRef.current !== currentFiltersKey) {
-			lastMutation.type = null;
-		}
-
-		const currentTasks = data.tasks || [];
-		const currentTotal = data.total || 0;
-
-		const isRecentMutation =
-			lastMutation.type !== null &&
-			Date.now() - lastMutation.timestamp < 5000 &&
-			lastMutation.timestamp !== lastProcessedMutationTimestampRef.current;
-
-		if (isRecentMutation && prevFiltersRef.current === currentFiltersKey) {
-			const expectedTasksLength = Math.min(limit, currentTotal);
-			if (
-				lastMutation.type === "delete" &&
-				currentTasks.length < expectedTasksLength
-			) {
-				// Wait for the server refetch to replenish the list.
-				// Still update the refs so we compare against the optimistic state.
-				prevTasksRef.current = currentTasks;
-				prevTotalRef.current = currentTotal;
-				prevFiltersRef.current = currentFiltersKey;
-				return;
-			}
-
-			const prevTasks = prevTasksRef.current;
-			const prevTotal = prevTotalRef.current;
-
-			const currentUuids = new Set(currentTasks.map((t) => t.uuid));
-			const prevUuids = new Set(prevTasks.map((t) => t.uuid));
-
-			const added = currentTasks.filter((t) => !prevUuids.has(t.uuid));
-			const removed = prevTasks.filter((t) => !currentUuids.has(t.uuid));
-
-			if (prevTasks.length > 0) {
-				// 1. Shift Down Detection (creation/updates pushing items off the bottom of the page)
-				if (lastMutation.type === "create" && currentTotal >= prevTotal) {
-					for (const r of removed) {
-						const prevIndex = prevTasks.findIndex((t) => t.uuid === r.uuid);
-						if (prevIndex >= 9) {
-							setTimeout(() => {
-								toast.warning(
-									`Task "${r.id}" shifted to page ${page + 1} due to the 10-task limit for showing pagination as requested in assignment`,
-									{
-										duration: 5000,
-									},
-								);
-							}, 1200);
-						}
-					}
-				}
-
-				// 2. Shift Up Detection (deletion pulling items up to the bottom of the page)
-				if (lastMutation.type === "delete") {
-					for (const a of added) {
-						const currentIndex = currentTasks.findIndex(
-							(t) => t.uuid === a.uuid,
-						);
-						if (currentIndex >= 9) {
-							setTimeout(() => {
-								toast.warning(
-									`Task "${a.id}" shifted up from page ${page + 1} to fill the page.`,
-									{
-										duration: 5000,
-									},
-								);
-							}, 1200);
-						}
-					}
-				}
-			}
-			// Reset the tracker after processing the shift
-			lastProcessedMutationTimestampRef.current = lastMutation.timestamp;
-			lastMutation.type = null;
-		}
-
-		prevTasksRef.current = currentTasks;
-		prevTotalRef.current = currentTotal;
-		prevFiltersRef.current = currentFiltersKey;
-	}, [data, isLoading, isError, currentFiltersKey, page]);
 
 	const createTaskMutation = useCreateTaskMutation();
 
 	const tasks = data?.tasks || [];
-	const total = data?.total || 0;
-	const totalPages = Math.max(1, Math.ceil(total / limit));
-
-	const handlePageChange = (newPage: number) => {
-		const newParams = new URLSearchParams(searchParams.toString());
-		newParams.set("page", String(newPage));
-		router.replace(`${pathname}?${newParams.toString()}`, { scroll: false });
-	};
 
 	const handleCreateTaskSubmit = (issue: {
 		title: string;
@@ -311,35 +191,6 @@ export function WorkspaceLayout() {
 							/>
 						)}
 					</main>
-
-					{/* Pagination Footer */}
-					<footer className="flex h-12 shrink-0 items-center justify-between border-t border-border bg-card px-4 text-[12px] select-none">
-						<div className="text-muted-foreground font-medium">
-							Showing {total > 0 ? (page - 1) * limit + 1 : 0}-
-							{Math.min(page * limit, total)} of {total} tasks
-						</div>
-						<div className="flex items-center gap-4">
-							<button
-								type="button"
-								disabled={page <= 1 || isLoading}
-								onClick={() => handlePageChange(page - 1)}
-								className="flex h-7 items-center justify-center border border-border px-3 font-semibold text-foreground/80 hover:bg-muted/50 disabled:opacity-40 disabled:pointer-events-none transition-colors outline-none cursor-pointer"
-							>
-								Previous
-							</button>
-							<span className="text-muted-foreground font-medium">
-								Page {page} of {totalPages}
-							</span>
-							<button
-								type="button"
-								disabled={page >= totalPages || isLoading}
-								onClick={() => handlePageChange(page + 1)}
-								className="flex h-7 items-center justify-center border border-border px-3 font-semibold text-foreground/80 hover:bg-muted/50 disabled:opacity-40 disabled:pointer-events-none transition-colors outline-none cursor-pointer"
-							>
-								Next
-							</button>
-						</div>
-					</footer>
 				</>
 			)}
 

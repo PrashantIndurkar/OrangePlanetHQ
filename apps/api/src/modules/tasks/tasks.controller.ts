@@ -54,17 +54,8 @@ export const listTasks = async (
 		if (!req.user) {
 			throw new ApiError(401, "Unauthorized");
 		}
-		const {
-			status,
-			priority,
-			dueDate,
-			search,
-			sortBy,
-			sortOrder,
-			page,
-			limit,
-			allUsers,
-		} = req.query as unknown as z.infer<typeof listTasksQuerySchema>;
+		const { status, priority, dueDate, search, sortBy, sortOrder, allUsers } =
+			req.query as unknown as z.infer<typeof listTasksQuerySchema>;
 
 		const { tasks, total } = await tasksRepository.list({
 			userId: req.user.id,
@@ -74,8 +65,6 @@ export const listTasks = async (
 			search,
 			sortBy,
 			sortOrder,
-			page,
-			limit,
 			allUsers,
 			userRole: req.user.role,
 		});
