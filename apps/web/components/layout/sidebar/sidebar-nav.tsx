@@ -2,7 +2,6 @@
 
 import {
 	CenterFocusIcon,
-	GitPullRequestIcon,
 	InboxIcon,
 } from "@hugeicons/core-free-icons";
 import type { IconSvgElement } from "@hugeicons/react";
@@ -34,12 +33,6 @@ export function SidebarNav() {
 			name: "My issues",
 			href: "/tasks",
 			icon: CenterFocusIcon,
-		},
-		{
-			id: "reviews",
-			name: "Reviews",
-			href: "/reviews",
-			icon: GitPullRequestIcon,
 		},
 	];
 

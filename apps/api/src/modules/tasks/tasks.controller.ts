@@ -61,8 +61,6 @@ export const listTasks = async (
 			search,
 			sortBy,
 			sortOrder,
-			page,
-			limit,
 			allUsers,
 		} = req.query as unknown as z.infer<typeof listTasksQuerySchema>;
 
@@ -74,8 +72,6 @@ export const listTasks = async (
 			search,
 			sortBy,
 			sortOrder,
-			page,
-			limit,
 			allUsers,
 			userRole: req.user.role,
 		});

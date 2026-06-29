@@ -75,24 +75,6 @@ export const listTasksQuerySchema = z.object({
 	search: z.string().optional(),
 	sortBy: z.enum(["createdAt", "dueDate", "priority"]).default("createdAt"),
 	sortOrder: z.enum(["asc", "desc"]).default("desc"),
-	page: z
-		.string()
-		.optional()
-		.default("1")
-		.transform((val) => {
-			const parsed = parseInt(val, 10);
-			return Number.isNaN(parsed) ? 1 : Math.max(1, parsed);
-		})
-		.pipe(z.number()),
-	limit: z
-		.string()
-		.optional()
-		.default("25")
-		.transform((val) => {
-			const parsed = parseInt(val, 10);
-			return Number.isNaN(parsed) ? 25 : Math.min(100, Math.max(1, parsed));
-		})
-		.pipe(z.number()),
 	allUsers: z
 		.string()
 		.optional()

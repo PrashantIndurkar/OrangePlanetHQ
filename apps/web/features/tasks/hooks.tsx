@@ -22,8 +22,6 @@ export function useTasksQuery(filters: {
 	search?: string;
 	sortBy?: string;
 	sortOrder?: string;
-	page?: number;
-	limit?: number;
 	allUsers?: boolean;
 }) {
 	return useQuery({
