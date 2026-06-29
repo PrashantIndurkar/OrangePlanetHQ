@@ -64,7 +64,9 @@ Switch to the new branch.
 
 Stage all changes.
 
-Create a Conventional Commit.
+Create a Conventional Commit. Include a detailed description in the commit body detailing:
+1. **Validation** (what checks passed: Biome Format, Biome Lint, Type Check, Tests, Build)
+2. **Summary** (bullet points describing what was done)
 
 Examples:
 

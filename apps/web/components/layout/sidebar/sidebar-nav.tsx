@@ -1,9 +1,6 @@
 "use client";
 
-import {
-	CenterFocusIcon,
-	InboxIcon,
-} from "@hugeicons/core-free-icons";
+import { CenterFocusIcon, InboxIcon } from "@hugeicons/core-free-icons";
 import type { IconSvgElement } from "@hugeicons/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Link from "next/link";
