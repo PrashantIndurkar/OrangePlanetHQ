@@ -69,11 +69,6 @@ export function SidebarHeader({
 											OrangePlanet
 										</span>
 									)}
-									{user?.role === "admin" && (
-										<span className="inline-flex h-4.5 items-center justify-center rounded-[3px] bg-red-500/10 border border-red-500/20 px-1.5 text-[9px] font-bold tracking-wider text-red-600 dark:text-red-400 uppercase leading-none shrink-0">
-											Admin
-										</span>
-									)}
 									<HugeiconsIcon
 										icon={ArrowDown01Icon}
 										size={12}
