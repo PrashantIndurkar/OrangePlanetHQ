@@ -51,8 +51,6 @@ export function WorkspaceLayout() {
 	} = getNormalizedFilters(searchParams);
 
 	const searchQuery = searchParams.get("q") || "";
-	const showAllUsers =
-		user?.role === "admin" && searchParams.get("allUsers") === "true";
 
 	// Fetch server-side tasks
 	const { data, isLoading, isError } = useTasksQuery({
@@ -62,7 +60,6 @@ export function WorkspaceLayout() {
 		search: searchQuery,
 		sortBy,
 		sortOrder,
-		allUsers: showAllUsers,
 	});
 
 	const createTaskMutation = useCreateTaskMutation();
@@ -112,28 +109,7 @@ export function WorkspaceLayout() {
 			{activeTab === "tasks" && (
 				<>
 					{/* Sub-header filters and toggles */}
-					<WorkspaceFilters
-						view={view}
-						onViewChange={setView}
-						showAllUsers={showAllUsers}
-						onShowAllUsersChange={
-							user?.role === "admin"
-								? (show) => {
-										const newParams = new URLSearchParams(
-											searchParams.toString(),
-										);
-										if (show) {
-											newParams.set("allUsers", "true");
-										} else {
-											newParams.delete("allUsers");
-										}
-										router.replace(`${pathname}?${newParams.toString()}`, {
-											scroll: false,
-										});
-									}
-								: undefined
-						}
-					/>
+					<WorkspaceFilters view={view} onViewChange={setView} />
 
 					{/* Workspace Main content scrollable viewport */}
 					<main className="relative min-h-0 flex-1 overflow-hidden">
