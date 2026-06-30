@@ -207,7 +207,7 @@ OrangePlanet is composed of **6 core modules** that share a unified workspace, a
 | **Roles & Permissions** (admin, member, viewer, guest) | Global | P0 |
 | **People directory** (member profiles, online status, timezone) | Global | P1 |
 | **File uploads** (images, files → cloud storage) | Global | P0 — ✅ Built (Cloudinary) |
-| **Real-time infrastructure** (native WebSocket/SSE) | Global | P0 — 🟡 Basic SSE exists |
+| **Real-time infrastructure** (native WebSocket) | Global | P0 — ❌ Not started |
 | **Search** (global search across tasks, messages, docs) | Global | P1 |
 | **Integrations** (GitHub, Slack, Linear webhooks) | Global | P2 |
 | **Billing / Subscriptions** (Stripe, free + paid plans) | Global | P2 |
@@ -271,7 +271,7 @@ User (global identity — can belong to multiple orgs)
 ### Phase 2 — Communication
 > Chat, messaging, real-time infrastructure
 
-- [ ] Build WebSocket infrastructure (native, replaces SSE singleton)
+- [ ] Build WebSocket infrastructure (native)
 - [ ] Implement message threads (channels + DMs)
 - [ ] Implement messages with rich text (Tiptap)
 - [ ] Typing indicators, presence, unread counts
@@ -346,7 +346,7 @@ Following the **Cal.com model**:
 | **ORM** | Drizzle ORM |
 | **Database** | PostgreSQL |
 | **Auth** | Better Auth (Drizzle adapter + Org plugin) |
-| **Realtime** | Native WebSocket (chat, presence, calls), SSE (notifications) |
+| **Realtime** | Native WebSocket (chat, presence, calls, notifications) |
 | **Rich Editor** | Tiptap v3 + Yjs (collaborative editing) |
 | **Video/Calls** | WebRTC (native signaling server) |
 | **Design System** | `packages/ui` (Campsite model — directory-per-component) with Storybook |

@@ -73,7 +73,6 @@ OrangePlanet now includes:
 * Activity Logs
 * Role-Based Access Control
 * Optimistic UI Updates
-* Real-Time Updates (SSE)
 * Dockerized Deployment
 * GitHub Actions CI/CD
 * Integration Testing
@@ -124,12 +123,6 @@ This release marks the completion of the planned OrangePlanet assessment scope a
 
 ## ⚡ Real-Time Collaboration
 
-### Real-Time Updates
-
-* Added live task synchronization using Server-Sent Events (SSE).
-* Task creations, updates, and deletions now appear automatically across active sessions.
-* Improved data consistency across multiple browser tabs and users.
-
 ### Optimistic User Experience
 
 * Enhanced task creation, updates, and deletion workflows with smoother optimistic UI updates.
@@ -164,7 +157,6 @@ This release marks the completion of the planned OrangePlanet assessment scope a
 
 ## 🚀 Improvements
 
-* Enhanced collaboration experience through real-time synchronization.
 * Improved responsiveness and perceived application performance.
 * Increased reliability of authentication and persistence workflows.
 * Continued refining the overall workspace experience.
